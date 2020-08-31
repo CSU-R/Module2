@@ -1,10 +1,10 @@
-# Repo for the CSU R Module 1 Course
+# Repo for the CSU R Module 2 Course
 
-This is the repository for the Module 1 R course offered at Colorado State University.
+This is the repository for the Module 2 R course offered at Colorado State University.
 The output bookdown document is hosted via github pages here:
 
 
-[Bookdown Page](https://csu-r.github.io/Module1/)
+[Bookdown Page](https://csu-r.github.io/Module2/)
 
 
 The project is configured so that changes made on a local machine are then built into bookdown output locally, which is then pushed to the repo to update the live site.
