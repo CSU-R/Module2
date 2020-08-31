@@ -1,9 +1,9 @@
 --- 
-title: "R Module 1"
+title: "R Module 2"
 author: 
-  - "Alex Fout^[Department of Statistics, Colorado State University, fout@colostate.edu]"
+  - "Connor Gibbs^[Department of Statistics, Colorado State University, connor.gibbs@colostate.edu]"
 date: "`r format(Sys.time(), '%d %h, %Y, %I:%M %p')`"
-description: This is the book for the R Intro Course at CSU.
+description: This is the second installment for the book for the R Intro Course at CSU.
 link-citations: yes
 bibliography:
 - src/book.bib
@@ -40,9 +40,9 @@ course_dates <- start_date + sort(as.vector(outer(c(0, 2, 4), c(0, 7, 14, 21), "
 r_version <- "4.0.2"
 ```
 
-Hi, and welcome to the R Module 1 (AKA STAT 158) course at Colorado State University!
+Hi, and welcome to the R Module 2 (AKA STAT 158) course at Colorado State University!
 
-This course is the first of three 1 credit courses intended to introduce the R programming language to those with little or no programming experience.
+This course is the second of three 1 credit courses intended to introduce the R programming language to those with little or no programming experience.
 
 Through these Modules (courses), we'll explore how R can be used to do the following:
 

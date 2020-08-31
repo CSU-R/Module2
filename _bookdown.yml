@@ -1,4 +1,4 @@
-book_filename: "Module1"
+book_filename: "Module2"
 delete_merged_file: true
 language:
   ui:
@@ -7,10 +7,7 @@ language:
 rmd_files:
   - "index.Rmd"
   - "src/02-CoursePreliminaries.Rmd"
-  - "src/03-InstallingR.Rmd"
-  - "src/04-RProgrammingFundamentals.Rmd"
-  - "src/05-WorkingWithData.Rmd"
-  - "src/06-PerformingEffectiveDataAnalysis.Rmd"
 output_dir: "docs"
+
 # rmd_subdir: ["src"]  # misses index.Rmd if we use this
 # clean: ["src/book.bib"] # removes book.bib file when cleaned

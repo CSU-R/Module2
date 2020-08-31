@@ -1,0 +1,847 @@
+% Options for packages loaded elsewhere
+\PassOptionsToPackage{unicode}{hyperref}
+\PassOptionsToPackage{hyphens}{url}
+%
+\documentclass[
+]{article}
+\usepackage{lmodern}
+\usepackage{amssymb,amsmath}
+\usepackage{ifxetex,ifluatex}
+\ifnum 0\ifxetex 1\fi\ifluatex 1\fi=0 % if pdftex
+  \usepackage[T1]{fontenc}
+  \usepackage[utf8]{inputenc}
+  \usepackage{textcomp} % provide euro and other symbols
+\else % if luatex or xetex
+  \usepackage{unicode-math}
+  \defaultfontfeatures{Scale=MatchLowercase}
+  \defaultfontfeatures[\rmfamily]{Ligatures=TeX,Scale=1}
+\fi
+% Use upquote if available, for straight quotes in verbatim environments
+\IfFileExists{upquote.sty}{\usepackage{upquote}}{}
+\IfFileExists{microtype.sty}{% use microtype if available
+  \usepackage[]{microtype}
+  \UseMicrotypeSet[protrusion]{basicmath} % disable protrusion for tt fonts
+}{}
+\makeatletter
+\@ifundefined{KOMAClassName}{% if non-KOMA class
+  \IfFileExists{parskip.sty}{%
+    \usepackage{parskip}
+  }{% else
+    \setlength{\parindent}{0pt}
+    \setlength{\parskip}{6pt plus 2pt minus 1pt}}
+}{% if KOMA class
+  \KOMAoptions{parskip=half}}
+\makeatother
+\usepackage{xcolor}
+\IfFileExists{xurl.sty}{\usepackage{xurl}}{} % add URL line breaks if available
+\IfFileExists{bookmark.sty}{\usepackage{bookmark}}{\usepackage{hyperref}}
+\hypersetup{
+  pdftitle={R Module 2},
+  pdfauthor={Connor Gibbs},
+  hidelinks,
+  pdfcreator={LaTeX via pandoc}}
+\urlstyle{same} % disable monospaced font for URLs
+\usepackage[margin=1in]{geometry}
+\usepackage{color}
+\usepackage{fancyvrb}
+\newcommand{\VerbBar}{|}
+\newcommand{\VERB}{\Verb[commandchars=\\\{\}]}
+\DefineVerbatimEnvironment{Highlighting}{Verbatim}{commandchars=\\\{\}}
+% Add ',fontsize=\small' for more characters per line
+\usepackage{framed}
+\definecolor{shadecolor}{RGB}{248,248,248}
+\newenvironment{Shaded}{\begin{snugshade}}{\end{snugshade}}
+\newcommand{\AlertTok}[1]{\textcolor[rgb]{0.94,0.16,0.16}{#1}}
+\newcommand{\AnnotationTok}[1]{\textcolor[rgb]{0.56,0.35,0.01}{\textbf{\textit{#1}}}}
+\newcommand{\AttributeTok}[1]{\textcolor[rgb]{0.77,0.63,0.00}{#1}}
+\newcommand{\BaseNTok}[1]{\textcolor[rgb]{0.00,0.00,0.81}{#1}}
+\newcommand{\BuiltInTok}[1]{#1}
+\newcommand{\CharTok}[1]{\textcolor[rgb]{0.31,0.60,0.02}{#1}}
+\newcommand{\CommentTok}[1]{\textcolor[rgb]{0.56,0.35,0.01}{\textit{#1}}}
+\newcommand{\CommentVarTok}[1]{\textcolor[rgb]{0.56,0.35,0.01}{\textbf{\textit{#1}}}}
+\newcommand{\ConstantTok}[1]{\textcolor[rgb]{0.00,0.00,0.00}{#1}}
+\newcommand{\ControlFlowTok}[1]{\textcolor[rgb]{0.13,0.29,0.53}{\textbf{#1}}}
+\newcommand{\DataTypeTok}[1]{\textcolor[rgb]{0.13,0.29,0.53}{#1}}
+\newcommand{\DecValTok}[1]{\textcolor[rgb]{0.00,0.00,0.81}{#1}}
+\newcommand{\DocumentationTok}[1]{\textcolor[rgb]{0.56,0.35,0.01}{\textbf{\textit{#1}}}}
+\newcommand{\ErrorTok}[1]{\textcolor[rgb]{0.64,0.00,0.00}{\textbf{#1}}}
+\newcommand{\ExtensionTok}[1]{#1}
+\newcommand{\FloatTok}[1]{\textcolor[rgb]{0.00,0.00,0.81}{#1}}
+\newcommand{\FunctionTok}[1]{\textcolor[rgb]{0.00,0.00,0.00}{#1}}
+\newcommand{\ImportTok}[1]{#1}
+\newcommand{\InformationTok}[1]{\textcolor[rgb]{0.56,0.35,0.01}{\textbf{\textit{#1}}}}
+\newcommand{\KeywordTok}[1]{\textcolor[rgb]{0.13,0.29,0.53}{\textbf{#1}}}
+\newcommand{\NormalTok}[1]{#1}
+\newcommand{\OperatorTok}[1]{\textcolor[rgb]{0.81,0.36,0.00}{\textbf{#1}}}
+\newcommand{\OtherTok}[1]{\textcolor[rgb]{0.56,0.35,0.01}{#1}}
+\newcommand{\PreprocessorTok}[1]{\textcolor[rgb]{0.56,0.35,0.01}{\textit{#1}}}
+\newcommand{\RegionMarkerTok}[1]{#1}
+\newcommand{\SpecialCharTok}[1]{\textcolor[rgb]{0.00,0.00,0.00}{#1}}
+\newcommand{\SpecialStringTok}[1]{\textcolor[rgb]{0.31,0.60,0.02}{#1}}
+\newcommand{\StringTok}[1]{\textcolor[rgb]{0.31,0.60,0.02}{#1}}
+\newcommand{\VariableTok}[1]{\textcolor[rgb]{0.00,0.00,0.00}{#1}}
+\newcommand{\VerbatimStringTok}[1]{\textcolor[rgb]{0.31,0.60,0.02}{#1}}
+\newcommand{\WarningTok}[1]{\textcolor[rgb]{0.56,0.35,0.01}{\textbf{\textit{#1}}}}
+\usepackage{longtable,booktabs}
+% Correct order of tables after \paragraph or \subparagraph
+\usepackage{etoolbox}
+\makeatletter
+\patchcmd\longtable{\par}{\if@noskipsec\mbox{}\fi\par}{}{}
+\makeatother
+% Allow footnotes in longtable head/foot
+\IfFileExists{footnotehyper.sty}{\usepackage{footnotehyper}}{\usepackage{footnote}}
+\makesavenoteenv{longtable}
+\usepackage{graphicx,grffile}
+\makeatletter
+\def\maxwidth{\ifdim\Gin@nat@width>\linewidth\linewidth\else\Gin@nat@width\fi}
+\def\maxheight{\ifdim\Gin@nat@height>\textheight\textheight\else\Gin@nat@height\fi}
+\makeatother
+% Scale images if necessary, so that they will not overflow the page
+% margins by default, and it is still possible to overwrite the defaults
+% using explicit options in \includegraphics[width, height, ...]{}
+\setkeys{Gin}{width=\maxwidth,height=\maxheight,keepaspectratio}
+% Set default figure placement to htbp
+\makeatletter
+\def\fps@figure{htbp}
+\makeatother
+\setlength{\emergencystretch}{3em} % prevent overfull lines
+\providecommand{\tightlist}{%
+  \setlength{\itemsep}{0pt}\setlength{\parskip}{0pt}}
+\setcounter{secnumdepth}{5}
+\usepackage{booktabs}
+
+
+\definecolor{output}{HTML}{fffbcf}
+
+
+% add a background color to the verbatim environment
+\let\oldv\verbatim
+\let\oldendv\endverbatim
+
+\def\verbatim{\par\setbox0\vbox\bgroup\oldv}
+\def\endverbatim{\oldendv\egroup\fboxsep0pt \noindent\colorbox{output}{\usebox0}}
+% png images should be 72x72 pixels
+
+\usepackage{xcolor}
+\usepackage{hyperref}
+\hypersetup{
+  colorlinks=true,
+  linkcolor=blue!50!red,
+  urlcolor=red!70!black
+}
+  
+
+% define colors:
+\definecolor{bonus}{HTML}{81c9a8}
+\definecolor{reflect}{HTML}{ffdb80}
+\definecolor{assessment}{HTML}{93b6ed}
+\definecolor{progress}{HTML}{bba3cc}
+\definecolor{video}{HTML}{d98780}
+\definecolor{caution}{HTML}{ff6700}
+\definecolor{feedback}{HTML}{cccccc}
+
+
+% template block for all environments 
+\newenvironment{specialblock}[3]
+{
+  \begin{center}
+  \begin{tabular}
+  {|>{\columncolor{#1}}p{0.9\textwidth}|}\hline\\
+  \includegraphics[scale=0.1]{src/images/#2}
+  \textbf{#3}
+}
+{\\\\\hline
+  \end{tabular}
+  \end{center}
+}
+
+
+% styling for all special blocks
+\newenvironment{bonus}{
+  \specialblock{bonus}{sun-fill.png}{Bonus}
+}{\endspecialblock}
+
+\newenvironment{reflect}{
+  \specialblock{reflect}{lightbulb-fill.png}{Reflect}
+}{\endspecialblock}
+
+\newenvironment{assessment}{
+  \specialblock{assessment}{pencil-fill.png}{Assessment}
+}{\endspecialblock}
+
+\newenvironment{progress}{
+  \specialblock{progress}{pulse-line.png}{Progress Check}
+}{\endspecialblock}
+
+\newenvironment{video}{
+  \specialblock{video}{vidicon-fill.png}{Video}
+}{\endspecialblock}
+
+\newenvironment{caution}{
+  \specialblock{caution}{alarm-warning-fill.png}{Caution}
+}{\endspecialblock}
+
+\newenvironment{feedback}{
+  \specialblock{feedback}{chat-1-fill.png}{Feedback}
+}{\endspecialblock}
+\usepackage{booktabs}
+\usepackage{longtable}
+\usepackage{array}
+\usepackage{multirow}
+\usepackage{wrapfig}
+\usepackage{float}
+\usepackage{colortbl}
+\usepackage{pdflscape}
+\usepackage{tabu}
+\usepackage{threeparttable}
+\usepackage{threeparttablex}
+\usepackage[normalem]{ulem}
+\usepackage{makecell}
+\usepackage[]{natbib}
+\bibliographystyle{apalike}
+
+\title{R Module 2}
+\author{Connor Gibbs\footnote{Department of Statistics, Colorado State University, \href{mailto:connor.gibbs@colostate.edu}{\nolinkurl{connor.gibbs@colostate.edu}}}}
+\date{31 Aug, 2020, 05:23 PM}
+
+\begin{document}
+\maketitle
+
+{
+\setcounter{tocdepth}{2}
+\tableofcontents
+}
+\hypertarget{welcome}{%
+\section{Welcome!}\label{welcome}}
+
+Hi, and welcome to the R Module 2 (AKA STAT 158) course at Colorado State University!
+
+This course is the second of three 1 credit courses intended to introduce the R programming language to those with little or no programming experience.
+
+Through these Modules (courses), we'll explore how R can be used to do the following:
+
+\begin{enumerate}
+\def\labelenumi{\arabic{enumi}.}
+\tightlist
+\item
+  Perform basic computations and logic, just like any other programming language
+\item
+  Load, clean, analyze, and visualise data
+\item
+  Run scripts
+\item
+  Create reproducible reports so you can explain your work in a narrative form
+\end{enumerate}
+
+In addition, you'll also be exposed to some aspects of the broader R community, including:
+
+\begin{enumerate}
+\def\labelenumi{\arabic{enumi}.}
+\tightlist
+\item
+  R as free, open source software
+\item
+  The RStudio free software
+\item
+  Publicly available packages which extend the capability of R
+\item
+  Events and community groups which advocate for the use of R and the support of R users
+\end{enumerate}
+
+More detail will be provided in the Course Topics laid out in the next chapter.
+
+\hypertarget{how-to-navigate-this-book}{%
+\subsubsection{How To Navigate This Book}\label{how-to-navigate-this-book}}
+
+To move quickly to different portions of the book, click on the appropriate chapter or section in the the table of contents on the left.
+The buttons at the top of the page allow you to show/hide the table of contents, search the book, change font settings, download a pdf or ebook copy of this book, or get hints on various sections of the book.
+The faint left and right arrows at the sides of each page (or bottom of the page if it's narrow enough) allow you to step to the next/previous section.
+Here's what they look like:
+
+\begin{figure}
+
+{\centering \includegraphics[width=0.93in]{src/images/left_arrow} \includegraphics[width=0.74in]{src/images/right_arrow} 
+
+}
+
+\caption{Left and right navigation arrows}\label{fig:unnamed-chunk-1}
+\end{figure}
+
+\hypertarget{associated-csu-course}{%
+\subsection{Associated CSU Course}\label{associated-csu-course}}
+
+This bookdown book is intended to accompany the associated course at Colorado State University, but the curriculum is free for anyone to access and use.
+If you're reading the PDF or EPUB version of this book, you can find the ``live'' version at \url{https://csu-r.github.io/Module1/}, and all of the source files for this book can be found at \url{https://github.com/CSU-R/Module1}.
+
+If you're not taking the CSU course, you will periodically encounter instructions and references which are not relevant to you. For example, we will make reference to the Canvas website, which only CSU students enrolled in the course have access to.
+
+\hypertarget{prelim}{%
+\section{Course Preliminaries}\label{prelim}}
+
+\begin{quote}
+``Learning to code is useful no matter what your career ambitions are.'' ---Arianna Huffington, Founder, The Huffington Post
+\end{quote}
+
+In this chapter, we'll discuss the preliminary details of the course.
+Then you'll run some R code and learn more about R and the R community.
+
+\hypertarget{this-textbook}{%
+\subsection{This Textbook}\label{this-textbook}}
+
+This course is presented as a \href{https://bookdown.org/}{bookdown} document, and is divided into chapters and sections
+Each week, you'll be expected to read through the chapter and complete any associated exercises, quizzes, or assignments.
+
+\hypertarget{special-boxes}{%
+\subsubsection{Special Boxes}\label{special-boxes}}
+
+Throughout the book, you'll encounter special boxes, each with a special meaning.
+Here is an example of each type of box:
+
+\begin{reflect}
+This box will prompt you to pause and reflect on your experience and/or
+learning. No feedback will be given, but this may be graded on
+completion.
+\end{reflect}
+
+\begin{assessment}
+This box will signify a quiz or assignment which you will turn in for
+grading, on which the instructor will provide feedback.
+\end{assessment}
+
+\begin{progress}
+This box is for checking your understanding, to make sure you are ready
+for what follows.
+\end{progress}
+
+\begin{video}
+This box is for displaying/linking to videos in order to help illustrate
+or communicate concepts.
+\end{video}
+
+\begin{caution}
+This box will warn you of possible problems or pitfalls you may
+encounter!
+\end{caution}
+
+\begin{bonus}
+This box is to provide material going beyond the main course content, or
+material which will be revisited later in more depth.
+\end{bonus}
+
+\begin{feedback}
+This box will prompt for your feedback on the organization of the
+course, so we can improve the material for everyone!
+
+Any of the boxes may include hyperlinks like this:
+\href{https://www.r-graph-gallery.com/}{I am a link} or code like this
+\texttt{This\ is\ code}.
+\end{feedback}
+
+\hypertarget{how-this-book-displays-code}{%
+\subsubsection{How This Book Displays Code}\label{how-this-book-displays-code}}
+
+In addition, you may see R code either as part of a sentence like this: \texttt{1+1}, or as a separate block like so:
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\DecValTok{1}\OperatorTok{+}\DecValTok{1}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+[1] 2
+\end{verbatim}
+
+Sometimes (as in this example) we will also show the \textbf{output} (in yellow), that is, the result of running the R code. In this case the code \texttt{1+1} produced the output \texttt{2}.
+If you hover over a code block with your mouse, you will see the option to copy the code to your clipboard, like this:
+
+\begin{figure}
+
+{\centering \includegraphics[width=7.9in]{src/images/copy_code} 
+
+}
+
+\caption{copying code from this book}\label{fig:unnamed-chunk-9}
+\end{figure}
+
+This will be useful when you are asked to run code on your computer.
+
+\hypertarget{next-steps}{%
+\subsubsection{Next Steps}\label{next-steps}}
+
+When you're ready, go to the next section to learn about the course syllabus and grading policies.
+
+\begin{feedback}
+Any feedback for this section? Click
+\href{https://docs.google.com/forms/d/e/1FAIpQLSePQZ3lIaCIPo9J2owXImHZ_9wBEgTo21A0s-A1ty28u4yfvw/viewform?entry.1684471501=Course\%20Preliminaries}{here}
+\end{feedback}
+
+\hypertarget{course-topics-syllabus}{%
+\subsection{Course Topics \& Syllabus}\label{course-topics-syllabus}}
+
+Broadly speaking, the topics of this course are described by the Chapter Titles. Here's what each entails:
+- Course Preliminaries: Introduction to R and the world of R
+- Installing R: Like it sounds, setting up your computer so you can work with R.
+- R Programming Fundamentals: The basics of programming in R, the building blocks that you need in order to do anything more interesting.
+- Working with Data: How to do meaningful things with data sets. Probably the most useful Chapter of the book.
+- Creating R Programs: More programming concepts to increase your R Power!
+
+\hypertarget{syllabus}{%
+\subsubsection{Syllabus}\label{syllabus}}
+
+First, some important details:
+
+\begin{itemize}
+\item
+  \textbf{Instructor}: \href{mailto:fout@colostate.edu}{Alex Fout}
+\item
+  \textbf{Office Hours}: Held via Google Meet (look for email invite), schedule on Canvas.
+\item
+  \textbf{Webpages}: \href{https://canvas.colostate.edu}{Canvas}, \href{https://csu-r.github.io/Module1/}{this textbook}
+\item
+  \textbf{Course Credits}: 1. Because this week lasts four weeks, this course should ``feel'' like a 3 credit course for four weeks. Normally this means \textasciitilde3 hours of lecture and 12 hours of work outside of lecture per week. Because this course is online, there will be 1 hour or less of ``lecture'' (see below), and about 14 hours of outside work per week.
+\item
+  \textbf{Textbook}: You're reading it right now. The textbook will be your primary learning resource. You'll be expected to read through the required sections, watch any relevant videos, and complete any reflections, progress checks, and assessments along the way. On days when a quiz is due, you should complete the reading \emph{before} you take the quiz.
+\item
+  \textbf{Prerequisites}: None
+\item
+  \textbf{Progress Checks}: As you work your way through the textbook, you'll encounter purple ``Progress Check'' boxes. For Week 1, you'll submit your responses directly to canvas. For weeks 2-4, you'll fill in a R Markdown document and submit it to canvas. You'll be provided a template to fill in as you complete the progress checks. To turn in the document, you'll \textbf{knit} the document to HTML or PDF and upload to Canvas. (More details coming later in the book!). Progress checks will be graded on completion, organization, and correctness.
+\item
+  \textbf{Homework}: About once per week, you'll complete an assignment using R. Homeworks must be turned in by 11:59pm (Mountain) on the day they are due.
+\item
+  \textbf{Exams}: There will be no exams in this course
+\item
+  \textbf{Quizzes}: Once per week, there will be a 15 minute Canvas quiz. Quizzes must be completed by 11:59pm (Mountain) on the day they are due.
+\item
+  \textbf{Lectures}: Since we aren't having in-person lectures, we will hold short \emph{mini-lectures} instead (more details on Canvas). These will be shorter than a traditional lecture (approximately 10-30 minutes), and the purpose will be to allow some interaction between everyone in the course and to allow the instructor to introduce any relevant topics and address any challenges that students are having.
+\item
+  \textbf{Grading}: The grading for the course is apportioned like so:
+
+  \begin{itemize}
+  \tightlist
+  \item
+    Progress Checks: 30\%
+  \item
+    Homework: 40\%
+  \item
+    Quizzes: 30\%
+  \end{itemize}
+\end{itemize}
+
+\hypertarget{schedule}{%
+\subsubsection{Schedule}\label{schedule}}
+
+\begin{table}[H]
+\centering
+\begin{tabular}{r|l|l|l|l}
+\hline
+Week & Weekday & Date & Reading & Due\\
+\hline
+1 & Monday & July 13 & 1, 2 & Progress Check 1\\
+\hline
+1 & Wednesday & July 15 & 3 & Quiz 1\\
+\hline
+1 & Friday & July 17 & 4.1, 4.2 & Assignment 1\\
+\hline
+2 & Monday & July 20 & 4.3 & Progress Check 2\\
+\hline
+2 & Wednesday & July 22 & 4.4, 4.5 & Quiz 2\\
+\hline
+2 & Friday & July 24 & 5.1, 5.2 & Assignment 2\\
+\hline
+3 & Monday & July 27 & 5.3, 5.4 & Progress Check 3\\
+\hline
+3 & Wednesday & July 29 & 5.5, 5.6 & Quiz 3\\
+\hline
+3 & Friday & July 31 & 5.7 & Assignment 3\\
+\hline
+4 & Monday & August 03 & 6.1 & Progress Check 4\\
+\hline
+4 & Wednesday & August 05 & 6.2, 6.3 & Quiz 4\\
+\hline
+4 & Friday & August 07 & 6.4 & Assignment 4\\
+\hline
+\end{tabular}
+\end{table}
+
+\hypertarget{assignment-templates}{%
+\subsubsection{Assignment Templates}\label{assignment-templates}}
+
+In order to complete the progress checks and course assignments, you'll need to start from these templates:
+
+Progress Checks
+
+\begin{itemize}
+\tightlist
+\item
+  (Assignment 1 will not require a template)
+\item
+  \href{assignment_templates/progress_check_2.rmd}{Progress Check 2}
+\item
+  \href{assignment_templates/progress_check_3.rmd}{Progress Check 3}
+\item
+  \href{assignment_templates/progress_check_4.rmd}{Progress Check 4}
+\end{itemize}
+
+Assignments
+
+\begin{itemize}
+\tightlist
+\item
+  \href{assignment_templates/assignment_1.rmd}{Assignment 1}
+\item
+  \href{assignment_templates/assignment_2.rmd}{Assignment 2}
+\item
+  \href{assignment_templates/assignment_3.rmd}{Assignment 3}
+\item
+  \href{assignment_templates/assignment_4.rmd}{Assignment 4}
+\end{itemize}
+
+\hypertarget{course-policies}{%
+\subsubsection{Course Policies}\label{course-policies}}
+
+\begin{itemize}
+\tightlist
+\item
+  \textbf{Late Work}: Homework and Progress Checks must be turned in on time to receive full credit. You may turn in Homework and Progress Checks up to 2 days late for up to 50\% credit.
+\item
+  \textbf{Group Work}: Students are welcome to discuss the course with each other, but all work you turn in must be your own. This means no sharing solutions to homework, progress checks, or quizzes. You may not work with other students on quizzes. You \emph{are} welcome to seek help on Canvas discussion boards and during office hours.
+\item
+  \textbf{Students with Disabilities}: The university is committed to providing support for students with disabilities. If you have an accommodation plan, please provide that to me as soon as possible so we can discuss appropriate arrangements.
+\item
+  \textbf{Growth Mindset}: This phrase was coined by Carol Dweck to reflect how your learning outcomes can be affected by the way you view the learning process. To quote Dweck: ``The view you adopt for yourself profoundly affects the way you lead your life\ldots{} Believing that your qualities are carved in stone - \emph{the fixed mindset} - creates an urgency to prove yourself over and over. If you have only a certain amount of intelligence, a certain personality, and a certain moral character --- well, then you'd better prove that you have a healthy dose of them. It simply wouldn't do to look or feel deficient in these most basic characteristics\ldots{} There's another mindset in which these traits are not simply a hand you're dealt and have to live with, always trying to convince yourself and others that you have a royal flush when you're secretly worried it's a pair of tens. In this mindset, the hand you're dealt is just the starting point for development. This growth mindset is based on the belief that your basic qualities are things you can cultivate through your efforts. Although people may differ in every which way --- in their initial talents and aptitudes, interests, or temperaments --- everyone can change and grow through application and experience.'' Programming may be a very new, intimidating thing for you. That's okay! View this course as a way to grow and gain new skills which you can use to do incredible and important things!
+\item
+  \textbf{Learn by doing}: \href{https://statistics.colostate.edu/person/?id=B0D2F899C79C05AAE4EDBA6EE2FECACA\&sq=t}{A wise statistics instructor} once compared watching someone else solve statistics problems to watching someone else practice shooting basketball free throws. You may learn a little by watching, but at some point you won't get any better until you try it yourself! The same can be said for programming. Reading a textbook and watching videos are a good \emph{start}, but you'll have to actually \emph{program} in order to get any better! This textbook was designed to be \emph{interactive}, and I encourage you to ``code along with the book'' as you read.
+\end{itemize}
+
+\hypertarget{grading-scale}{%
+\subsubsection{Grading Scale}\label{grading-scale}}
+
+Grades will be assigned according to the following scale:
+
+\begin{table}[H]
+\centering
+\begin{tabular}{l|l}
+\hline
+Class.Score & Letter.Grade\\
+\hline
+92\%-100\% & A\\
+\hline
+90\%-92\% & A-\\
+\hline
+88\%-90\% & B+\\
+\hline
+82\%-88\% & B\\
+\hline
+80\%-82\% & B-\\
+\hline
+78\%-80\% & C+\\
+\hline
+70\%-78\% & C\\
+\hline
+60\%-70\% & D\\
+\hline
+0\%-60\% & F\\
+\hline
+\end{tabular}
+\end{table}
+
+\begin{feedback}
+Any feedback for this section? Click
+\href{https://docs.google.com/forms/d/e/1FAIpQLSePQZ3lIaCIPo9J2owXImHZ_9wBEgTo21A0s-A1ty28u4yfvw/viewform?entry.1684471501=Course\%20Topics\%20\%26\%20Syllabus}{here}
+\end{feedback}
+
+\hypertarget{running-your-first-r-code}{%
+\subsection{Running your first R Code}\label{running-your-first-r-code}}
+
+Enough of the boring stuff, let's run some R code!
+Normally you will run R on your computer, but since you may not have R installed yet, let's run some R code using a website first.
+As you run code, you'll see some of the things R can do.
+In a browser, navigate to \href{https://rdrr.io/snippets/}{rdrr.io/snippets}, where you'll see a box that looks like this:
+
+\begin{figure}
+
+{\centering \includegraphics[width=9.68in]{src/images/rdrr} 
+
+}
+
+\caption{rdrr code entry box}\label{fig:unnamed-chunk-12}
+\end{figure}
+
+The box comes with some code entered already, but we want to use our own code instead, so delete all the text, from before \texttt{library(ggplot2)} to after \texttt{factor(cyl))}.
+In its place, type \texttt{1+1}, then click the big green ``Run'' button.
+You should see the \texttt{{[}1{]}\ 2} displayed below.
+So if you give R a math expression, it will evaluate it and give the result.
+Note: the ``correct answer'' to \(1+1\) is \texttt{2}, but the output also displays \texttt{{[}1{]}}, which we won't explain until later, so you can ignore that for now.
+
+Next, delete the code you just wrote and type (or copy/paste) the following, and run it:
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\KeywordTok{factorial}\NormalTok{(}\DecValTok{10}\NormalTok{)}
+\end{Highlighting}
+\end{Shaded}
+
+The result should be a very large number, which is equivalent to \(10!\), that is, \(10\times9\times8\times7\times6\times5\times4\times3\times2\times1\).
+This is an example of an R \emph{function}, which we will discuss more later.
+
+Aside from math, R can produce plots. Try copy/pasting the following code into the website:
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{x <-}\StringTok{ }\DecValTok{-10}\OperatorTok{:}\DecValTok{10}
+\KeywordTok{plot}\NormalTok{(x, x}\OperatorTok{^}\DecValTok{2}\NormalTok{)}
+\end{Highlighting}
+\end{Shaded}
+
+You should see points in a scatter plot which follow a parabola.
+Here's a more complicated example, which you should copy/paste into the website and run:
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\KeywordTok{library}\NormalTok{(ggplot2)}
+\KeywordTok{theme_set}\NormalTok{(}\KeywordTok{theme_bw}\NormalTok{())}
+\KeywordTok{ggplot}\NormalTok{(mtcars, }\KeywordTok{aes}\NormalTok{(}\DataTypeTok{y=}\NormalTok{mpg, }\DataTypeTok{fill=}\KeywordTok{as.factor}\NormalTok{(cyl))) }\OperatorTok{+}\StringTok{ }
+\StringTok{  }\KeywordTok{geom_boxplot}\NormalTok{() }\OperatorTok{+}\StringTok{ }
+\StringTok{  }\KeywordTok{labs}\NormalTok{(}\DataTypeTok{title=}\StringTok{"Engine Fuel Efficiency vs. Number of Cylinders"}\NormalTok{, }\DataTypeTok{y=}\StringTok{"MPG"}\NormalTok{, }\DataTypeTok{fill=}\StringTok{"Cylinders"}\NormalTok{) }\OperatorTok{+}\StringTok{ }
+\StringTok{  }\KeywordTok{theme}\NormalTok{(}\DataTypeTok{legend.position=}\StringTok{"bottom"}\NormalTok{, }
+        \DataTypeTok{axis.ticks.x =} \KeywordTok{element_blank}\NormalTok{(),}
+        \DataTypeTok{axis.text.x =} \KeywordTok{element_blank}\NormalTok{())}
+\end{Highlighting}
+\end{Shaded}
+
+R can be used to make many types of visualizations, which you will do more of later.
+
+\begin{bonus}
+This may be the first time you've seen R, so it's okay if you don't
+understand how to read this code. We'll talk more later about what each
+statement is doing, but for now, here is a brief description of some of
+the code above:
+
+\begin{itemize}
+\tightlist
+\item
+  \texttt{-10:10} This creates a sequence of numbers starting from -10
+  and ending at 10. That is, \(-10, -9, -8, \ldots, 8, 9, 10\).
+\item
+  \texttt{library} This is a function which loads an R \emph{package}. R
+  packages provide extra abilities to R.
+\end{itemize}
+\end{bonus}
+
+\begin{feedback}
+Any feedback for this section? Click
+\href{https://docs.google.com/forms/d/e/1FAIpQLSePQZ3lIaCIPo9J2owXImHZ_9wBEgTo21A0s-A1ty28u4yfvw/viewform?entry.1684471501=Running\%20Your\%20First\%20R\%20Code}{here}
+\end{feedback}
+
+\hypertarget{getoutoftheclass}{%
+\subsection{What do you hope to get out of this course?}\label{getoutoftheclass}}
+
+To close out this chapter, it would be healthy for you to reflect on what you'd like to get from this course.
+Take some time to think through each question below, and write down your answers.
+It is fine if your honest answer is \emph{I don't know}.
+In that case, try to come up with some possible answers that \emph{might} be true.
+
+\begin{reflect}
+\begin{enumerate}
+\def\labelenumi{\arabic{enumi}.}
+\tightlist
+\item
+  Why are you taking this course?
+\item
+  If this course is required for your major, how do you think it is
+  supposed to benefit you in your studes?
+\item
+  What types of data sets related to your field of study may require
+  data analysis?
+\item
+  What skills do you hope to develop in this course, and how might they
+  be applied in your major and career?
+\end{enumerate}
+\end{reflect}
+
+\begin{assessment}
+Submit your answers to the above reflection to Canvas. This will be your
+Progress Check 1.
+\end{assessment}
+
+Store your answers in a safe place, and refer to them periodically as you progress through the course.
+You may find that you aren't achieving your goals and that some adjustment to how you are approaching the course may be necessary.
+Or you may find that your goals have changed, which is fine!
+Just update your goals so that you have something to refer back to.
+
+\begin{feedback}
+Any feedback for this section? Click
+\href{https://docs.google.com/forms/d/e/1FAIpQLSePQZ3lIaCIPo9J2owXImHZ_9wBEgTo21A0s-A1ty28u4yfvw/viewform?entry.1684471501=What\%20Do\%20You\%20Hope\%20To\%20Get\%20Out\%20Of\%20The\%20Class}{here}
+\end{feedback}
+
+\hypertarget{what-is-r}{%
+\subsection{What is R?}\label{what-is-r}}
+
+What is R? This question can be answered several different ways.
+Here are a few of them:
+
+\begin{feedback}
+Any feedback for this section? Click
+\href{https://docs.google.com/forms/d/e/1FAIpQLSePQZ3lIaCIPo9J2owXImHZ_9wBEgTo21A0s-A1ty28u4yfvw/viewform?entry.1684471501=What\%20is\%20R}{here}
+\end{feedback}
+
+\hypertarget{r-is-a-programming-language}{%
+\subsubsection{R is a Programming Language}\label{r-is-a-programming-language}}
+
+A programming language is a way of providing instructions to a computer.
+Some popular languages (in no particular order) are C, C++, Java, Python, PHP, Visual Basic, and Swift.
+Much like other types of languages, programming languages combine text and punctuation (syntax) to create statements which provide meaningful instructions (semantics) to be performed by a computer.
+These instructions are called ``code''.
+R code can be used to do many things, but primarily R was designed to easily work with data and produce graphics.
+The R language can be used to use a computer to do the following:
+- Read and process a set of data in a file or database
+- Use data to compute statistics and perform statistical tests
+- Produce nice looking visualizations of data
+- Save data for others to use.
+But this list is just the tip of the iceberg.
+As you will see, R can be used to do so much more!
+After the instructions are written, the R code is \emph{run}, that is, the code is provided to the computer, and the computer performs the instructions to produce the desired results.
+
+\begin{bonus}
+Many other programming languages use different syntax for the same
+purpose.
+
+\texttt{\#} comments out a line in R and python
+
+\texttt{\%} comments out a line in matlab
+
+\texttt{//} comments out a line in C++ and javascript
+
+Similar to learning a foreign language, learning your first programming
+language will make it easier to understand other similar ones.
+\end{bonus}
+
+\hypertarget{r-is-software}{%
+\subsubsection{R is software}\label{r-is-software}}
+
+R can also be thought of as the software program which runs R code.
+In other words, if R code is the computer language, then the R software is what interprets the language and makes the computer follow the instructions laid out in the code.
+This is sometimes called ``base R''.
+
+\hypertarget{r-is-free}{%
+\subsubsection{R is Free}\label{r-is-free}}
+
+The R software is free, so anyone can download R, write R code, and run the R code in order to produce results on their computer.
+
+\hypertarget{r-is-open-source}{%
+\subsubsection{R is Open Source}\label{r-is-open-source}}
+
+The R software, which runs R code, is also made up of a bunch of code called \emph{source code}.
+In addition to being free, R is also \emph{open source}, meaning that anyone can look at the source code and understand the ``deep-down nuts-and-bolts'' of how R works.
+In addition, anyone is able to \emph{contribute} to R, in order to improve it and add new features to it.
+
+\begin{reflect}
+What are the advantages of open-source software? What are some potential
+downsides?
+
+Why do you think the creators of R decided to make it open source?
+\end{reflect}
+
+\hypertarget{r-is-an-ecosystem}{%
+\subsubsection{R is an ecosystem}\label{r-is-an-ecosystem}}
+
+Another way of thinking about R is to include not only the R language and the R software, but also the community of R users and programmers, and the various ``add on'' software they have created for R.
+These add on software are called ``packages''.
+
+\hypertarget{r-packages}{%
+\subsubsection{R Packages}\label{r-packages}}
+
+An R package is software written to extend the capabilities of base R.
+R packages are often written in R code, so anyone who knows how to write R code can also create R packages.
+The importance of packages cannot be understated.
+One of the reasons for the incredible popularity of R is the fact that members from the community can write new packages which enable R to do more.
+Sometimes packages are written to help folks in particular disciplines (e.g.~psychology, geosciences, microbiology, education) do their jobs better.
+Other times, packages are written to extend the capability of R so that people from many disciplines can use them.
+R can be used to make web sites, interactive applications, dynamic reproducible reports, and even textbooks (like this one!).
+
+The inclusion of R packages, combined with the free and open source nature of R software, has led to the development of a active, diverse, and supportive community of R users who can easily share their code, data, and results with one another.
+
+\begin{bonus}
+\href{https://github.com/ropensci/skimr}{skimr} is one example of a
+package. It provides a frictionless approach to summary statistics which
+conforms to the principle of least surprise, displaying summary
+statistics the user can skim quickly to understand their data.
+\end{bonus}
+
+\hypertarget{r-interfaces}{%
+\subsubsection{R Interfaces}\label{r-interfaces}}
+
+The R software can be run in many different places, including personal computers, remote servers, and websites (as you have seen!).
+R works on Windows, MAC OSX, and Linux, and
+R can be run using a terminal or command line (if you know what those are), or using a graphical user interface (with buttons you can click and such).
+By far one of the most popular ways of using R is with RStudio, which is \emph{also} open free and open source software.
+For this course, you'll be using RStudio.
+
+\begin{feedback}
+Any feedback for this section? Click
+\href{https://docs.google.com/forms/d/e/1FAIpQLSePQZ3lIaCIPo9J2owXImHZ_9wBEgTo21A0s-A1ty28u4yfvw/viewform?entry.1684471501=What\%20Is\%20R}{here}
+\end{feedback}
+
+\hypertarget{the-r-community}{%
+\subsection{The R Community}\label{the-r-community}}
+
+We already mentioned that there is active community of R users around the world, ranging from novice to expert level.
+Here is a partial list of venues where R users interact (aside from the official websites, none of these links should be considered an official endorsement):
+
+\begin{enumerate}
+\def\labelenumi{\arabic{enumi}.}
+\tightlist
+\item
+  \href{r-project.org}{R Project}: The official website for R
+\item
+  \href{https://www.r-project.org/mail.html}{R Project Mailing Lists}: Various email lists to stay informed on R related activities. The R-announce list is a good starting point, which will keep you updated on the latest releases of the R software
+\item
+  \href{https://twitter.com/hashtag/rstats?lang=en}{Twitter \#rstats}: Many R Users are active on Twitter and you can find them
+\item
+  \href{https://github.com/rfordatascience/tidytuesday}{Tidy Tuesday} is a weekly online project that focuses on understanding how to summarize, arrange, and make meaningful charts with open source data. You can see the projects others have done by following \#tidytuesday on twitter.
+\item
+  \href{https://rladies.org/}{R-Ladies} is a global group dedicated to promoting gender equality in the R community. They have an elaborate list of resources for learning and host educational and networking events.
+\item
+  \href{https://r-podcast.org/}{R-Podcast}: A periodic podcast with practical advice for using R, and the latest R news.
+\item
+  \href{r-bloggers.com}{R-Bloggers}: A blog website where authors can post examples of code, data analysis, and visualization.
+\end{enumerate}
+
+\hypertarget{places-to-get-help-if-youre-a-student-taking-this-class-for-credit}{%
+\subsubsection{Places to Get Help (If you're a student taking this class for credit)}\label{places-to-get-help-if-youre-a-student-taking-this-class-for-credit}}
+
+Students taking the course for credit should seek help from these places, in order:
+
+\begin{itemize}
+\tightlist
+\item
+  Canvas Discussion boards
+\item
+  Office Hours
+\end{itemize}
+
+I will not answer homework/quiz/textbook related questions via email
+
+\hypertarget{places-to-get-help-anyone}{%
+\subsubsection{Places to Get Help (anyone)}\label{places-to-get-help-anyone}}
+
+If you find yourself stuck, there are many options available to you, here are a few:
+
+\begin{enumerate}
+\def\labelenumi{\arabic{enumi}.}
+\tightlist
+\item
+  \href{https://stackoverflow.com}{Stack Overflow} is a message board where users can post questions about issues they're having. If you search for your error, there's likely already an answered question about it. If not, you can submit one with a \href{https://stackoverflow.com/questions/5963269/how-to-make-a-great-r-reproducible-example}{reproducible example} that the active community can help you with.
+\item
+  \href{https://cran.r-project.org/manuals.html}{R Manuals}: With so many R resources available on the internet, sometimes information get's ``boiled down'' or simplified for ease of communication. If you need the ``official answer'' to a question, these manuals are the place to go. Check out ``An Introduction to R'' for a good reference.
+\end{enumerate}
+
+\begin{feedback}
+Any feedback for this section? Click
+\href{https://docs.google.com/forms/d/e/1FAIpQLSePQZ3lIaCIPo9J2owXImHZ_9wBEgTo21A0s-A1ty28u4yfvw/viewform?entry.1684471501=The\%20R\%20Community}{here}
+\end{feedback}
+
+  \bibliography{src/book.bib}
+
+\end{document}
