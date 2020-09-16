@@ -1,0 +1,11 @@
+section item price
+produce apples 3.99
+produce bananas 0.49
+condiments peanut_butter 2.18
+condiments mayonnaise 3.89
+canned_goods black_beans 0.99
+canned_goods tomato_sauce 0.69
+grains bread 2.99
+grains pasta 1.99
+dairy milk 2.73
+dairy butter 2.57

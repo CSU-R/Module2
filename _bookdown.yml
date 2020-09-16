@@ -6,7 +6,7 @@ language:
     before_chapter_script: "rscripts/before_chapter.r"
 rmd_files:
   - "index.Rmd"
-  - "src/02-CoursePreliminaries.Rmd"
+  - "src/02-AccessingData.Rmd"
 output_dir: "docs"
 
 # rmd_subdir: ["src"]  # misses index.Rmd if we use this

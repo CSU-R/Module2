@@ -1,0 +1,350 @@
+<!DOCTYPE html>
+<html lang="" xml:lang="">
+<head>
+
+  <meta charset="utf-8" />
+  <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+  <title>2.1 Common Forms | R Module 2</title>
+  <meta name="description" content="This is the second installment for the book for the R Intro Course at CSU." />
+  <meta name="generator" content="bookdown 0.20 and GitBook 2.6.7" />
+
+  <meta property="og:title" content="2.1 Common Forms | R Module 2" />
+  <meta property="og:type" content="book" />
+  
+  
+  <meta property="og:description" content="This is the second installment for the book for the R Intro Course at CSU." />
+  
+
+  <meta name="twitter:card" content="summary" />
+  <meta name="twitter:title" content="2.1 Common Forms | R Module 2" />
+  
+  <meta name="twitter:description" content="This is the second installment for the book for the R Intro Course at CSU." />
+  
+
+<meta name="author" content="Connor Gibbs" />
+
+
+
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="apple-mobile-web-app-capable" content="yes" />
+  <meta name="apple-mobile-web-app-status-bar-style" content="black" />
+  
+  
+<link rel="prev" href="AccessingData.html"/>
+<link rel="next" href="apis-clean-and-curated.html"/>
+<script src="libs/jquery-2.2.3/jquery.min.js"></script>
+<link href="libs/gitbook-2.6.7/css/style.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-table.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-bookdown.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-highlight.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-search.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-fontsettings.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-clipboard.css" rel="stylesheet" />
+
+
+
+
+
+
+
+
+
+<link href="libs/pagedtable-1.1/css/pagedtable.css" rel="stylesheet" />
+<script src="libs/pagedtable-1.1/js/pagedtable.js"></script>
+
+
+<style type="text/css">
+a.sourceLine { display: inline-block; line-height: 1.25; }
+a.sourceLine { pointer-events: none; color: inherit; text-decoration: inherit; }
+a.sourceLine:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode { white-space: pre; position: relative; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+code.sourceCode { white-space: pre-wrap; }
+a.sourceLine { text-indent: -1em; padding-left: 1em; }
+}
+pre.numberSource a.sourceLine
+  { position: relative; left: -4em; }
+pre.numberSource a.sourceLine::before
+  { content: attr(title);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; pointer-events: all; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+    color: #aaaaaa;
+  }
+pre.numberSource { margin-left: 3em; border-left: 1px solid #aaaaaa;  padding-left: 4px; }
+div.sourceCode
+  {  }
+@media screen {
+a.sourceLine::before { text-decoration: underline; }
+}
+code span.al { color: #ff0000; font-weight: bold; } /* Alert */
+code span.an { color: #60a0b0; font-weight: bold; font-style: italic; } /* Annotation */
+code span.at { color: #7d9029; } /* Attribute */
+code span.bn { color: #40a070; } /* BaseN */
+code span.bu { } /* BuiltIn */
+code span.cf { color: #007020; font-weight: bold; } /* ControlFlow */
+code span.ch { color: #4070a0; } /* Char */
+code span.cn { color: #880000; } /* Constant */
+code span.co { color: #60a0b0; font-style: italic; } /* Comment */
+code span.cv { color: #60a0b0; font-weight: bold; font-style: italic; } /* CommentVar */
+code span.do { color: #ba2121; font-style: italic; } /* Documentation */
+code span.dt { color: #902000; } /* DataType */
+code span.dv { color: #40a070; } /* DecVal */
+code span.er { color: #ff0000; font-weight: bold; } /* Error */
+code span.ex { } /* Extension */
+code span.fl { color: #40a070; } /* Float */
+code span.fu { color: #06287e; } /* Function */
+code span.im { } /* Import */
+code span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Information */
+code span.kw { color: #007020; font-weight: bold; } /* Keyword */
+code span.op { color: #666666; } /* Operator */
+code span.ot { color: #007020; } /* Other */
+code span.pp { color: #bc7a00; } /* Preprocessor */
+code span.sc { color: #4070a0; } /* SpecialChar */
+code span.ss { color: #bb6688; } /* SpecialString */
+code span.st { color: #4070a0; } /* String */
+code span.va { color: #19177c; } /* Variable */
+code span.vs { color: #4070a0; } /* VerbatimString */
+code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warning */
+</style>
+
+<link rel="stylesheet" href="src\style.css" type="text/css" />
+<link rel="stylesheet" href="src\environments.css" type="text/css" />
+</head>
+
+<body>
+
+
+
+  <div class="book without-animation with-summary font-size-2 font-family-1" data-basepath=".">
+
+    <div class="book-summary">
+      <nav role="navigation">
+
+<ul class="summary">
+<li><a href="./">R Module 2</a></li>
+
+<li class="divider"></li>
+<li class="chapter" data-level="1" data-path="index.html"><a href="index.html"><i class="fa fa-check"></i><b>1</b> Welcome!</a><ul>
+<li class="chapter" data-level="1.0.1" data-path="index.html"><a href="index.html#how-to-navigate-this-book"><i class="fa fa-check"></i><b>1.0.1</b> How To Navigate This Book</a></li>
+<li class="chapter" data-level="1.1" data-path="associated-csu-course.html"><a href="associated-csu-course.html"><i class="fa fa-check"></i><b>1.1</b> Associated CSU Course</a></li>
+</ul></li>
+<li class="chapter" data-level="2" data-path="AccessingData.html"><a href="AccessingData.html"><i class="fa fa-check"></i><b>2</b> Accessing Data</a><ul>
+<li class="chapter" data-level="2.1" data-path="common-forms.html"><a href="common-forms.html"><i class="fa fa-check"></i><b>2.1</b> Common Forms</a><ul>
+<li class="chapter" data-level="2.1.1" data-path="common-forms.html"><a href="common-forms.html#rectangular-data"><i class="fa fa-check"></i><b>2.1.1</b> Rectangular Data</a></li>
+<li class="chapter" data-level="2.1.2" data-path="common-forms.html"><a href="common-forms.html#non-rectangular-data"><i class="fa fa-check"></i><b>2.1.2</b> Non-rectangular Data</a></li>
+</ul></li>
+<li class="chapter" data-level="2.2" data-path="apis-clean-and-curated.html"><a href="apis-clean-and-curated.html"><i class="fa fa-check"></i><b>2.2</b> APIs: Clean and Curated</a></li>
+<li class="chapter" data-level="2.3" data-path="scraping-messy-and-mangled.html"><a href="scraping-messy-and-mangled.html"><i class="fa fa-check"></i><b>2.3</b> Scraping: Messy and Mangled</a></li>
+</ul></li>
+<li class="divider"></li>
+<li><a href="https://github.com/rstudio/bookdown" target="blank">Published with bookdown</a></li>
+
+</ul>
+
+      </nav>
+    </div>
+
+    <div class="book-body">
+      <div class="body-inner">
+        <div class="book-header" role="navigation">
+          <h1>
+            <i class="fa fa-circle-o-notch fa-spin"></i><a href="./">R Module 2</a>
+          </h1>
+        </div>
+
+        <div class="page-wrapper" tabindex="-1" role="main">
+          <div class="page-inner">
+
+            <section class="normal" id="section-">
+<div id="common-forms" class="section level2">
+<h2><span class="header-section-number">2.1</span> Common Forms</h2>
+<p>Data present themselves in many forms, but at a basic level, all data can be categorized into two structures: <strong>rectangular data</strong> and <strong>non-rectangular data</strong>. Intuitively, rectangular data are shaped like a rectangule where every value cooresponds to some row and column. Non-rectangular data, on the other hand, are not no neatly arranged in rows and columns. Instead, they are often a culmination of seperate data structures where there is some similarity among members of the same data strucuture.</p>
+<p>To motivate this idea, let’s consider a basic grocery list which consists of ten items: black beans, milk, pasta, cheese, bananas, peanut butter, bread, apples, tomato sauce, and mayonnaise. Notice, there is little organization to this list, and more involved shoppers may find this list inadequate or unhelpful. We may wish to group these items by sections in which we’re likely to find them. We may also want to include prices, so we know in-store whether the items are on sale. Let’s consider two distinct (but legitamate) ways to organize these data.</p>
+<div class="caution">
+<p>
+To illustrate the idea of rectangular vs. non-rectangular data, we will consider how these data can be structured in both ways using <code>R</code>. You may not have seen some of these functions yet. No worries! The objective is not to understand <strong>how</strong> to utilize these functions but to comprehend the difference between rectangular and non-rectangular data.
+</p>
+</div>
+<p>One may first consider grouping these items by section. For example, apples and bananas can be found in the produce section, whereas black beans and tomato sauce can be found in the canned goods. If we were to continue to group these items by section, we may arrive at a data set which looks something like this:</p>
+<div class="sourceCode" id="cb1"><pre class="sourceCode r chunk-style"><code class="sourceCode r"><a class="sourceLine" id="cb1-1" title="1">groc &lt;-<span class="st"> </span><span class="kw">list</span>(<span class="dt">produce =</span> <span class="kw">data.frame</span>(<span class="dt">item =</span> <span class="kw">c</span>(<span class="st">&#39;apples&#39;</span>, <span class="st">&#39;bananas&#39;</span>),</a>
+<a class="sourceLine" id="cb1-2" title="2">                                  <span class="dt">price =</span> <span class="kw">c</span>(<span class="fl">3.99</span>, <span class="fl">0.49</span>)),</a>
+<a class="sourceLine" id="cb1-3" title="3">             <span class="dt">condiments =</span> <span class="kw">data.frame</span>(<span class="dt">item =</span> <span class="kw">c</span>(<span class="st">&#39;peanut_butter&#39;</span>, <span class="st">&#39;mayonnaise&#39;</span>),</a>
+<a class="sourceLine" id="cb1-4" title="4">                                     <span class="dt">price =</span> <span class="kw">c</span>(<span class="fl">2.18</span>, <span class="fl">3.89</span>)),</a>
+<a class="sourceLine" id="cb1-5" title="5">             <span class="dt">canned_goods =</span> <span class="kw">data.frame</span>(<span class="dt">item =</span> <span class="kw">c</span>(<span class="st">&#39;black_beans&#39;</span>, <span class="st">&#39;tomato_sauce&#39;</span>),</a>
+<a class="sourceLine" id="cb1-6" title="6">                                       <span class="dt">price =</span> <span class="kw">c</span>(<span class="fl">0.99</span>, <span class="fl">0.69</span>)),</a>
+<a class="sourceLine" id="cb1-7" title="7">             <span class="dt">grains =</span> <span class="kw">data.frame</span>(<span class="dt">item =</span> <span class="kw">c</span>(<span class="st">&#39;bread&#39;</span>, <span class="st">&#39;pasta&#39;</span>),</a>
+<a class="sourceLine" id="cb1-8" title="8">                                 <span class="dt">price =</span> <span class="kw">c</span>(<span class="fl">2.99</span>, <span class="fl">1.99</span>)),</a>
+<a class="sourceLine" id="cb1-9" title="9">             <span class="dt">dairy =</span> <span class="kw">data.frame</span>(<span class="dt">item =</span> <span class="kw">c</span>(<span class="st">&#39;milk&#39;</span>, <span class="st">&#39;butter&#39;</span>),</a>
+<a class="sourceLine" id="cb1-10" title="10">                                <span class="dt">price =</span> <span class="kw">c</span>(<span class="fl">2.73</span>, <span class="fl">2.57</span>)))</a>
+<a class="sourceLine" id="cb1-11" title="11">groc</a></code></pre></div>
+<pre class="output-style"><code>$produce
+     item price
+1  apples  3.99
+2 bananas  0.49
+
+$condiments
+           item price
+1 peanut_butter  2.18
+2    mayonnaise  3.89
+
+$canned_goods
+          item price
+1  black_beans  0.99
+2 tomato_sauce  0.69
+
+$grains
+   item price
+1 bread  2.99
+2 pasta  1.99
+
+$dairy
+    item price
+1   milk  2.73
+2 butter  2.57</code></pre>
+<p>Here, we use lists and data frames to create a data set of our grocery list. This list can be traversed depending on what section of the store we find ourselves. For example, suppose we are in the produce section, and we need to recall what items to buy. We could utilize the following code to remind ourselves.</p>
+<div class="sourceCode" id="cb3"><pre class="sourceCode r chunk-style"><code class="sourceCode r"><a class="sourceLine" id="cb3-1" title="1">groc<span class="op">$</span>produce</a></code></pre></div>
+<div data-pagedtable="false">
+<script data-pagedtable-source type="application/json">
+{"columns":[{"label":["item"],"name":[1],"type":["chr"],"align":["left"]},{"label":["price"],"name":[2],"type":["dbl"],"align":["right"]}],"data":[{"1":"apples","2":"3.99"},{"1":"bananas","2":"0.49"}],"options":{"columns":{"min":{},"max":[10]},"rows":{"min":[10],"max":[10]},"pages":{}}}
+  </script>
+</div>
+<div class="reflect">
+<p>
+Is this grocery list an example of rectangular or non-rectangular data? Are there examples of rectangular data contained within the grocery list? How could we restructure the data to <strong>rectangularize</strong> the grocery list?
+</p>
+</div>
+<p>As constructed, this grocery list is an example of non-rectangular data. As a whole, the grocery list is not shaped like a rectangule, but rather, consists of sets of rectangular data, where the sets are defined by the section of the store. Within a section of the store, the items and prices are given in rectangular form since every value is defined by a row and column.</p>
+<p>While non-rectangular data is often a useful return object for user-defined functions, they are often troublesome to work with. If a data set can be restructured or created in rectangular form, it should be. Rectangular data is especially important within the Tidyverse, a self-described ‘opinionated collection of R pacakges designed for data science’. All packages within the Tidyverse rely on the priciple of <em>tidy data</em>, data structures where observations are given by rows and variables are given by columns. As defined, tidy data are rectangular, so as we embark on wrangling, visualizing, and modeling data in future chapters, it is important to ponder the nature of our data and whether it can be rectangularized.</p>
+<p>Let’s consider how we can rectangularize the grocery list. Instead of creating a list of named data frames, where the name represents the section of the store, let’s create a grocery list where each row represents an item and columns specify the section and price. Because the Tidyverse requires rectangular data, there are several functions which are handy for converting data structures to rectangular form. We could utilize some of these functions,</p>
+<div class="sourceCode" id="cb4"><pre class="sourceCode r chunk-style"><code class="sourceCode r"><a class="sourceLine" id="cb4-1" title="1"><span class="kw">library</span>(tidyverse)</a></code></pre></div>
+<pre><code>-- Attaching packages --------</code></pre>
+<pre><code>v ggplot2 3.3.2     v purrr   0.3.4
+v tibble  3.0.3     v dplyr   1.0.2
+v tidyr   1.1.2     v stringr 1.4.0
+v readr   1.3.1     v forcats 0.5.0</code></pre>
+<pre><code>-- Conflicts -----------------
+x lubridate::as.difftime() masks base::as.difftime()
+x lubridate::date()        masks base::date()
+x dplyr::filter()          masks stats::filter()
+x dplyr::group_rows()      masks kableExtra::group_rows()
+x lubridate::intersect()   masks base::intersect()
+x dplyr::lag()             masks stats::lag()
+x lubridate::setdiff()     masks base::setdiff()
+x lubridate::union()       masks base::union()</code></pre>
+<div class="sourceCode" id="cb8"><pre class="sourceCode r chunk-style"><code class="sourceCode r"><a class="sourceLine" id="cb8-1" title="1">groc <span class="op">%&gt;%</span></a>
+<a class="sourceLine" id="cb8-2" title="2"><span class="st">  </span><span class="kw">bind_rows</span>(., <span class="dt">.id =</span> <span class="st">&#39;section&#39;</span>)</a></code></pre></div>
+<div data-pagedtable="false">
+<script data-pagedtable-source type="application/json">
+{"columns":[{"label":["section"],"name":[1],"type":["chr"],"align":["left"]},{"label":["item"],"name":[2],"type":["chr"],"align":["left"]},{"label":["price"],"name":[3],"type":["dbl"],"align":["right"]}],"data":[{"1":"produce","2":"apples","3":"3.99"},{"1":"produce","2":"bananas","3":"0.49"},{"1":"condiments","2":"peanut_butter","3":"2.18"},{"1":"condiments","2":"mayonnaise","3":"3.89"},{"1":"canned_goods","2":"black_beans","3":"0.99"},{"1":"canned_goods","2":"tomato_sauce","3":"0.69"},{"1":"grains","2":"bread","3":"2.99"},{"1":"grains","2":"pasta","3":"1.99"},{"1":"dairy","2":"milk","3":"2.73"},{"1":"dairy","2":"butter","3":"2.57"}],"options":{"columns":{"min":{},"max":[10]},"rows":{"min":[10],"max":[10]},"pages":{}}}
+  </script>
+</div>
+<p>or we can simply create the grocery list in long form to begin with.</p>
+<p>, but the most popular file storage via text files (.txt), comma seperated value files (.csv), and Excel files (.xlsx). Beyond</p>
+<div class="feedback">
+<p>
+Any feedback for this section? Click <a href="https://docs.google.com/forms/d/e/1FAIpQLSePQZ3lIaCIPo9J2owXImHZ_9wBEgTo21A0s-A1ty28u4yfvw/viewform?entry.1684471501=The%20R%20Community">here</a>
+</p>
+</div>
+<div id="rectangular-data" class="section level3">
+<h3><span class="header-section-number">2.1.1</span> Rectangular Data</h3>
+<p>Microsoft Excel has exceled in helping business persons, researchers, and students manage and organize their data, alike. From accounting to budgets, many data exhibit <em>rectangular form</em>. This means that the data are organized in rows and columns.</p>
+<p>Let’s consider an example of rectangular data. Here, the data set (created using the data frame class) consists of five rows and two columns.</p>
+<div class="sourceCode" id="cb9"><pre class="sourceCode r chunk-style"><code class="sourceCode r"><a class="sourceLine" id="cb9-1" title="1">(dt &lt;-<span class="st"> </span><span class="kw">data.frame</span>(<span class="dt">id =</span> <span class="dv">1</span><span class="op">:</span><span class="dv">5</span>, <span class="dt">x =</span> <span class="kw">rnorm</span>(<span class="dv">5</span>)))</a></code></pre></div>
+<div data-pagedtable="false">
+<script data-pagedtable-source type="application/json">
+{"columns":[{"label":["id"],"name":[1],"type":["int"],"align":["right"]},{"label":["x"],"name":[2],"type":["dbl"],"align":["right"]}],"data":[{"1":"1","2":"-0.4486660"},{"1":"2","2":"-0.6732663"},{"1":"3","2":"1.9687339"},{"1":"4","2":"0.4246097"},{"1":"5","2":"-0.1800598"}],"options":{"columns":{"min":{},"max":[10]},"rows":{"min":[10],"max":[10]},"pages":{}}}
+  </script>
+</div>
+<p>Each element of the data need not be populated for the data to be considered of rectangular form, and the data need not be numeric to be considered rectangular form. All that matters is that the data are constructed in rows and columns.</p>
+<div class="progress">
+<p>
+Would the following be classified as rectangular data? <code>r (dt &lt;- data.frame(id = c(1, NA, 3, 4, 5), letters = c(NA, letters[2:5])))</code>
+</p>
+</div>
+<p>Rectangular data is often stored locally using text files, comma seperated value files, and Excel files.</p>
+<div class="feedback">
+<p>
+Any feedback for this section? Click <a href="https://docs.google.com/forms/d/e/1FAIpQLSePQZ3lIaCIPo9J2owXImHZ_9wBEgTo21A0s-A1ty28u4yfvw/viewform?entry.1684471501=The%20R%20Community">here</a>
+</p>
+</div>
+</div>
+<div id="non-rectangular-data" class="section level3">
+<h3><span class="header-section-number">2.1.2</span> Non-rectangular Data</h3>
+<div class="feedback">
+<p>
+Any feedback for this section? Click <a href="https://docs.google.com/forms/d/e/1FAIpQLSePQZ3lIaCIPo9J2owXImHZ_9wBEgTo21A0s-A1ty28u4yfvw/viewform?entry.1684471501=The%20R%20Community">here</a>
+</p>
+</div>
+</div>
+</div>
+            </section>
+
+          </div>
+        </div>
+      </div>
+<a href="AccessingData.html" class="navigation navigation-prev " aria-label="Previous page"><i class="fa fa-angle-left"></i></a>
+<a href="apis-clean-and-curated.html" class="navigation navigation-next " aria-label="Next page"><i class="fa fa-angle-right"></i></a>
+    </div>
+  </div>
+<script src="libs/gitbook-2.6.7/js/app.min.js"></script>
+<script src="libs/gitbook-2.6.7/js/lunr.js"></script>
+<script src="libs/gitbook-2.6.7/js/clipboard.min.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-search.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-sharing.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-fontsettings.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-bookdown.js"></script>
+<script src="libs/gitbook-2.6.7/js/jquery.highlight.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-clipboard.js"></script>
+<script>
+gitbook.require(["gitbook"], function(gitbook) {
+gitbook.start({
+"sharing": {
+"github": false,
+"facebook": true,
+"twitter": true,
+"linkedin": false,
+"weibo": false,
+"instapaper": false,
+"vk": false,
+"all": ["facebook", "twitter", "linkedin", "weibo", "instapaper"]
+},
+"fontsettings": {
+"theme": "white",
+"family": "sans",
+"size": 2
+},
+"edit": {
+"link": null,
+"text": null
+},
+"history": {
+"link": null,
+"text": null
+},
+"view": {
+"link": null,
+"text": null
+},
+"download": ["Module2.pdf", "Module2.epub"],
+"toc": {
+"collapse": "subsection"
+},
+"toolbar": {
+"position": "static"
+}
+});
+});
+</script>
+
+</body>
+
+</html>

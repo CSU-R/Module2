@@ -1,9 +1,8 @@
 # Course Preliminaries {#prelim}
 
-> "Learning to code is useful no matter what your career ambitions are." —Arianna Huffington, Founder, The Huffington Post
+> "Data is the new oil." —Clive Humby, Chief Data Scientist, Starcount
 
-In this chapter, we'll discuss the preliminary details of the course.
-Then you'll run some R code and learn more about R and the R community.
+In this chapter, we'll cover how to access data given in various forms and provided from various sources.
 
 ## This Textbook
 

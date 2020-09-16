@@ -4,11 +4,11 @@
 
   <meta charset="utf-8" />
   <meta http-equiv="X-UA-Compatible" content="IE=edge" />
-  <title>R Module 2</title>
+  <title>2.2 APIs: Clean and Curated | R Module 2</title>
   <meta name="description" content="This is the second installment for the book for the R Intro Course at CSU." />
   <meta name="generator" content="bookdown 0.20 and GitBook 2.6.7" />
 
-  <meta property="og:title" content="R Module 2" />
+  <meta property="og:title" content="2.2 APIs: Clean and Curated | R Module 2" />
   <meta property="og:type" content="book" />
   
   
@@ -16,7 +16,7 @@
   
 
   <meta name="twitter:card" content="summary" />
-  <meta name="twitter:title" content="R Module 2" />
+  <meta name="twitter:title" content="2.2 APIs: Clean and Curated | R Module 2" />
   
   <meta name="twitter:description" content="This is the second installment for the book for the R Intro Course at CSU." />
   
@@ -30,8 +30,8 @@
   <meta name="apple-mobile-web-app-status-bar-style" content="black" />
   
   
-
-<link rel="next" href="associated-csu-course.html"/>
+<link rel="prev" href="rectangular-vs-non-rectangular-data.html"/>
+<link rel="next" href="scraping-messy-and-mangled.html"/>
 <script src="libs/jquery-2.2.3/jquery.min.js"></script>
 <link href="libs/gitbook-2.6.7/css/style.css" rel="stylesheet" />
 <link href="libs/gitbook-2.6.7/css/plugin-table.css" rel="stylesheet" />
@@ -165,57 +165,67 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
           <div class="page-inner">
 
             <section class="normal" id="section-">
-<div id="header">
-<h1 class="title">R Module 2</h1>
-<p class="author"><em>Connor Gibbs<a href="#fn1" class="footnote-ref" id="fnref1"><sup>1</sup></a></em></p>
-<p class="date"><em>15 Sep, 2020, 02:33 PM</em></p>
-</div>
-<div id="welcome" class="section level1">
-<h1><span class="header-section-number">Chapter 1</span> Welcome!</h1>
-<p>Hi, and welcome to the R Module 2 (AKA STAT 158) course at Colorado State University!</p>
-<p>This course is the second of three 1 credit courses intended to introduce the R programming language to those with little or no programming experience.</p>
-<p>Through these Modules (courses), we’ll explore how R can be used to do the following:</p>
+<div id="apis-clean-and-curated" class="section level2">
+<h2><span class="header-section-number">2.2</span> APIs: Clean and Curated</h2>
+<p>An application programming interface (API) is a set of functions and procedures which allows one computer program to interact with another. To simplify the concept remarkably, we will consider web-APIs where there is a server (computer waiting to provide data) and a client (computer making a request for data).</p>
+<p>The benefit of APIs is the result: clean and curated data from the host. The pre-processing needed to get the data in a workable form is entirely done on the server side. We, however, are responsible for making the request. Web-APIs often utilize JavaScript Object Notation (JSON), another example of non-rectangular data. We will utilize the <code>httr</code> and the <code>jsonlite</code> packages to retrieve the latest sports lines from Bovada, an online sportsbook.</p>
+<p>Before we start, we’ll need to download the <code>httr</code> and <code>jsonlite</code> packages and load them into our current environment. Furthermore, we will need to find the address of the server to which we will send the request.</p>
+<div class="sourceCode" id="cb15"><pre class="sourceCode r chunk-style"><code class="sourceCode r"><a class="sourceLine" id="cb15-1" title="1"><span class="kw">library</span>(httr, <span class="dt">quietly =</span> <span class="ot">TRUE</span>)</a>
+<a class="sourceLine" id="cb15-2" title="2"><span class="kw">library</span>(jsonlite, <span class="dt">quietly =</span> <span class="ot">TRUE</span>)</a></code></pre></div>
+<pre><code>
+Attaching package: &#39;jsonlite&#39;</code></pre>
+<pre><code>The following object is masked from &#39;package:purrr&#39;:
+
+    flatten</code></pre>
+<div class="sourceCode" id="cb18"><pre class="sourceCode r chunk-style"><code class="sourceCode r"><a class="sourceLine" id="cb18-1" title="1">bov_nfl_api &lt;-<span class="st"> &quot;https://www.bovada.lv/services/sports/event/v2/events/A/description/football/nfl&quot;</span></a></code></pre></div>
+<p>To ask for data through a web-API, we will need to make a <code>GET</code> request with the <code>httr</code> package’s <code>GET()</code> function. After making the request, we can read about the server’s response.</p>
+<div class="sourceCode" id="cb19"><pre class="sourceCode r chunk-style"><code class="sourceCode r"><a class="sourceLine" id="cb19-1" title="1">bov_req &lt;-<span class="st"> </span>httr<span class="op">::</span><span class="kw">GET</span>(<span class="dt">url =</span> bov_nfl_api)</a>
+<a class="sourceLine" id="cb19-2" title="2">bov_req</a></code></pre></div>
+<pre class="output-style"><code>Response [https://www.bovada.lv/services/sports/event/v2/events/A/description/football/nfl]
+  Date: 2020-09-15 20:33
+  Status: 200
+  Content-Type: application/json;charset=utf-8
+  Size: 1.11 MB</code></pre>
+<p>If the request was successful, then the status of the request will read 200. Otherwise, there was some error with your request. For a list of HTTP status codes and their respective definitions, follow this <a href="https://www.w3.org/Protocols/rfc2616/rfc2616-sec10.html">link</a>. Since the response clarifys that the content is indeed driven by JavaScript, then we will utilize the <code>jsonlite</code> package to read the JSON structured data. A handy function we will use will be <code>fromJSON()</code> which converts a character vector containing data in JSON structure to native structures in <code>R</code> like lists. So, in order, we will</p>
 <ol style="list-style-type: decimal">
-<li>Perform basic computations and logic, just like any other programming language</li>
-<li>Load, clean, analyze, and visualise data</li>
-<li>Run scripts</li>
-<li>Create reproducible reports so you can explain your work in a narrative form</li>
+<li>Extract the content from the server’s response</li>
+<li>Convert the content to a character vector, maintaining the JSON structure</li>
+<li>Restructure the data into native <code>R</code> structures, using <code>fromJSON()</code>.</li>
 </ol>
-<p>In addition, you’ll also be exposed to some aspects of the broader R community, including:</p>
-<ol style="list-style-type: decimal">
-<li>R as free, open source software</li>
-<li>The RStudio free software</li>
-<li>Publicly available packages which extend the capability of R</li>
-<li>Events and community groups which advocate for the use of R and the support of R users</li>
-</ol>
-<p>More detail will be provided in the Course Topics laid out in the next chapter.</p>
-<div id="how-to-navigate-this-book" class="section level3">
-<h3><span class="header-section-number">1.0.1</span> How To Navigate This Book</h3>
-To move quickly to different portions of the book, click on the appropriate chapter or section in the the table of contents on the left.
-The buttons at the top of the page allow you to show/hide the table of contents, search the book, change font settings, download a pdf or ebook copy of this book, or get hints on various sections of the book.
-The faint left and right arrows at the sides of each page (or bottom of the page if it’s narrow enough) allow you to step to the next/previous section.
-Here’s what they look like:
-<div class="figure" style="text-align: center"><span id="fig:unnamed-chunk-1"></span>
-<img src="src/images/left_arrow.png" alt="Left and right navigation arrows" width="34" /><img src="src/images/right_arrow.png" alt="Left and right navigation arrows" width="26" />
-<p class="caption">
-Figure 1.1: Left and right navigation arrows
+<div class="sourceCode" id="cb21"><pre class="sourceCode r chunk-style"><code class="sourceCode r"><a class="sourceLine" id="cb21-1" title="1">content &lt;-<span class="st"> </span>bov_req<span class="op">$</span>content</a>
+<a class="sourceLine" id="cb21-2" title="2">content_char &lt;-<span class="st"> </span><span class="kw">rawToChar</span>(content)</a>
+<a class="sourceLine" id="cb21-3" title="3">bov_res &lt;-<span class="st"> </span>jsonlite<span class="op">::</span><span class="kw">fromJSON</span>(content_char)</a></code></pre></div>
+<p>Of course, we could also create a function which takes the server’s response and converts the content to native <code>R</code> structures. We will want to code in a force stop if the response status is not 200. We will also want to require the <code>httr</code> and <code>jsonlite</code> packages which will automatically install the packages if a user calls the function without having the packages installed.</p>
+<div class="sourceCode" id="cb22"><pre class="sourceCode r chunk-style"><code class="sourceCode r"><a class="sourceLine" id="cb22-1" title="1">convert_JSON &lt;-<span class="st"> </span><span class="cf">function</span>(resp){</a>
+<a class="sourceLine" id="cb22-2" title="2">  <span class="co"># call needed packages</span></a>
+<a class="sourceLine" id="cb22-3" title="3">  <span class="kw">require</span>(httr)</a>
+<a class="sourceLine" id="cb22-4" title="4">  <span class="kw">require</span>(jsonlite)</a>
+<a class="sourceLine" id="cb22-5" title="5">  <span class="co"># stop if the server returned an error</span></a>
+<a class="sourceLine" id="cb22-6" title="6">  httr<span class="op">::</span><span class="kw">stop_for_status</span>(resp)</a>
+<a class="sourceLine" id="cb22-7" title="7">  <span class="co"># return JSON content in native R structures</span></a>
+<a class="sourceLine" id="cb22-8" title="8">  <span class="kw">return</span>(jsonlite<span class="op">::</span><span class="kw">fromJSON</span>(<span class="kw">rawToChar</span>(resp<span class="op">$</span>content)))</a>
+<a class="sourceLine" id="cb22-9" title="9">}</a></code></pre></div>
+<p>Finally, we can get the same output by simply calling the function.</p>
+<div class="sourceCode" id="cb23"><pre class="sourceCode r chunk-style"><code class="sourceCode r"><a class="sourceLine" id="cb23-1" title="1"><span class="kw">identical</span>(<span class="kw">convert_JSON</span>(bov_req), bov_res)</a></code></pre></div>
+<pre class="output-style"><code>[1] TRUE</code></pre>
+<div class="bonus">
+<p>
+Some web-APIs require additional information from the us as outlined in the documentation for the API. In this case, the user would need to provide additional query parameters in their GET request. Thankfully, this functionality is ingrained in the <code>httr</code> package’s <code>GET()</code> function. For more information on how to include query parameters, type <code>??GET</code> into your <code>R</code> console.
 </p>
 </div>
+<div class="feedback">
+<p>
+Any feedback for this section? Click <a href="https://docs.google.com/forms/d/e/1FAIpQLSePQZ3lIaCIPo9J2owXImHZ_9wBEgTo21A0s-A1ty28u4yfvw/viewform?entry.1684471501=The%20R%20Community">here</a>
+</p>
 </div>
-</div>
-<div class="footnotes">
-<hr />
-<ol start="1">
-<li id="fn1"><p>Department of Statistics, Colorado State University, <a href="mailto:connor.gibbs@colostate.edu" class="email">connor.gibbs@colostate.edu</a><a href="#fnref1" class="footnote-back">↩</a></p></li>
-</ol>
 </div>
             </section>
 
           </div>
         </div>
       </div>
-
-<a href="associated-csu-course.html" class="navigation navigation-next navigation-unique" aria-label="Next page"><i class="fa fa-angle-right"></i></a>
+<a href="rectangular-vs-non-rectangular-data.html" class="navigation navigation-prev " aria-label="Previous page"><i class="fa fa-angle-left"></i></a>
+<a href="scraping-messy-and-mangled.html" class="navigation navigation-next " aria-label="Next page"><i class="fa fa-angle-right"></i></a>
     </div>
   </div>
 <script src="libs/gitbook-2.6.7/js/app.min.js"></script>
