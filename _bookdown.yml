@@ -8,6 +8,7 @@ rmd_files:
   - "index.Rmd"
   - "src/02-AccessingData.Rmd"
 output_dir: "docs"
+df_print: paged
 
 # rmd_subdir: ["src"]  # misses index.Rmd if we use this
 # clean: ["src/book.bib"] # removes book.bib file when cleaned

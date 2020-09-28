@@ -145,7 +145,8 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <li class="chapter" data-level="2.2" data-path="apis-clean-and-curated.html"><a href="apis-clean-and-curated.html"><i class="fa fa-check"></i><b>2.2</b> APIs: Clean and Curated</a></li>
 <li class="chapter" data-level="2.3" data-path="scraping-messy-and-mangled.html"><a href="scraping-messy-and-mangled.html"><i class="fa fa-check"></i><b>2.3</b> Scraping: Messy and Mangled</a><ul>
 <li class="chapter" data-level="2.3.1" data-path="scraping-messy-and-mangled.html"><a href="scraping-messy-and-mangled.html#scraping-vs-api"><i class="fa fa-check"></i><b>2.3.1</b> Scraping vs API</a></li>
-<li class="chapter" data-level="2.3.2" data-path="scraping-messy-and-mangled.html"><a href="scraping-messy-and-mangled.html#hypertext-markup-language-html-and-selector-gadgets"><i class="fa fa-check"></i><b>2.3.2</b> Hypertext Markup Language (HTML) and Selector Gadgets</a></li>
+<li class="chapter" data-level="2.3.2" data-path="scraping-messy-and-mangled.html"><a href="scraping-messy-and-mangled.html#hypertext-markup-language-html"><i class="fa fa-check"></i><b>2.3.2</b> Hypertext Markup Language (HTML)</a></li>
+<li class="chapter" data-level="2.3.3" data-path="scraping-messy-and-mangled.html"><a href="scraping-messy-and-mangled.html#selector-gadgets"><i class="fa fa-check"></i><b>2.3.3</b> Selector Gadgets</a></li>
 </ul></li>
 </ul></li>
 <li class="divider"></li>
@@ -228,24 +229,10 @@ Is this grocery list an example of rectangular or non-rectangular data? Are ther
 <p>As constructed, this grocery list is an example of non-rectangular data. As a whole, the grocery list is not shaped like a rectangule, but rather, consists of sets of rectangular data, where the sets are defined by the section of the store. Within a section of the store, the items and prices are given in rectangular form since every value is defined by a row and column.</p>
 <p>While non-rectangular data is often a useful return object for user-defined functions, they are often troublesome to work with. If a data set can be restructured or created in rectangular form, it should be. Rectangular data is especially important within the Tidyverse, a self-described ‘opinionated collection of R pacakges designed for data science’. All packages within the Tidyverse rely on the priciple of <em>tidy data</em>, data structures where observations are given by rows and variables are given by columns. As defined, tidy data are rectangular, so as we embark on wrangling, visualizing, and modeling data in future chapters, it is important to ponder the nature of our data and whether it can be rectangularized.</p>
 <p>Let’s consider how we can rectangularize the grocery list. Instead of creating a list of named data frames, where the name represents the section of the store, let’s create a grocery list where each row represents an item and columns specify the section and price. Because the Tidyverse requires rectangular data, there are several functions which are handy for converting data structures to rectangular form. We could utilize one of these functions to rectangularize the data set.</p>
-<div class="sourceCode" id="cb4"><pre class="sourceCode r chunk-style"><code class="sourceCode r"><a class="sourceLine" id="cb4-1" title="1"><span class="kw">library</span>(tidyverse, <span class="dt">quietly =</span> <span class="ot">TRUE</span>)</a></code></pre></div>
-<pre><code>-- Attaching packages --------</code></pre>
-<pre><code>v ggplot2 3.3.2     v purrr   0.3.4
-v tibble  3.0.3     v dplyr   1.0.2
-v tidyr   1.1.2     v stringr 1.4.0
-v readr   1.3.1     v forcats 0.5.0</code></pre>
-<pre><code>-- Conflicts -----------------
-x lubridate::as.difftime() masks base::as.difftime()
-x lubridate::date()        masks base::date()
-x dplyr::filter()          masks stats::filter()
-x dplyr::group_rows()      masks kableExtra::group_rows()
-x lubridate::intersect()   masks base::intersect()
-x dplyr::lag()             masks stats::lag()
-x lubridate::setdiff()     masks base::setdiff()
-x lubridate::union()       masks base::union()</code></pre>
-<div class="sourceCode" id="cb8"><pre class="sourceCode r chunk-style"><code class="sourceCode r"><a class="sourceLine" id="cb8-1" title="1">groc_rec &lt;-<span class="st"> </span>groc <span class="op">%&gt;%</span></a>
-<a class="sourceLine" id="cb8-2" title="2"><span class="st">  </span><span class="kw">bind_rows</span>(., <span class="dt">.id =</span> <span class="st">&#39;section&#39;</span>)</a>
-<a class="sourceLine" id="cb8-3" title="3">groc_rec</a></code></pre></div>
+<div class="sourceCode" id="cb4"><pre class="sourceCode r chunk-style"><code class="sourceCode r"><a class="sourceLine" id="cb4-1" title="1"><span class="kw">library</span>(tidyverse, <span class="dt">quietly =</span> <span class="ot">TRUE</span>)</a>
+<a class="sourceLine" id="cb4-2" title="2">groc_rec &lt;-<span class="st"> </span>groc <span class="op">%&gt;%</span></a>
+<a class="sourceLine" id="cb4-3" title="3"><span class="st">  </span><span class="kw">bind_rows</span>(., <span class="dt">.id =</span> <span class="st">&#39;section&#39;</span>)</a>
+<a class="sourceLine" id="cb4-4" title="4">groc_rec</a></code></pre></div>
 <div data-pagedtable="false">
 <script data-pagedtable-source type="application/json">
 {"columns":[{"label":["section"],"name":[1],"type":["chr"],"align":["left"]},{"label":["item"],"name":[2],"type":["chr"],"align":["left"]},{"label":["price"],"name":[3],"type":["dbl"],"align":["right"]}],"data":[{"1":"produce","2":"apples","3":"3.99"},{"1":"produce","2":"bananas","3":"0.49"},{"1":"condiments","2":"peanut_butter","3":"2.18"},{"1":"condiments","2":"mayonnaise","3":"3.89"},{"1":"canned_goods","2":"black_beans","3":"0.99"},{"1":"canned_goods","2":"tomato_sauce","3":"0.69"},{"1":"grains","2":"bread","3":"2.99"},{"1":"grains","2":"pasta","3":"1.99"},{"1":"dairy","2":"milk","3":"2.73"},{"1":"dairy","2":"butter","3":"2.57"}],"options":{"columns":{"min":{},"max":[10]},"rows":{"min":[10],"max":[10]},"pages":{}}}
@@ -260,31 +247,19 @@ Any feedback for this section? Click <a href="https://docs.google.com/forms/d/e/
 <div id="reading-and-writing-rectangular-data" class="section level3">
 <h3><span class="header-section-number">2.1.1</span> Reading and Writing Rectangular Data</h3>
 <p>Rectangular data are often stored locally using text files (.txt), comma seperated value files (.csv), and Excel files (.xlsx). When data are written to these file types, they are easy to view across devices, without the need for <code>R</code>. Since most grocery store trips obviate the need for <code>R</code>, let’s consider how to write our grocery list to each of these file types. To write and read data to and from text files or comma seperated value files, the <code>readr</code> package will come in handy, whereas the <code>xlsx</code> package will allow us to write and read to and from Excel files. To write data from <code>R</code> to a file, we will leverage commands begining with <code>write</code>.</p>
-<div class="sourceCode" id="cb9"><pre class="sourceCode r chunk-style"><code class="sourceCode r"><a class="sourceLine" id="cb9-1" title="1"><span class="co"># text file</span></a>
-<a class="sourceLine" id="cb9-2" title="2">readr<span class="op">::</span><span class="kw">write_delim</span>(groc_rec, <span class="dt">path =</span> <span class="st">&#39;./data_raw/groceries-rectangular.txt&#39;</span>)</a>
-<a class="sourceLine" id="cb9-3" title="3"><span class="co"># csv file</span></a>
-<a class="sourceLine" id="cb9-4" title="4">readr<span class="op">::</span><span class="kw">write_csv</span>(groc_rec, <span class="dt">path =</span> <span class="st">&#39;./data_raw/groceries-rectangular.csv&#39;</span>)</a>
-<a class="sourceLine" id="cb9-5" title="5"><span class="co"># Excel file</span></a>
-<a class="sourceLine" id="cb9-6" title="6">xlsx<span class="op">::</span><span class="kw">write.xlsx</span>(groc_rec, <span class="dt">file =</span> <span class="st">&#39;./data_raw/groceries-rectangular.xlsx&#39;</span>, <span class="dt">row.names =</span> <span class="ot">FALSE</span>)</a></code></pre></div>
+<div class="sourceCode" id="cb5"><pre class="sourceCode r chunk-style"><code class="sourceCode r"><a class="sourceLine" id="cb5-1" title="1"><span class="co"># text file</span></a>
+<a class="sourceLine" id="cb5-2" title="2">readr<span class="op">::</span><span class="kw">write_delim</span>(groc_rec, <span class="dt">path =</span> <span class="st">&#39;./data_raw/groceries-rectangular.txt&#39;</span>)</a>
+<a class="sourceLine" id="cb5-3" title="3"><span class="co"># csv file</span></a>
+<a class="sourceLine" id="cb5-4" title="4">readr<span class="op">::</span><span class="kw">write_csv</span>(groc_rec, <span class="dt">path =</span> <span class="st">&#39;./data_raw/groceries-rectangular.csv&#39;</span>)</a>
+<a class="sourceLine" id="cb5-5" title="5"><span class="co"># Excel file</span></a>
+<a class="sourceLine" id="cb5-6" title="6">xlsx<span class="op">::</span><span class="kw">write.xlsx</span>(groc_rec, <span class="dt">file =</span> <span class="st">&#39;./data_raw/groceries-rectangular.xlsx&#39;</span>, <span class="dt">row.names =</span> <span class="ot">FALSE</span>)</a></code></pre></div>
 <p>To read data from a file to <code>R</code>, we will leverage commands beginning with <code>read</code>. Before reading data into <code>R</code>, you will need to look at the file and file extension to better understand which function to use.</p>
-<div class="sourceCode" id="cb10"><pre class="sourceCode r chunk-style"><code class="sourceCode r"><a class="sourceLine" id="cb10-1" title="1"><span class="co"># text file</span></a>
-<a class="sourceLine" id="cb10-2" title="2">readr<span class="op">::</span><span class="kw">read_delim</span>(<span class="st">&#39;./data_raw/groceries-rectangular.txt&#39;</span>, <span class="dt">delim =</span> <span class="st">&#39; &#39;</span>)</a></code></pre></div>
-<pre><code>Parsed with column specification:
-cols(
-  section = col_character(),
-  item = col_character(),
-  price = col_double()
-)</code></pre>
-<div class="sourceCode" id="cb12"><pre class="sourceCode r chunk-style"><code class="sourceCode r"><a class="sourceLine" id="cb12-1" title="1"><span class="co"># csv file</span></a>
-<a class="sourceLine" id="cb12-2" title="2">readr<span class="op">::</span><span class="kw">read_csv</span>(<span class="st">&#39;./data_raw/groceries-rectangular.csv&#39;</span>)</a></code></pre></div>
-<pre><code>Parsed with column specification:
-cols(
-  section = col_character(),
-  item = col_character(),
-  price = col_double()
-)</code></pre>
-<div class="sourceCode" id="cb14"><pre class="sourceCode r chunk-style"><code class="sourceCode r"><a class="sourceLine" id="cb14-1" title="1"><span class="co"># Excel file</span></a>
-<a class="sourceLine" id="cb14-2" title="2">xlsx<span class="op">::</span><span class="kw">read.xlsx</span>(<span class="st">&#39;./data_raw/groceries-rectangular.xlsx&#39;</span>, <span class="dt">sheetName =</span> <span class="st">&#39;Sheet1&#39;</span>)</a></code></pre></div>
+<div class="sourceCode" id="cb6"><pre class="sourceCode r chunk-style"><code class="sourceCode r"><a class="sourceLine" id="cb6-1" title="1"><span class="co"># text file</span></a>
+<a class="sourceLine" id="cb6-2" title="2">readr<span class="op">::</span><span class="kw">read_delim</span>(<span class="st">&#39;./data_raw/groceries-rectangular.txt&#39;</span>, <span class="dt">delim =</span> <span class="st">&#39; &#39;</span>)</a>
+<a class="sourceLine" id="cb6-3" title="3"><span class="co"># csv file</span></a>
+<a class="sourceLine" id="cb6-4" title="4">readr<span class="op">::</span><span class="kw">read_csv</span>(<span class="st">&#39;./data_raw/groceries-rectangular.csv&#39;</span>)</a>
+<a class="sourceLine" id="cb6-5" title="5"><span class="co"># Excel file</span></a>
+<a class="sourceLine" id="cb6-6" title="6">xlsx<span class="op">::</span><span class="kw">read.xlsx</span>(<span class="st">&#39;./data_raw/groceries-rectangular.xlsx&#39;</span>, <span class="dt">sheetName =</span> <span class="st">&#39;Sheet1&#39;</span>)</a></code></pre></div>
 <div data-pagedtable="false">
 <script data-pagedtable-source type="application/json">
 {"columns":[{"label":["section"],"name":[1],"type":["chr"],"align":["left"]},{"label":["item"],"name":[2],"type":["chr"],"align":["left"]},{"label":["price"],"name":[3],"type":["dbl"],"align":["right"]}],"data":[{"1":"produce","2":"apples","3":"3.99"},{"1":"produce","2":"bananas","3":"0.49"},{"1":"condiments","2":"peanut_butter","3":"2.18"},{"1":"condiments","2":"mayonnaise","3":"3.89"},{"1":"canned_goods","2":"black_beans","3":"0.99"},{"1":"canned_goods","2":"tomato_sauce","3":"0.69"},{"1":"grains","2":"bread","3":"2.99"},{"1":"grains","2":"pasta","3":"1.99"},{"1":"dairy","2":"milk","3":"2.73"},{"1":"dairy","2":"butter","3":"2.57"}],"options":{"columns":{"min":{},"max":[10]},"rows":{"min":[10],"max":[10]},"pages":{}}}

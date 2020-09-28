@@ -145,7 +145,8 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <li class="chapter" data-level="2.2" data-path="apis-clean-and-curated.html"><a href="apis-clean-and-curated.html"><i class="fa fa-check"></i><b>2.2</b> APIs: Clean and Curated</a></li>
 <li class="chapter" data-level="2.3" data-path="scraping-messy-and-mangled.html"><a href="scraping-messy-and-mangled.html"><i class="fa fa-check"></i><b>2.3</b> Scraping: Messy and Mangled</a><ul>
 <li class="chapter" data-level="2.3.1" data-path="scraping-messy-and-mangled.html"><a href="scraping-messy-and-mangled.html#scraping-vs-api"><i class="fa fa-check"></i><b>2.3.1</b> Scraping vs API</a></li>
-<li class="chapter" data-level="2.3.2" data-path="scraping-messy-and-mangled.html"><a href="scraping-messy-and-mangled.html#hypertext-markup-language-html-and-selector-gadgets"><i class="fa fa-check"></i><b>2.3.2</b> Hypertext Markup Language (HTML) and Selector Gadgets</a></li>
+<li class="chapter" data-level="2.3.2" data-path="scraping-messy-and-mangled.html"><a href="scraping-messy-and-mangled.html#hypertext-markup-language-html"><i class="fa fa-check"></i><b>2.3.2</b> Hypertext Markup Language (HTML)</a></li>
+<li class="chapter" data-level="2.3.3" data-path="scraping-messy-and-mangled.html"><a href="scraping-messy-and-mangled.html#selector-gadgets"><i class="fa fa-check"></i><b>2.3.3</b> Selector Gadgets</a></li>
 </ul></li>
 </ul></li>
 <li class="divider"></li>
@@ -174,97 +175,82 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <div id="scraping-vs-api" class="section level3">
 <h3><span class="header-section-number">2.3.1</span> Scraping vs API</h3>
 <p>The benefit of using an API are clean data. For example, we can traverse the result to find the latest NFL events.</p>
-<div class="sourceCode" id="cb25"><pre class="sourceCode r chunk-style"><code class="sourceCode r"><a class="sourceLine" id="cb25-1" title="1"><span class="kw">head</span>(bov_res[[<span class="dv">2</span>]][[<span class="dv">1</span>]][,<span class="dv">2</span>])</a></code></pre></div>
-<pre class="output-style"><code>[1] &quot;Cincinnati Bengals @ Cleveland Browns&quot;   
-[2] &quot;Atlanta Falcons @ Dallas Cowboys&quot;        
-[3] &quot;Buffalo Bills @ Miami Dolphins&quot;          
-[4] &quot;Carolina Panthers @ Tampa Bay Buccaneers&quot;
-[5] &quot;Denver Broncos @ Pittsburgh Steelers&quot;    
-[6] &quot;Detroit Lions @ Green Bay Packers&quot;       </code></pre>
+<div class="sourceCode" id="cb14"><pre class="sourceCode r chunk-style"><code class="sourceCode r"><a class="sourceLine" id="cb14-1" title="1"><span class="kw">head</span>(bov_res[[<span class="dv">2</span>]][[<span class="dv">1</span>]][,<span class="dv">2</span>])</a></code></pre></div>
+<pre class="output-style"><code>[1] &quot;Kansas City Chiefs @ Baltimore Ravens&quot;    
+[2] &quot;Denver Broncos @ New York Jets&quot;           
+[3] &quot;Arizona Cardinals @ Carolina Panthers&quot;    
+[4] &quot;Cleveland Browns @ Dallas Cowboys&quot;        
+[5] &quot;Indianapolis Colts @ Chicago Bears&quot;       
+[6] &quot;Jacksonville Jaguars @ Cincinnati Bengals&quot;</code></pre>
 <p>With more digging, we can find which teams are playing at home.</p>
-<div class="sourceCode" id="cb27"><pre class="sourceCode r chunk-style"><code class="sourceCode r"><a class="sourceLine" id="cb27-1" title="1"><span class="kw">head</span>(bov_res[[<span class="dv">2</span>]][[<span class="dv">1</span>]][[<span class="dv">16</span>]])</a></code></pre></div>
+<div class="sourceCode" id="cb16"><pre class="sourceCode r chunk-style"><code class="sourceCode r"><a class="sourceLine" id="cb16-1" title="1"><span class="kw">head</span>(bov_res[[<span class="dv">2</span>]][[<span class="dv">1</span>]][[<span class="dv">16</span>]])</a></code></pre></div>
 <pre class="output-style"><code>[[1]]
                 id               name  home
-1 7410847-11904219   Cleveland Browns  TRUE
-2 7410847-11904217 Cincinnati Bengals FALSE
+1 7712412-11903831   Baltimore Ravens  TRUE
+2 7712412-11852811 Kansas City Chiefs FALSE
 
 [[2]]
-                id            name  home
-1 7410866-11904234  Dallas Cowboys  TRUE
-2 7410866-11904242 Atlanta Falcons FALSE
-
-[[3]]
                 id           name  home
-1 7410932-11904224 Miami Dolphins  TRUE
-2 7410932-11904215  Buffalo Bills FALSE
-
-[[4]]
-                id                 name  home
-1 7410868-11904225 Tampa Bay Buccaneers  TRUE
-2 7410868-11904216    Carolina Panthers FALSE
-
-[[5]]
-                id                name  home
-1 7410927-11904223 Pittsburgh Steelers  TRUE
-2 7410927-11904245      Denver Broncos FALSE
-
-[[6]]
-                id              name  home
-1 7410940-11904228 Green Bay Packers  TRUE
-2 7410940-11904244     Detroit Lions FALSE</code></pre>
-<p>We can also find the current line of each of these games.</p>
-<div class="sourceCode" id="cb29"><pre class="sourceCode r chunk-style"><code class="sourceCode r"><a class="sourceLine" id="cb29-1" title="1"><span class="kw">library</span>(rlist, <span class="dt">quietly =</span> <span class="ot">TRUE</span>)</a>
-<a class="sourceLine" id="cb29-2" title="2">bov_res[[<span class="dv">2</span>]][[<span class="dv">1</span>]][[<span class="dv">17</span>]] <span class="op">%&gt;%</span><span class="st"> </span></a>
-<a class="sourceLine" id="cb29-3" title="3"><span class="st">  </span><span class="kw">map</span>(., <span class="op">~</span>.x[[<span class="st">&#39;markets&#39;</span>]]) <span class="op">%&gt;%</span><span class="st"> </span></a>
-<a class="sourceLine" id="cb29-4" title="4"><span class="st">  </span><span class="kw">map</span>(., <span class="op">~</span><span class="kw">pluck</span>(.x, <span class="dv">1</span>)) <span class="op">%&gt;%</span><span class="st"> </span></a>
-<a class="sourceLine" id="cb29-5" title="5"><span class="st">  </span><span class="kw">map</span>(., <span class="op">~</span>.x[[<span class="st">&#39;outcomes&#39;</span>]]) <span class="op">%&gt;%</span></a>
-<a class="sourceLine" id="cb29-6" title="6"><span class="st">  </span><span class="kw">map</span>(., <span class="op">~</span><span class="kw">pluck</span>(.x, <span class="dv">1</span>)) <span class="op">%&gt;%</span></a>
-<a class="sourceLine" id="cb29-7" title="7"><span class="st">  </span>rlist<span class="op">::</span><span class="kw">list.filter</span>(., <span class="kw">all</span>(<span class="kw">c</span>(<span class="st">&#39;A&#39;</span>, <span class="st">&#39;H&#39;</span>) <span class="op">%in%</span><span class="st"> </span>type)) <span class="op">%&gt;%</span></a>
-<a class="sourceLine" id="cb29-8" title="8"><span class="st">  </span><span class="kw">map</span>(., <span class="op">~</span><span class="kw">bind_cols</span>(.x, <span class="kw">select</span>(.x<span class="op">$</span>price, <span class="op">-</span>id))) <span class="op">%&gt;%</span><span class="st"> </span></a>
-<a class="sourceLine" id="cb29-9" title="9"><span class="st">  </span><span class="kw">map</span>(., <span class="op">~</span><span class="kw">select</span>(.x, description, handicap, american)) <span class="op">%&gt;%</span></a>
-<a class="sourceLine" id="cb29-10" title="10"><span class="st">  </span><span class="kw">head</span>()</a></code></pre></div>
-<pre class="output-style"><code>[[1]]
-         description handicap american
-1 Cincinnati Bengals      6.0     -115
-2   Cleveland Browns     -6.0     -105
-
-[[2]]
-      description handicap american
-1 Atlanta Falcons      4.0     -105
-2  Dallas Cowboys     -4.0     -115
+1 7736035-11904241  New York Jets  TRUE
+2 7736035-11904245 Denver Broncos FALSE
 
 [[3]]
-     description handicap american
-1  Buffalo Bills     -6.0     -105
-2 Miami Dolphins      6.0     -115
+                id              name  home
+1 7736038-11904216 Carolina Panthers  TRUE
+2 7736038-11904247 Arizona Cardinals FALSE
 
 [[4]]
-           description handicap american
-1    Carolina Panthers      9.0     -110
-2 Tampa Bay Buccaneers     -9.0     -110
+                id             name  home
+1 7736033-11904234   Dallas Cowboys  TRUE
+2 7736033-11904219 Cleveland Browns FALSE
 
 [[5]]
-          description handicap american
-1      Denver Broncos      7.5     -110
-2 Pittsburgh Steelers     -7.5     -110
+                id               name  home
+1 7736053-11903832      Chicago Bears  TRUE
+2 7736053-11904232 Indianapolis Colts FALSE
 
 [[6]]
-        description handicap american
-1     Detroit Lions      6.5     -115
-2 Green Bay Packers     -6.5     -105</code></pre>
-<p>While traversing these sometimes complicated lists may seem intimidating, with practice, working with data from an API is like a walk in the park compared to scraping data directly from the web.</p>
+                id                 name  home
+1 7736109-11904217   Cincinnati Bengals  TRUE
+2 7736109-11904220 Jacksonville Jaguars FALSE</code></pre>
+<p>We can also find the current line of each of these games. Here, I have created a function called <code>get_bovada_lines()</code> which traverses this complicated (yet clean) JSON object using methods explored in Chapter 3 and combines the information together into a rectangular data set.</p>
+<div class="sourceCode" id="cb18"><pre class="sourceCode r chunk-style"><code class="sourceCode r"><a class="sourceLine" id="cb18-1" title="1"><span class="kw">head</span>(<span class="kw">get_bovada_lines</span>(<span class="dt">bov_json =</span> bov_res))</a></code></pre></div>
+<div data-pagedtable="false">
+<script data-pagedtable-source type="application/json">
+{"columns":[{"label":["id"],"name":[1],"type":["chr"],"align":["left"]},{"label":["link"],"name":[2],"type":["chr"],"align":["left"]},{"label":["description"],"name":[3],"type":["chr"],"align":["left"]},{"label":["startTime"],"name":[4],"type":["S3: POSIXct"],"align":["right"]},{"label":["live"],"name":[5],"type":["lgl"],"align":["right"]},{"label":["type"],"name":[6],"type":["chr"],"align":["left"]},{"label":["lastModified"],"name":[7],"type":["S3: POSIXct"],"align":["right"]},{"label":["team_id"],"name":[8],"type":["chr"],"align":["left"]},{"label":["name"],"name":[9],"type":["chr"],"align":["left"]},{"label":["home"],"name":[10],"type":["lgl"],"align":["right"]},{"label":["juice_money"],"name":[11],"type":["dbl"],"align":["right"]},{"label":["handicap_spread"],"name":[12],"type":["dbl"],"align":["right"]},{"label":["juice_spread"],"name":[13],"type":["dbl"],"align":["right"]},{"label":["handicap_total"],"name":[14],"type":["dbl"],"align":["right"]},{"label":["juice_over"],"name":[15],"type":["dbl"],"align":["right"]},{"label":["juice_under"],"name":[16],"type":["dbl"],"align":["right"]}],"data":[{"1":"7712412","2":"/football/nfl/kansas-city-chiefs-baltimore-ravens-202009282015","3":"Kansas City Chiefs @ Baltimore Ravens","4":"2020-09-28 17:15:00","5":"FALSE","6":"GAMEEVENT","7":"2020-09-28 11:00:41","8":"11903831","9":"Baltimore Ravens","10":"TRUE","11":"1.625000","12":"-3","13":"1.833333","14":"55.5","15":"1.909091","16":"1.909091"},{"1":"7712412","2":"/football/nfl/kansas-city-chiefs-baltimore-ravens-202009282015","3":"Kansas City Chiefs @ Baltimore Ravens","4":"2020-09-28 17:15:00","5":"FALSE","6":"GAMEEVENT","7":"2020-09-28 11:00:41","8":"11852811","9":"Kansas City Chiefs","10":"FALSE","11":"2.400000","12":"3","13":"2.000000","14":"55.5","15":"1.909091","16":"1.909091"},{"1":"7736035","2":"/football/nfl/denver-broncos-new-york-jets-202010012020","3":"Denver Broncos @ New York Jets","4":"2020-10-01 17:20:00","5":"FALSE","6":"GAMEEVENT","7":"2020-09-28 10:10:37","8":"11904241","9":"New York Jets","10":"TRUE","11":"2.450000","12":"3","13":"1.909091","14":"40.0","15":"1.909091","16":"1.909091"},{"1":"7736035","2":"/football/nfl/denver-broncos-new-york-jets-202010012020","3":"Denver Broncos @ New York Jets","4":"2020-10-01 17:20:00","5":"FALSE","6":"GAMEEVENT","7":"2020-09-28 10:10:37","8":"11904245","9":"Denver Broncos","10":"FALSE","11":"1.606061","12":"-3","13":"1.909091","14":"40.0","15":"1.909091","16":"1.909091"},{"1":"7736038","2":"/football/nfl/arizona-cardinals-carolina-panthers-202010041300","3":"Arizona Cardinals @ Carolina Panthers","4":"2020-10-04 10:00:00","5":"FALSE","6":"GAMEEVENT","7":"2020-09-28 10:44:56","8":"11904216","9":"Carolina Panthers","10":"TRUE","11":"2.700000","12":"4","13":"1.870000","14":"52.0","15":"1.909091","16":"1.909091"},{"1":"7736038","2":"/football/nfl/arizona-cardinals-carolina-panthers-202010041300","3":"Arizona Cardinals @ Carolina Panthers","4":"2020-10-04 10:00:00","5":"FALSE","6":"GAMEEVENT","7":"2020-09-28 10:44:56","8":"11904247","9":"Arizona Cardinals","10":"FALSE","11":"1.500000","12":"-4","13":"1.952381","14":"52.0","15":"1.909091","16":"1.909091"}],"options":{"columns":{"min":{},"max":[10]},"rows":{"min":[10],"max":[10]},"pages":{}}}
+  </script>
 </div>
-<div id="hypertext-markup-language-html-and-selector-gadgets" class="section level3">
-<h3><span class="header-section-number">2.3.2</span> Hypertext Markup Language (HTML) and Selector Gadgets</h3>
+<p>While traversing these sometimes complicated lists may seem intimidating, with practice, working with data from an API will be made easier after discussing mapping functions in Chapter 3 which are useful for traversing complicated lists. Hopefully, after the scraping section, you will find working with APIs like a walk in the park compared to scraping data directly from the web.</p>
+</div>
+<div id="hypertext-markup-language-html" class="section level3">
+<h3><span class="header-section-number">2.3.2</span> Hypertext Markup Language (HTML)</h3>
 <p>Web sites are written in hypertext markup language. All contents that are displayed on a web page are structured through HTML with the help of HTML <strong>elements</strong>. HTML elements consist of a tag and contents. The <strong>tag</strong> defines how the web browser should format and display the content. Aptly, the <strong>content</strong> is what should be displayed.</p>
 <p>For example, if we wished to format text as a paragraph within the web document, then we could use the paragraph tag, <code>&lt;p&gt;</code>, to indicate the beginning of a paragraph. After opening a tag, we then specify the content to display before closing the tag. A complete paragraph may read:</p>
 <p><code>&lt;p&gt; This is the paragraph you want to scrape. &lt;/p&gt;</code></p>
-<p><strong>Attributes</strong> are optional parameters which provide additional information about the element in which the attribute is included. For example, within the paragraph tag, you can define a class which</p>
+<p><strong>Attributes</strong> are optional parameters which provide additional information about the element in which the attribute is included. For example, within the paragraph tag, you can define a class attribute which formats the text in a specific way, such as bolding, coloring, or aligning the text. To extend our example, the element may read:</p>
+<p><code>&lt;p class = "fancy"&gt; This is the paragraph you want to scrape which has been formatted in a fancy script. &lt;/p&gt;</code></p>
+<p>The type of attribute, being class, is the attribute <strong>name</strong>, whereas the quantity assigned to the attribute, being fancy, is the attribute <strong>value</strong>. The general decomposition of an HTML element is characterized by the following figure:</p>
+<div class="figure" style="text-align: center"><span id="fig:unnamed-chunk-24"></span>
+<img src="src/images/element_decomp.jpg" alt="the lingo of an HTML element" width="442" />
+<p class="caption">
+Figure 2.1: the lingo of an HTML element
+</p>
+</div>
+<div class="bonus">
+<p>
+The class attribute is a flexible one. Many web developers use the class attribute to point to a class name in a style sheet or to access and manipulate elements with the specifc class name with a JavaScript. For more information of the class attribute, see this <a href="https://www.w3schools.com/html/html_classes.asp">link</a>. For more information on cascading style sheets which are used to decorate HTML pages, see this <a href="https://www.w3schools.com/css/">link</a>.
+</p>
+</div>
 <div class="feedback">
 <p>
 Any feedback for this section? Click <a href="https://docs.google.com/forms/d/e/1FAIpQLSePQZ3lIaCIPo9J2owXImHZ_9wBEgTo21A0s-A1ty28u4yfvw/viewform?entry.1684471501=The%20R%20Community">here</a>
 </p>
 </div>
+</div>
+<div id="selector-gadgets" class="section level3">
+<h3><span class="header-section-number">2.3.3</span> Selector Gadgets</h3>
+<p>In the previous section, we introduced HTML elements. While all web pages are composed of HTML elements, the elements themselves can be structured in complicated ways. Elements are often nested inside one another or make use of elements in other documents. These complicated structures can make scraping data difficult. Thankfully, we can circumvent exploring these complicated structures with the help of selector gadgets.</p>
+<p>A <strong>selector gadget</strong> allows you to determine what css selector you need to extract the information desired from a webpage. These JavaScript bookmarklets allow you to determine where the information you desire belongs within the complicated struture of elements that makeup a webpage. To follow along in Chapter 3, you will need to download one of these gadgets from this <a href="https://selectorgadget.com/">link</a>. If you use Google Chrome, you can download the bookmark extension directly from this <a href="https://selectorgadget.com/">link</a>.</p>
 
 </div>
 </div>

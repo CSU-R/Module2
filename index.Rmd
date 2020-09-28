@@ -20,7 +20,7 @@ biblio-style: apalike
 # results="hold"      don't interleave chunk code and output, but hold all output until end of chunk.
 # class.source="chunk-style"     Use the CSS style "chunk-style" to style code chunks
 # class.output="output-style"    Use the CSS style "output-style" to style output of code chunks
-knitr::opts_chunk$set(fig.align="center", comment=NA, results="hold", class.source="chunk-style", class.output="output-style")
+knitr::opts_chunk$set(fig.align="center", comment=NA, results="hold", class.source="chunk-style", class.output="output-style", message=FALSE)
 
 knitr::knit_hooks$set(
   error = function(x, options){
@@ -28,8 +28,10 @@ knitr::knit_hooks$set(
   }
 )
 
-# A recent change in RMarkdown required this change. 
+# Scripts needed for compilation
+source('./rscripts/nfl_lines_from_api.R') # Chapter 2
 
+# A recent change in RMarkdown required this change. 
 
 library(kableExtra)
 library(lubridate)

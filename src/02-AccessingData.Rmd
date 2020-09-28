@@ -187,24 +187,15 @@ With more digging, we can find which teams are playing at home.
 head(bov_res[[2]][[1]][[16]])
 ```
 
-We can also find the current line of each of these games.
+We can also find the current line of each of these games. Here, I have created a function called `get_bovada_lines()` which traverses this complicated (yet clean) JSON object using methods explored in Chapter 3 and combines the information together into a rectangular data set.
 
 ```{r}
-library(rlist, quietly = TRUE)
-bov_res[[2]][[1]][[17]] %>% 
-  map(., ~.x[['markets']]) %>% 
-  map(., ~pluck(.x, 1)) %>% 
-  map(., ~.x[['outcomes']]) %>%
-  map(., ~pluck(.x, 1)) %>%
-  rlist::list.filter(., all(c('A', 'H') %in% type)) %>%
-  map(., ~bind_cols(.x, select(.x$price, -id))) %>% 
-  map(., ~select(.x, description, handicap, american)) %>%
-  head()
+head(get_bovada_lines(bov_json = bov_res))
 ```
 
-While traversing these sometimes complicated lists may seem intimidating, with practice, working with data from an API is like a walk in the park compared to scraping data directly from the web.
+While traversing these sometimes complicated lists may seem intimidating, with practice, working with data from an API will be made easier after discussing mapping functions in Chapter 3 which are useful for traversing complicated lists. Hopefully, after the scraping section, you will find working with APIs like a walk in the park compared to scraping data directly from the web. 
 
-### Hypertext Markup Language (HTML) and Selector Gadgets
+### Hypertext Markup Language (HTML)
 
 Web sites are written in hypertext markup language. All contents that are displayed on a web page are structured through HTML with the help of HTML __elements__. HTML elements consist of a tag and contents. The __tag__ defines how the web browser should format and display the content. Aptly, the __content__ is what should be displayed. 
 
@@ -212,8 +203,26 @@ For example, if we wished to format text as a paragraph within the web document,
 
 `<p> This is the paragraph you want to scrape. </p>`
 
-__Attributes__ are optional parameters which provide additional information about the element in which the attribute is included. For example, within the paragraph tag, you can define a class which  
+__Attributes__ are optional parameters which provide additional information about the element in which the attribute is included. For example, within the paragraph tag, you can define a class attribute which formats the text in a specific way, such as bolding, coloring, or aligning the text. To extend our example, the element may read:
+
+`<p class = "fancy"> This is the paragraph you want to scrape which has been formatted in a fancy script. </p>`
+
+The type of attribute, being class, is the attribute __name__, whereas the quantity assigned to the attribute, being fancy, is the attribute __value__. The general decomposition of an HTML element is characterized by the following figure:
+
+```{r, fig.cap="the lingo of an HTML element", echo=F}
+knitr::include_graphics("src/images/element_decomp.jpg")
+```
+
+```{block, type='bonus'}
+The class attribute is a flexible one. Many web developers use the class attribute to point to a class name in a style sheet or to access and manipulate elements with the specifc class name with a JavaScript. For more information of the class attribute, see this [link](https://www.w3schools.com/html/html_classes.asp). For more information on cascading style sheets which are used to decorate HTML pages, see this [link](https://www.w3schools.com/css/).
+```
 
 ```{block, type='feedback'}
 Any feedback for this section? Click [here](https://docs.google.com/forms/d/e/1FAIpQLSePQZ3lIaCIPo9J2owXImHZ_9wBEgTo21A0s-A1ty28u4yfvw/viewform?entry.1684471501=The%20R%20Community)
 ```
+
+### Selector Gadgets
+
+In the previous section, we introduced HTML elements. While all web pages are composed of HTML elements, the elements themselves can be structured in complicated ways. Elements are often nested inside one another or make use of elements in other documents. These complicated structures can make scraping data difficult. Thankfully, we can circumvent exploring these complicated structures with the help of selector gadgets.
+
+A __selector gadget__ allows you to determine what css selector you need to extract the information desired from a webpage. These JavaScript bookmarklets allow you to determine where the information you desire belongs within the complicated struture of elements that makeup a webpage. To follow along in Chapter 3, you will need to download one of these gadgets from this [link](https://selectorgadget.com/). If you use Google Chrome, you can download the bookmark extension directly from this [link](https://selectorgadget.com/). 

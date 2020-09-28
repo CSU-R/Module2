@@ -145,7 +145,8 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <li class="chapter" data-level="2.2" data-path="apis-clean-and-curated.html"><a href="apis-clean-and-curated.html"><i class="fa fa-check"></i><b>2.2</b> APIs: Clean and Curated</a></li>
 <li class="chapter" data-level="2.3" data-path="scraping-messy-and-mangled.html"><a href="scraping-messy-and-mangled.html"><i class="fa fa-check"></i><b>2.3</b> Scraping: Messy and Mangled</a><ul>
 <li class="chapter" data-level="2.3.1" data-path="scraping-messy-and-mangled.html"><a href="scraping-messy-and-mangled.html#scraping-vs-api"><i class="fa fa-check"></i><b>2.3.1</b> Scraping vs API</a></li>
-<li class="chapter" data-level="2.3.2" data-path="scraping-messy-and-mangled.html"><a href="scraping-messy-and-mangled.html#hypertext-markup-language-html-and-selector-gadgets"><i class="fa fa-check"></i><b>2.3.2</b> Hypertext Markup Language (HTML) and Selector Gadgets</a></li>
+<li class="chapter" data-level="2.3.2" data-path="scraping-messy-and-mangled.html"><a href="scraping-messy-and-mangled.html#hypertext-markup-language-html"><i class="fa fa-check"></i><b>2.3.2</b> Hypertext Markup Language (HTML)</a></li>
+<li class="chapter" data-level="2.3.3" data-path="scraping-messy-and-mangled.html"><a href="scraping-messy-and-mangled.html#selector-gadgets"><i class="fa fa-check"></i><b>2.3.3</b> Selector Gadgets</a></li>
 </ul></li>
 </ul></li>
 <li class="divider"></li>
@@ -173,43 +174,38 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <p>An application programming interface (API) is a set of functions and procedures which allows one computer program to interact with another. To simplify the concept remarkably, we will consider web-APIs where there is a server (computer waiting to provide data) and a client (computer making a request for data).</p>
 <p>The benefit of APIs is the result: clean and curated data from the host. The pre-processing needed to get the data in a workable form is entirely done on the server side. We, however, are responsible for making the request. Web-APIs often utilize JavaScript Object Notation (JSON), another example of non-rectangular data. We will utilize the <code>httr</code> and the <code>jsonlite</code> packages to retrieve the latest sports lines from Bovada, an online sportsbook.</p>
 <p>Before we start, we’ll need to download the <code>httr</code> and <code>jsonlite</code> packages and load them into our current environment. Furthermore, we will need to find the address of the server to which we will send the request.</p>
-<div class="sourceCode" id="cb15"><pre class="sourceCode r chunk-style"><code class="sourceCode r"><a class="sourceLine" id="cb15-1" title="1"><span class="kw">library</span>(httr, <span class="dt">quietly =</span> <span class="ot">TRUE</span>)</a>
-<a class="sourceLine" id="cb15-2" title="2"><span class="kw">library</span>(jsonlite, <span class="dt">quietly =</span> <span class="ot">TRUE</span>)</a></code></pre></div>
-<pre><code>
-Attaching package: &#39;jsonlite&#39;</code></pre>
-<pre><code>The following object is masked from &#39;package:purrr&#39;:
-
-    flatten</code></pre>
-<div class="sourceCode" id="cb18"><pre class="sourceCode r chunk-style"><code class="sourceCode r"><a class="sourceLine" id="cb18-1" title="1">bov_nfl_api &lt;-<span class="st"> &quot;https://www.bovada.lv/services/sports/event/v2/events/A/description/football/nfl&quot;</span></a></code></pre></div>
+<div class="sourceCode" id="cb7"><pre class="sourceCode r chunk-style"><code class="sourceCode r"><a class="sourceLine" id="cb7-1" title="1"><span class="kw">library</span>(httr, <span class="dt">quietly =</span> <span class="ot">TRUE</span>)</a>
+<a class="sourceLine" id="cb7-2" title="2"><span class="kw">library</span>(jsonlite, <span class="dt">quietly =</span> <span class="ot">TRUE</span>)</a>
+<a class="sourceLine" id="cb7-3" title="3">bov_nfl_api &lt;-<span class="st"> &quot;https://www.bovada.lv/services/sports/event/v2/events/A/description/football/nfl&quot;</span></a></code></pre></div>
 <p>To ask for data through a web-API, we will need to make a <code>GET</code> request with the <code>httr</code> package’s <code>GET()</code> function. After making the request, we can read about the server’s response.</p>
-<div class="sourceCode" id="cb19"><pre class="sourceCode r chunk-style"><code class="sourceCode r"><a class="sourceLine" id="cb19-1" title="1">bov_req &lt;-<span class="st"> </span>httr<span class="op">::</span><span class="kw">GET</span>(<span class="dt">url =</span> bov_nfl_api)</a>
-<a class="sourceLine" id="cb19-2" title="2">bov_req</a></code></pre></div>
+<div class="sourceCode" id="cb8"><pre class="sourceCode r chunk-style"><code class="sourceCode r"><a class="sourceLine" id="cb8-1" title="1">bov_req &lt;-<span class="st"> </span>httr<span class="op">::</span><span class="kw">GET</span>(<span class="dt">url =</span> bov_nfl_api)</a>
+<a class="sourceLine" id="cb8-2" title="2">bov_req</a></code></pre></div>
 <pre class="output-style"><code>Response [https://www.bovada.lv/services/sports/event/v2/events/A/description/football/nfl]
-  Date: 2020-09-16 20:57
+  Date: 2020-09-28 18:09
   Status: 200
   Content-Type: application/json;charset=utf-8
-  Size: 1.13 MB</code></pre>
+  Size: 1.03 MB</code></pre>
 <p>If the request was successful, then the status of the request will read 200. Otherwise, there was some error with your request. For a list of HTTP status codes and their respective definitions, follow this <a href="https://www.w3.org/Protocols/rfc2616/rfc2616-sec10.html">link</a>. Since the response clarifys that the content is indeed driven by JavaScript, then we will utilize the <code>jsonlite</code> package to read the JSON structured data. A handy function we will use will be <code>fromJSON()</code> which converts a character vector containing data in JSON structure to native structures in <code>R</code> like lists. So, in order, we will</p>
 <ol style="list-style-type: decimal">
 <li>Extract the content from the server’s response</li>
 <li>Convert the content to a character vector, maintaining the JSON structure</li>
 <li>Restructure the data into native <code>R</code> structures, using <code>fromJSON()</code>.</li>
 </ol>
-<div class="sourceCode" id="cb21"><pre class="sourceCode r chunk-style"><code class="sourceCode r"><a class="sourceLine" id="cb21-1" title="1">content &lt;-<span class="st"> </span>bov_req<span class="op">$</span>content</a>
-<a class="sourceLine" id="cb21-2" title="2">content_char &lt;-<span class="st"> </span><span class="kw">rawToChar</span>(content)</a>
-<a class="sourceLine" id="cb21-3" title="3">bov_res &lt;-<span class="st"> </span>jsonlite<span class="op">::</span><span class="kw">fromJSON</span>(content_char)</a></code></pre></div>
+<div class="sourceCode" id="cb10"><pre class="sourceCode r chunk-style"><code class="sourceCode r"><a class="sourceLine" id="cb10-1" title="1">content &lt;-<span class="st"> </span>bov_req<span class="op">$</span>content</a>
+<a class="sourceLine" id="cb10-2" title="2">content_char &lt;-<span class="st"> </span><span class="kw">rawToChar</span>(content)</a>
+<a class="sourceLine" id="cb10-3" title="3">bov_res &lt;-<span class="st"> </span>jsonlite<span class="op">::</span><span class="kw">fromJSON</span>(content_char)</a></code></pre></div>
 <p>Of course, we could also create a function which takes the server’s response and converts the content to native <code>R</code> structures. We will want to code in a force stop if the response status is not 200. We will also want to require the <code>httr</code> and <code>jsonlite</code> packages which will automatically install the packages if a user calls the function without having the packages installed.</p>
-<div class="sourceCode" id="cb22"><pre class="sourceCode r chunk-style"><code class="sourceCode r"><a class="sourceLine" id="cb22-1" title="1">convert_JSON &lt;-<span class="st"> </span><span class="cf">function</span>(resp){</a>
-<a class="sourceLine" id="cb22-2" title="2">  <span class="co"># call needed packages</span></a>
-<a class="sourceLine" id="cb22-3" title="3">  <span class="kw">require</span>(httr)</a>
-<a class="sourceLine" id="cb22-4" title="4">  <span class="kw">require</span>(jsonlite)</a>
-<a class="sourceLine" id="cb22-5" title="5">  <span class="co"># stop if the server returned an error</span></a>
-<a class="sourceLine" id="cb22-6" title="6">  httr<span class="op">::</span><span class="kw">stop_for_status</span>(resp)</a>
-<a class="sourceLine" id="cb22-7" title="7">  <span class="co"># return JSON content in native R structures</span></a>
-<a class="sourceLine" id="cb22-8" title="8">  <span class="kw">return</span>(jsonlite<span class="op">::</span><span class="kw">fromJSON</span>(<span class="kw">rawToChar</span>(resp<span class="op">$</span>content)))</a>
-<a class="sourceLine" id="cb22-9" title="9">}</a></code></pre></div>
+<div class="sourceCode" id="cb11"><pre class="sourceCode r chunk-style"><code class="sourceCode r"><a class="sourceLine" id="cb11-1" title="1">convert_JSON &lt;-<span class="st"> </span><span class="cf">function</span>(resp){</a>
+<a class="sourceLine" id="cb11-2" title="2">  <span class="co"># call needed packages</span></a>
+<a class="sourceLine" id="cb11-3" title="3">  <span class="kw">require</span>(httr)</a>
+<a class="sourceLine" id="cb11-4" title="4">  <span class="kw">require</span>(jsonlite)</a>
+<a class="sourceLine" id="cb11-5" title="5">  <span class="co"># stop if the server returned an error</span></a>
+<a class="sourceLine" id="cb11-6" title="6">  httr<span class="op">::</span><span class="kw">stop_for_status</span>(resp)</a>
+<a class="sourceLine" id="cb11-7" title="7">  <span class="co"># return JSON content in native R structures</span></a>
+<a class="sourceLine" id="cb11-8" title="8">  <span class="kw">return</span>(jsonlite<span class="op">::</span><span class="kw">fromJSON</span>(<span class="kw">rawToChar</span>(resp<span class="op">$</span>content)))</a>
+<a class="sourceLine" id="cb11-9" title="9">}</a></code></pre></div>
 <p>Finally, we can get the same output by simply calling the function.</p>
-<div class="sourceCode" id="cb23"><pre class="sourceCode r chunk-style"><code class="sourceCode r"><a class="sourceLine" id="cb23-1" title="1"><span class="kw">identical</span>(<span class="kw">convert_JSON</span>(bov_req), bov_res)</a></code></pre></div>
+<div class="sourceCode" id="cb12"><pre class="sourceCode r chunk-style"><code class="sourceCode r"><a class="sourceLine" id="cb12-1" title="1"><span class="kw">identical</span>(<span class="kw">convert_JSON</span>(bov_req), bov_res)</a></code></pre></div>
 <pre class="output-style"><code>[1] TRUE</code></pre>
 <div class="bonus">
 <p>
