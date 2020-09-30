@@ -13,7 +13,7 @@ Output is placed in the docs directory (instead of _book), so that github pages 
 The project is still under construction, and we welcome any feedback or contributions you wish to make.
 Feel free to open an issue, create a pull request, or just directly contact one of the contributors below:
 
-The following individuals have or are currently contributing to the project
+The following individuals have contributed or are currently contributing to the project.
 * [Alex Fout](https://github.com/fouticus)
 * [Connor Gibbs](https://github.com/congibbs10)
 * [Kathleen Wendt](https://github.com/wendtke)
