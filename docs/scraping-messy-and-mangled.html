@@ -31,7 +31,7 @@
   
   
 <link rel="prev" href="apis-clean-and-curated.html"/>
-
+<link rel="next" href="ScrapingInTheWild.html"/>
 <script src="libs/jquery-2.2.3/jquery.min.js"></script>
 <link href="libs/gitbook-2.6.7/css/style.css" rel="stylesheet" />
 <link href="libs/gitbook-2.6.7/css/plugin-table.css" rel="stylesheet" />
@@ -149,6 +149,15 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <li class="chapter" data-level="2.3.3" data-path="scraping-messy-and-mangled.html"><a href="scraping-messy-and-mangled.html#selector-gadgets"><i class="fa fa-check"></i><b>2.3.3</b> Selector Gadgets</a></li>
 </ul></li>
 </ul></li>
+<li class="chapter" data-level="3" data-path="ScrapingInTheWild.html"><a href="ScrapingInTheWild.html"><i class="fa fa-check"></i><b>3</b> Scraping in the Wild</a><ul>
+<li class="chapter" data-level="3.1" data-path="LessonsLearnedFromScraping.html"><a href="LessonsLearnedFromScraping.html"><i class="fa fa-check"></i><b>3.1</b> Lessons Learned from Scraping</a></li>
+<li class="chapter" data-level="3.2" data-path="scraping-nfl-data.html"><a href="scraping-nfl-data.html"><i class="fa fa-check"></i><b>3.2</b> Scraping NFL Data</a><ul>
+<li class="chapter" data-level="3.2.1" data-path="scraping-nfl-data.html"><a href="scraping-nfl-data.html#html-tables-team-statistics"><i class="fa fa-check"></i><b>3.2.1</b> HTML Tables: Team Statistics</a></li>
+<li class="chapter" data-level="3.2.2" data-path="scraping-nfl-data.html"><a href="scraping-nfl-data.html#commented-and-hidden-html-tables-player-statistics"><i class="fa fa-check"></i><b>3.2.2</b> Commented and Hidden HTML Tables: Player Statistics</a></li>
+<li class="chapter" data-level="3.2.3" data-path="scraping-nfl-data.html"><a href="scraping-nfl-data.html#attributes-player-statistics-by-game"><i class="fa fa-check"></i><b>3.2.3</b> Attributes: Player Statistics by Game</a></li>
+</ul></li>
+<li class="chapter" data-level="3.3" data-path="putting-it-all-together.html"><a href="putting-it-all-together.html"><i class="fa fa-check"></i><b>3.3</b> Putting It All Together</a></li>
+</ul></li>
 <li class="divider"></li>
 <li><a href="https://github.com/rstudio/bookdown" target="blank">Published with bookdown</a></li>
 
@@ -176,28 +185,28 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <h3><span class="header-section-number">2.3.1</span> Scraping vs API</h3>
 <p>The benefit of using an API are clean data. For example, we can traverse the result to find the latest NFL events.</p>
 <div class="sourceCode" id="cb14"><pre class="sourceCode r chunk-style"><code class="sourceCode r"><a class="sourceLine" id="cb14-1" title="1"><span class="kw">head</span>(bov_res[[<span class="dv">2</span>]][[<span class="dv">1</span>]][,<span class="dv">2</span>])</a></code></pre></div>
-<pre class="output-style"><code>[1] &quot;Kansas City Chiefs @ Baltimore Ravens&quot;    
-[2] &quot;Denver Broncos @ New York Jets&quot;           
-[3] &quot;Arizona Cardinals @ Carolina Panthers&quot;    
-[4] &quot;Cleveland Browns @ Dallas Cowboys&quot;        
-[5] &quot;Indianapolis Colts @ Chicago Bears&quot;       
-[6] &quot;Jacksonville Jaguars @ Cincinnati Bengals&quot;</code></pre>
+<pre class="output-style"><code>[1] &quot;Denver Broncos @ New York Jets&quot;             
+[2] &quot;Arizona Cardinals @ Carolina Panthers&quot;      
+[3] &quot;Baltimore Ravens @ Washington Football Team&quot;
+[4] &quot;Cleveland Browns @ Dallas Cowboys&quot;          
+[5] &quot;Indianapolis Colts @ Chicago Bears&quot;         
+[6] &quot;Jacksonville Jaguars @ Cincinnati Bengals&quot;  </code></pre>
 <p>With more digging, we can find which teams are playing at home.</p>
 <div class="sourceCode" id="cb16"><pre class="sourceCode r chunk-style"><code class="sourceCode r"><a class="sourceLine" id="cb16-1" title="1"><span class="kw">head</span>(bov_res[[<span class="dv">2</span>]][[<span class="dv">1</span>]][[<span class="dv">16</span>]])</a></code></pre></div>
 <pre class="output-style"><code>[[1]]
-                id               name  home
-1 7712412-11903831   Baltimore Ravens  TRUE
-2 7712412-11852811 Kansas City Chiefs FALSE
-
-[[2]]
                 id           name  home
 1 7736035-11904241  New York Jets  TRUE
 2 7736035-11904245 Denver Broncos FALSE
 
-[[3]]
+[[2]]
                 id              name  home
 1 7736038-11904216 Carolina Panthers  TRUE
 2 7736038-11904247 Arizona Cardinals FALSE
+
+[[3]]
+                id                     name  home
+1 7736049-16421961 Washington Football Team  TRUE
+2 7736049-11903831         Baltimore Ravens FALSE
 
 [[4]]
                 id             name  home
@@ -217,7 +226,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <div class="sourceCode" id="cb18"><pre class="sourceCode r chunk-style"><code class="sourceCode r"><a class="sourceLine" id="cb18-1" title="1"><span class="kw">head</span>(<span class="kw">get_bovada_lines</span>(<span class="dt">bov_json =</span> bov_res))</a></code></pre></div>
 <div data-pagedtable="false">
 <script data-pagedtable-source type="application/json">
-{"columns":[{"label":["id"],"name":[1],"type":["chr"],"align":["left"]},{"label":["link"],"name":[2],"type":["chr"],"align":["left"]},{"label":["description"],"name":[3],"type":["chr"],"align":["left"]},{"label":["startTime"],"name":[4],"type":["S3: POSIXct"],"align":["right"]},{"label":["live"],"name":[5],"type":["lgl"],"align":["right"]},{"label":["type"],"name":[6],"type":["chr"],"align":["left"]},{"label":["lastModified"],"name":[7],"type":["S3: POSIXct"],"align":["right"]},{"label":["team_id"],"name":[8],"type":["chr"],"align":["left"]},{"label":["name"],"name":[9],"type":["chr"],"align":["left"]},{"label":["home"],"name":[10],"type":["lgl"],"align":["right"]},{"label":["juice_money"],"name":[11],"type":["dbl"],"align":["right"]},{"label":["handicap_spread"],"name":[12],"type":["dbl"],"align":["right"]},{"label":["juice_spread"],"name":[13],"type":["dbl"],"align":["right"]},{"label":["handicap_total"],"name":[14],"type":["dbl"],"align":["right"]},{"label":["juice_over"],"name":[15],"type":["dbl"],"align":["right"]},{"label":["juice_under"],"name":[16],"type":["dbl"],"align":["right"]}],"data":[{"1":"7712412","2":"/football/nfl/kansas-city-chiefs-baltimore-ravens-202009282015","3":"Kansas City Chiefs @ Baltimore Ravens","4":"2020-09-28 17:15:00","5":"FALSE","6":"GAMEEVENT","7":"2020-09-28 11:00:41","8":"11903831","9":"Baltimore Ravens","10":"TRUE","11":"1.625000","12":"-3","13":"1.833333","14":"55.5","15":"1.909091","16":"1.909091"},{"1":"7712412","2":"/football/nfl/kansas-city-chiefs-baltimore-ravens-202009282015","3":"Kansas City Chiefs @ Baltimore Ravens","4":"2020-09-28 17:15:00","5":"FALSE","6":"GAMEEVENT","7":"2020-09-28 11:00:41","8":"11852811","9":"Kansas City Chiefs","10":"FALSE","11":"2.400000","12":"3","13":"2.000000","14":"55.5","15":"1.909091","16":"1.909091"},{"1":"7736035","2":"/football/nfl/denver-broncos-new-york-jets-202010012020","3":"Denver Broncos @ New York Jets","4":"2020-10-01 17:20:00","5":"FALSE","6":"GAMEEVENT","7":"2020-09-28 10:10:37","8":"11904241","9":"New York Jets","10":"TRUE","11":"2.450000","12":"3","13":"1.909091","14":"40.0","15":"1.909091","16":"1.909091"},{"1":"7736035","2":"/football/nfl/denver-broncos-new-york-jets-202010012020","3":"Denver Broncos @ New York Jets","4":"2020-10-01 17:20:00","5":"FALSE","6":"GAMEEVENT","7":"2020-09-28 10:10:37","8":"11904245","9":"Denver Broncos","10":"FALSE","11":"1.606061","12":"-3","13":"1.909091","14":"40.0","15":"1.909091","16":"1.909091"},{"1":"7736038","2":"/football/nfl/arizona-cardinals-carolina-panthers-202010041300","3":"Arizona Cardinals @ Carolina Panthers","4":"2020-10-04 10:00:00","5":"FALSE","6":"GAMEEVENT","7":"2020-09-28 10:44:56","8":"11904216","9":"Carolina Panthers","10":"TRUE","11":"2.700000","12":"4","13":"1.870000","14":"52.0","15":"1.909091","16":"1.909091"},{"1":"7736038","2":"/football/nfl/arizona-cardinals-carolina-panthers-202010041300","3":"Arizona Cardinals @ Carolina Panthers","4":"2020-10-04 10:00:00","5":"FALSE","6":"GAMEEVENT","7":"2020-09-28 10:44:56","8":"11904247","9":"Arizona Cardinals","10":"FALSE","11":"1.500000","12":"-4","13":"1.952381","14":"52.0","15":"1.909091","16":"1.909091"}],"options":{"columns":{"min":{},"max":[10]},"rows":{"min":[10],"max":[10]},"pages":{}}}
+{"columns":[{"label":["id"],"name":[1],"type":["chr"],"align":["left"]},{"label":["link"],"name":[2],"type":["chr"],"align":["left"]},{"label":["description"],"name":[3],"type":["chr"],"align":["left"]},{"label":["startTime"],"name":[4],"type":["S3: POSIXct"],"align":["right"]},{"label":["live"],"name":[5],"type":["lgl"],"align":["right"]},{"label":["type"],"name":[6],"type":["chr"],"align":["left"]},{"label":["lastModified"],"name":[7],"type":["S3: POSIXct"],"align":["right"]},{"label":["team_id"],"name":[8],"type":["chr"],"align":["left"]},{"label":["name"],"name":[9],"type":["chr"],"align":["left"]},{"label":["home"],"name":[10],"type":["lgl"],"align":["right"]},{"label":["handicap_spread"],"name":[11],"type":["dbl"],"align":["right"]},{"label":["juice_spread"],"name":[12],"type":["dbl"],"align":["right"]},{"label":["handicap_total"],"name":[13],"type":["dbl"],"align":["right"]},{"label":["juice_over"],"name":[14],"type":["dbl"],"align":["right"]},{"label":["juice_under"],"name":[15],"type":["dbl"],"align":["right"]},{"label":["juice_money"],"name":[16],"type":["dbl"],"align":["right"]}],"data":[{"1":"7736035","2":"/football/nfl/denver-broncos-new-york-jets-202010012020","3":"Denver Broncos @ New York Jets","4":"2020-10-01 17:20:00","5":"FALSE","6":"GAMEEVENT","7":"2020-09-30 09:48:59","8":"11904241","9":"New York Jets","10":"TRUE","11":"0","12":"1.909091","13":"39.5","14":"1.909091","15":"1.909091","16":"NA"},{"1":"7736035","2":"/football/nfl/denver-broncos-new-york-jets-202010012020","3":"Denver Broncos @ New York Jets","4":"2020-10-01 17:20:00","5":"FALSE","6":"GAMEEVENT","7":"2020-09-30 09:48:59","8":"11904245","9":"Denver Broncos","10":"FALSE","11":"0","12":"1.909091","13":"39.5","14":"1.909091","15":"1.909091","16":"NA"},{"1":"7736038","2":"/football/nfl/arizona-cardinals-carolina-panthers-202010041300","3":"Arizona Cardinals @ Carolina Panthers","4":"2020-10-04 10:00:00","5":"FALSE","6":"GAMEEVENT","7":"2020-09-30 10:53:26","8":"11904216","9":"Carolina Panthers","10":"TRUE","11":"4","12":"1.833333","13":"52.5","14":"1.909091","15":"1.909091","16":"2.600000"},{"1":"7736038","2":"/football/nfl/arizona-cardinals-carolina-panthers-202010041300","3":"Arizona Cardinals @ Carolina Panthers","4":"2020-10-04 10:00:00","5":"FALSE","6":"GAMEEVENT","7":"2020-09-30 10:53:26","8":"11904247","9":"Arizona Cardinals","10":"FALSE","11":"-4","12":"2.000000","13":"52.5","14":"1.909091","15":"1.909091","16":"1.555556"},{"1":"7736049","2":"/football/nfl/baltimore-ravens-washington-football-team-202010041300","3":"Baltimore Ravens @ Washington Football Team","4":"2020-10-04 10:00:00","5":"FALSE","6":"GAMEEVENT","7":"2020-09-30 11:37:10","8":"16421961","9":"Washington Football Team","10":"TRUE","11":"13","12":"1.952381","13":"47.0","14":"1.909091","15":"1.909091","16":"6.500000"},{"1":"7736049","2":"/football/nfl/baltimore-ravens-washington-football-team-202010041300","3":"Baltimore Ravens @ Washington Football Team","4":"2020-10-04 10:00:00","5":"FALSE","6":"GAMEEVENT","7":"2020-09-30 11:37:10","8":"11903831","9":"Baltimore Ravens","10":"FALSE","11":"-13","12":"1.870000","13":"47.0","14":"1.909091","15":"1.909091","16":"1.111111"}],"options":{"columns":{"min":{},"max":[10]},"rows":{"min":[10],"max":[10]},"pages":{}}}
   </script>
 </div>
 <p>While traversing these sometimes complicated lists may seem intimidating, with practice, working with data from an API will be made easier after discussing mapping functions in Chapter 3 which are useful for traversing complicated lists. Hopefully, after the scraping section, you will find working with APIs like a walk in the park compared to scraping data directly from the web.</p>
@@ -238,7 +247,7 @@ Figure 2.1: the lingo of an HTML element
 </div>
 <div class="bonus">
 <p>
-The class attribute is a flexible one. Many web developers use the class attribute to point to a class name in a style sheet or to access and manipulate elements with the specifc class name with a JavaScript. For more information of the class attribute, see this <a href="https://www.w3schools.com/html/html_classes.asp">link</a>. For more information on cascading style sheets which are used to decorate HTML pages, see this <a href="https://www.w3schools.com/css/">link</a>.
+The class attribute is a flexible one. Many web developers use the class attribute to point to a class name in a style sheet or to access and manipulate elements with the specific class name with a JavaScript. For more information of the class attribute, see this <a href="https://www.w3schools.com/html/html_classes.asp">link</a>. For more information on cascading style sheets which are used to decorate HTML pages, see this <a href="https://www.w3schools.com/css/">link</a>.
 </p>
 </div>
 <div class="feedback">
@@ -250,24 +259,19 @@ Any feedback for this section? Click <a href="https://docs.google.com/forms/d/e/
 <div id="selector-gadgets" class="section level3">
 <h3><span class="header-section-number">2.3.3</span> Selector Gadgets</h3>
 <p>In the previous section, we introduced HTML elements. While all web pages are composed of HTML elements, the elements themselves can be structured in complicated ways. Elements are often nested inside one another or make use of elements in other documents. These complicated structures can make scraping data difficult. Thankfully, we can circumvent exploring these complicated structures with the help of selector gadgets.</p>
-<p>A <strong>selector gadget</strong> allows you to determine what css selector you need to extract the information desired from a webpage. These JavaScript bookmarklets allow you to determine where the information you desire belongs within the complicated struture of elements that makeup a webpage. To follow along in Chapter 3, you will need to download one of these gadgets from this <a href="https://selectorgadget.com/">link</a>. If you use Google Chrome, you can download the bookmark extension directly from this <a href="https://selectorgadget.com/">link</a>.</p>
+<p>A <strong>selector gadget</strong> allows you to determine what css selector you need to extract the information desired from a webpage. These JavaScript bookmarklets allow you to determine where the information you desire belongs within the complicated structure of elements that makeup a webpage. To follow along in Chapter 3, you will need to download one of these gadgets from this <a href="https://selectorgadget.com/">link</a>. If you use Google Chrome, you can download the bookmark extension directly from this <a href="https://selectorgadget.com/">link</a>.</p>
+<p>If the selector gadget fails us, we can always view the structure of the elements directly by viewing the page source. This can be done by right-clicking on the webpage and selecting ‘View Page Source’. For Google Chrome, you can also use the keyboard shortcut ‘CTRL-U’.</p>
 
 </div>
 </div>
 <!-- </div> -->
-
-
-
-
-
-
             </section>
 
           </div>
         </div>
       </div>
-<a href="apis-clean-and-curated.html" class="navigation navigation-prev navigation-unique" aria-label="Previous page"><i class="fa fa-angle-left"></i></a>
-
+<a href="apis-clean-and-curated.html" class="navigation navigation-prev " aria-label="Previous page"><i class="fa fa-angle-left"></i></a>
+<a href="ScrapingInTheWild.html" class="navigation navigation-next " aria-label="Next page"><i class="fa fa-angle-right"></i></a>
     </div>
   </div>
 <script src="libs/gitbook-2.6.7/js/app.min.js"></script>

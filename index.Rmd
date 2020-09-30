@@ -20,7 +20,7 @@ biblio-style: apalike
 # results="hold"      don't interleave chunk code and output, but hold all output until end of chunk.
 # class.source="chunk-style"     Use the CSS style "chunk-style" to style code chunks
 # class.output="output-style"    Use the CSS style "output-style" to style output of code chunks
-knitr::opts_chunk$set(fig.align="center", comment=NA, results="hold", class.source="chunk-style", class.output="output-style", message=FALSE)
+knitr::opts_chunk$set(fig.align="center", comment=NA, results="hold", class.source="chunk-style", class.output="output-style", message=FALSE, warning=FALSE)
 
 knitr::knit_hooks$set(
   error = function(x, options){
@@ -44,21 +44,21 @@ r_version <- "4.0.2"
 
 Hi, and welcome to the R Module 2 (AKA STAT 158) course at Colorado State University!
 
-This course is the second of three 1 credit courses intended to introduce the R programming language to those with little or no programming experience.
+This course is the second of three 1 credit courses intended to introduce the R programming language, specifically the Tidyverse.
 
 Through these Modules (courses), we'll explore how R can be used to do the following:
 
-1. Perform basic computations and logic, just like any other programming language
-1. Load, clean, analyze, and visualise data
-1. Run scripts
-1. Create reproducible reports so you can explain your work in a narrative form
+1. Access data via files or web application programming interfaces (APIs)
+1. Scrape data from web
+1. Wrangle and clean complicated data structures
+1. Create graphics with an eye for quality and aesthetics
+1. Understand data using basic modeling 
 
-In addition, you'll also be exposed to some aspects of the broader R community, including:
+In addition, you'll also be exposed to broader concepts, including:
 
-1. R as free, open source software
-1. The RStudio free software
-1. Publicly available packages which extend the capability of R
-1. Events and community groups which advocate for the use of R and the support of R users
+1. Data organization and storage
+1. Hypertext Markup Language (HTML)
+1. Tidyverse principles
 
 More detail will be provided in the Course Topics laid out in the next chapter.
 

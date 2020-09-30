@@ -1,4 +1,4 @@
-# Course Preliminaries {#prelim}
+# Course Preliminaries {#Wrangling}
 
 > "Data is the new oil." —Clive Humby, Chief Data Scientist, Starcount
 

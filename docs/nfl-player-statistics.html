@@ -1,0 +1,324 @@
+<!DOCTYPE html>
+<html lang="" xml:lang="">
+<head>
+
+  <meta charset="utf-8" />
+  <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+  <title>3.3 NFL Player Statistics | R Module 2</title>
+  <meta name="description" content="This is the second installment for the book for the R Intro Course at CSU." />
+  <meta name="generator" content="bookdown 0.20 and GitBook 2.6.7" />
+
+  <meta property="og:title" content="3.3 NFL Player Statistics | R Module 2" />
+  <meta property="og:type" content="book" />
+  
+  
+  <meta property="og:description" content="This is the second installment for the book for the R Intro Course at CSU." />
+  
+
+  <meta name="twitter:card" content="summary" />
+  <meta name="twitter:title" content="3.3 NFL Player Statistics | R Module 2" />
+  
+  <meta name="twitter:description" content="This is the second installment for the book for the R Intro Course at CSU." />
+  
+
+<meta name="author" content="Connor Gibbs" />
+
+
+
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="apple-mobile-web-app-capable" content="yes" />
+  <meta name="apple-mobile-web-app-status-bar-style" content="black" />
+  
+  
+<link rel="prev" href="scraping-nfl-data.html"/>
+
+<script src="libs/jquery-2.2.3/jquery.min.js"></script>
+<link href="libs/gitbook-2.6.7/css/style.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-table.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-bookdown.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-highlight.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-search.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-fontsettings.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-clipboard.css" rel="stylesheet" />
+
+
+
+
+
+
+
+
+
+<link href="libs/pagedtable-1.1/css/pagedtable.css" rel="stylesheet" />
+<script src="libs/pagedtable-1.1/js/pagedtable.js"></script>
+
+
+<style type="text/css">
+a.sourceLine { display: inline-block; line-height: 1.25; }
+a.sourceLine { pointer-events: none; color: inherit; text-decoration: inherit; }
+a.sourceLine:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode { white-space: pre; position: relative; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+code.sourceCode { white-space: pre-wrap; }
+a.sourceLine { text-indent: -1em; padding-left: 1em; }
+}
+pre.numberSource a.sourceLine
+  { position: relative; left: -4em; }
+pre.numberSource a.sourceLine::before
+  { content: attr(title);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; pointer-events: all; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+    color: #aaaaaa;
+  }
+pre.numberSource { margin-left: 3em; border-left: 1px solid #aaaaaa;  padding-left: 4px; }
+div.sourceCode
+  {  }
+@media screen {
+a.sourceLine::before { text-decoration: underline; }
+}
+code span.al { color: #ff0000; font-weight: bold; } /* Alert */
+code span.an { color: #60a0b0; font-weight: bold; font-style: italic; } /* Annotation */
+code span.at { color: #7d9029; } /* Attribute */
+code span.bn { color: #40a070; } /* BaseN */
+code span.bu { } /* BuiltIn */
+code span.cf { color: #007020; font-weight: bold; } /* ControlFlow */
+code span.ch { color: #4070a0; } /* Char */
+code span.cn { color: #880000; } /* Constant */
+code span.co { color: #60a0b0; font-style: italic; } /* Comment */
+code span.cv { color: #60a0b0; font-weight: bold; font-style: italic; } /* CommentVar */
+code span.do { color: #ba2121; font-style: italic; } /* Documentation */
+code span.dt { color: #902000; } /* DataType */
+code span.dv { color: #40a070; } /* DecVal */
+code span.er { color: #ff0000; font-weight: bold; } /* Error */
+code span.ex { } /* Extension */
+code span.fl { color: #40a070; } /* Float */
+code span.fu { color: #06287e; } /* Function */
+code span.im { } /* Import */
+code span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Information */
+code span.kw { color: #007020; font-weight: bold; } /* Keyword */
+code span.op { color: #666666; } /* Operator */
+code span.ot { color: #007020; } /* Other */
+code span.pp { color: #bc7a00; } /* Preprocessor */
+code span.sc { color: #4070a0; } /* SpecialChar */
+code span.ss { color: #bb6688; } /* SpecialString */
+code span.st { color: #4070a0; } /* String */
+code span.va { color: #19177c; } /* Variable */
+code span.vs { color: #4070a0; } /* VerbatimString */
+code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warning */
+</style>
+
+<link rel="stylesheet" href="src\style.css" type="text/css" />
+<link rel="stylesheet" href="src\environments.css" type="text/css" />
+</head>
+
+<body>
+
+
+
+  <div class="book without-animation with-summary font-size-2 font-family-1" data-basepath=".">
+
+    <div class="book-summary">
+      <nav role="navigation">
+
+<ul class="summary">
+<li><a href="./">R Module 2</a></li>
+
+<li class="divider"></li>
+<li class="chapter" data-level="1" data-path="index.html"><a href="index.html"><i class="fa fa-check"></i><b>1</b> Welcome!</a><ul>
+<li class="chapter" data-level="1.0.1" data-path="index.html"><a href="index.html#how-to-navigate-this-book"><i class="fa fa-check"></i><b>1.0.1</b> How To Navigate This Book</a></li>
+<li class="chapter" data-level="1.1" data-path="associated-csu-course.html"><a href="associated-csu-course.html"><i class="fa fa-check"></i><b>1.1</b> Associated CSU Course</a></li>
+</ul></li>
+<li class="chapter" data-level="2" data-path="AccessingData.html"><a href="AccessingData.html"><i class="fa fa-check"></i><b>2</b> Accessing Data</a><ul>
+<li class="chapter" data-level="2.1" data-path="rectangular-vs-non-rectangular-data.html"><a href="rectangular-vs-non-rectangular-data.html"><i class="fa fa-check"></i><b>2.1</b> Rectangular vs. Non-rectangular Data</a><ul>
+<li class="chapter" data-level="2.1.1" data-path="rectangular-vs-non-rectangular-data.html"><a href="rectangular-vs-non-rectangular-data.html#reading-and-writing-rectangular-data"><i class="fa fa-check"></i><b>2.1.1</b> Reading and Writing Rectangular Data</a></li>
+<li class="chapter" data-level="2.1.2" data-path="rectangular-vs-non-rectangular-data.html"><a href="rectangular-vs-non-rectangular-data.html#reading-and-writing-non-rectangular-data"><i class="fa fa-check"></i><b>2.1.2</b> Reading and Writing Non-rectangular Data</a></li>
+</ul></li>
+<li class="chapter" data-level="2.2" data-path="apis-clean-and-curated.html"><a href="apis-clean-and-curated.html"><i class="fa fa-check"></i><b>2.2</b> APIs: Clean and Curated</a></li>
+<li class="chapter" data-level="2.3" data-path="scraping-messy-and-mangled.html"><a href="scraping-messy-and-mangled.html"><i class="fa fa-check"></i><b>2.3</b> Scraping: Messy and Mangled</a><ul>
+<li class="chapter" data-level="2.3.1" data-path="scraping-messy-and-mangled.html"><a href="scraping-messy-and-mangled.html#scraping-vs-api"><i class="fa fa-check"></i><b>2.3.1</b> Scraping vs API</a></li>
+<li class="chapter" data-level="2.3.2" data-path="scraping-messy-and-mangled.html"><a href="scraping-messy-and-mangled.html#hypertext-markup-language-html"><i class="fa fa-check"></i><b>2.3.2</b> Hypertext Markup Language (HTML)</a></li>
+<li class="chapter" data-level="2.3.3" data-path="scraping-messy-and-mangled.html"><a href="scraping-messy-and-mangled.html#selector-gadgets"><i class="fa fa-check"></i><b>2.3.3</b> Selector Gadgets</a></li>
+</ul></li>
+</ul></li>
+<li class="chapter" data-level="3" data-path="ScrapingInTheWild.html"><a href="ScrapingInTheWild.html"><i class="fa fa-check"></i><b>3</b> Scraping in the Wild</a><ul>
+<li class="chapter" data-level="3.1" data-path="LessonsLearnedFromScraping.html"><a href="LessonsLearnedFromScraping.html"><i class="fa fa-check"></i><b>3.1</b> Lessons Learned from Scraping</a></li>
+<li class="chapter" data-level="3.2" data-path="scraping-nfl-data.html"><a href="scraping-nfl-data.html"><i class="fa fa-check"></i><b>3.2</b> Scraping NFL Data</a><ul>
+<li class="chapter" data-level="3.2.1" data-path="scraping-nfl-data.html"><a href="scraping-nfl-data.html#html-tables-team-statistics"><i class="fa fa-check"></i><b>3.2.1</b> HTML Tables: Team Statistics</a></li>
+</ul></li>
+<li class="chapter" data-level="3.3" data-path="nfl-player-statistics.html"><a href="nfl-player-statistics.html"><i class="fa fa-check"></i><b>3.3</b> NFL Player Statistics</a></li>
+</ul></li>
+<li class="divider"></li>
+<li><a href="https://github.com/rstudio/bookdown" target="blank">Published with bookdown</a></li>
+
+</ul>
+
+      </nav>
+    </div>
+
+    <div class="book-body">
+      <div class="body-inner">
+        <div class="book-header" role="navigation">
+          <h1>
+            <i class="fa fa-circle-o-notch fa-spin"></i><a href="./">R Module 2</a>
+          </h1>
+        </div>
+
+        <div class="page-wrapper" tabindex="-1" role="main">
+          <div class="page-inner">
+
+            <section class="normal" id="section-">
+<div id="nfl-player-statistics" class="section level2">
+<h2><span class="header-section-number">3.3</span> NFL Player Statistics</h2>
+<p>Much like writing a paper, web scraping requires the author to brainstorm. It is important to identify a plan of action, primarily how to traverse webpages to attain the needed data. Suppose we wish to scrape rushing and receiving data for each player by game, rather than aggregated across the entire season. We need to ask ourselves how we could utilize the web page, as designed, to attain these data.</p>
+<p>In you recent progress check, you should have scraped the Rushing and Receiving table. To do this, you can use the selector gadget to identify the node in the HTML which contains the rushing and receiving statistics. In this case, the node is called ‘#rushing_and_receiving’.</p>
+<div class="figure" style="text-align: center"><span id="fig:unnamed-chunk-33"></span>
+<img src="src/images/broncos_rushreceive_selector_gadget.png" alt="finding the rushing and receiving statistics element using the selector gadget" width="800" />
+<p class="caption">
+Figure 3.3: finding the rushing and receiving statistics element using the selector gadget
+</p>
+</div>
+<p>Within this table, there are hyperlinks for each player who recorded statistics in any rushing or receiving category. When you click on this hyperlink, you will find the player’s statistics for each game played. These are the data we desire. We want rushing and receiving statistics for each player on each team for a variety of years. While this may seem like a danting task, let’s not forget the lessons of scraping: (1) ask from where to scrape and (2) scale down the problem.</p>
+<p>Thankfully, we have already tackled (1). We have a web address for the 2020 Denver Broncos, and we know there is a direct link which takes us to each player’s game by game rushing and receiving statistics. Now for (2), let’s scale down the problem by gathering these game by game statistics for an individual player: Melvin Gordon III, running back. To do this, we will:</p>
+<ol style="list-style-type: decimal">
+<li>Get the web address associated with Melvin Gordon’s rushing and receiving statistics. This can be attained by clicking on his name for the hyperlink.</li>
+<li>Isolate the node containing his game by game statistics.</li>
+<li>Parse the HTML table using a similar method as in the previous sub-section.</li>
+</ol>
+<div class="sourceCode" id="cb20"><pre class="sourceCode r chunk-style"><code class="sourceCode r"><a class="sourceLine" id="cb20-1" title="1">broncos_gordon_url &lt;-<span class="st"> &quot;https://www.pro-football-reference.com/players/G/GordMe00.htm&quot;</span></a>
+<a class="sourceLine" id="cb20-2" title="2"></a>
+<a class="sourceLine" id="cb20-3" title="3">broncos_gordon_url <span class="op">%&gt;%</span></a>
+<a class="sourceLine" id="cb20-4" title="4"><span class="st">  </span><span class="co"># read the HTML</span></a>
+<a class="sourceLine" id="cb20-5" title="5"><span class="st">  </span><span class="kw">read_html</span>(.) <span class="op">%&gt;%</span></a>
+<a class="sourceLine" id="cb20-6" title="6"><span class="st">  </span><span class="co"># isolate the node containing the HTML table</span></a>
+<a class="sourceLine" id="cb20-7" title="7"><span class="st">  </span><span class="kw">html_node</span>(., <span class="dt">css =</span> <span class="st">&#39;#stats&#39;</span>) <span class="op">%&gt;%</span></a>
+<a class="sourceLine" id="cb20-8" title="8"><span class="st">  </span><span class="co"># parse the html table</span></a>
+<a class="sourceLine" id="cb20-9" title="9"><span class="st">  </span><span class="kw">html_table</span>(., <span class="dt">fill =</span> <span class="ot">TRUE</span>) <span class="op">%&gt;%</span></a>
+<a class="sourceLine" id="cb20-10" title="10"><span class="st">  </span><span class="co"># make the first row of the table column headers and clean up column names</span></a>
+<a class="sourceLine" id="cb20-11" title="11"><span class="st">  </span><span class="kw">row_to_names</span>(., <span class="dt">row_number =</span> <span class="dv">1</span>) <span class="op">%&gt;%</span></a>
+<a class="sourceLine" id="cb20-12" title="12"><span class="st">  </span><span class="kw">clean_names</span>()</a></code></pre></div>
+<div data-pagedtable="false">
+<script data-pagedtable-source type="application/json">
+{"columns":[{"label":[""],"name":["_rn_"],"type":[""],"align":["left"]},{"label":["date"],"name":[1],"type":["chr"],"align":["left"]},{"label":["week"],"name":[2],"type":["chr"],"align":["left"]},{"label":["tm"],"name":[3],"type":["chr"],"align":["left"]},{"label":["x"],"name":[4],"type":["chr"],"align":["left"]},{"label":["opp"],"name":[5],"type":["chr"],"align":["left"]},{"label":["result"],"name":[6],"type":["chr"],"align":["left"]},{"label":["gs"],"name":[7],"type":["chr"],"align":["left"]},{"label":["rush"],"name":[8],"type":["chr"],"align":["left"]},{"label":["yds"],"name":[9],"type":["chr"],"align":["left"]},{"label":["y_a"],"name":[10],"type":["chr"],"align":["left"]},{"label":["td"],"name":[11],"type":["chr"],"align":["left"]},{"label":["tgt"],"name":[12],"type":["chr"],"align":["left"]},{"label":["rec"],"name":[13],"type":["chr"],"align":["left"]},{"label":["yds_2"],"name":[14],"type":["chr"],"align":["left"]},{"label":["y_r"],"name":[15],"type":["chr"],"align":["left"]},{"label":["td_2"],"name":[16],"type":["chr"],"align":["left"]},{"label":["ctch_percent"],"name":[17],"type":["chr"],"align":["left"]},{"label":["y_tgt"],"name":[18],"type":["chr"],"align":["left"]},{"label":["td_3"],"name":[19],"type":["chr"],"align":["left"]},{"label":["fmb"],"name":[20],"type":["chr"],"align":["left"]},{"label":["fl"],"name":[21],"type":["chr"],"align":["left"]},{"label":["ff"],"name":[22],"type":["chr"],"align":["left"]},{"label":["fr"],"name":[23],"type":["chr"],"align":["left"]},{"label":["yds_3"],"name":[24],"type":["chr"],"align":["left"]},{"label":["td_4"],"name":[25],"type":["chr"],"align":["left"]},{"label":["num"],"name":[26],"type":["chr"],"align":["left"]},{"label":["pct"],"name":[27],"type":["chr"],"align":["left"]},{"label":["num_2"],"name":[28],"type":["chr"],"align":["left"]},{"label":["pct_2"],"name":[29],"type":["chr"],"align":["left"]},{"label":["num_3"],"name":[30],"type":["chr"],"align":["left"]},{"label":["pct_3"],"name":[31],"type":["chr"],"align":["left"]},{"label":["na"],"name":[32],"type":["chr"],"align":["left"]},{"label":["na_2"],"name":[33],"type":["chr"],"align":["left"]},{"label":["na_3"],"name":[34],"type":["chr"],"align":["left"]},{"label":["na_4"],"name":[35],"type":["chr"],"align":["left"]},{"label":["na_5"],"name":[36],"type":["chr"],"align":["left"]},{"label":["na_6"],"name":[37],"type":["chr"],"align":["left"]},{"label":["na_7"],"name":[38],"type":["chr"],"align":["left"]},{"label":["na_8"],"name":[39],"type":["chr"],"align":["left"]},{"label":["na_9"],"name":[40],"type":["chr"],"align":["left"]},{"label":["na_10"],"name":[41],"type":["chr"],"align":["left"]},{"label":["na_11"],"name":[42],"type":["chr"],"align":["left"]},{"label":["na_12"],"name":[43],"type":["chr"],"align":["left"]},{"label":["na_13"],"name":[44],"type":["chr"],"align":["left"]},{"label":["na_14"],"name":[45],"type":["chr"],"align":["left"]},{"label":["na_15"],"name":[46],"type":["chr"],"align":["left"]},{"label":["na_16"],"name":[47],"type":["chr"],"align":["left"]},{"label":["na_17"],"name":[48],"type":["chr"],"align":["left"]},{"label":["na_18"],"name":[49],"type":["chr"],"align":["left"]},{"label":["na_19"],"name":[50],"type":["chr"],"align":["left"]},{"label":["na_20"],"name":[51],"type":["chr"],"align":["left"]},{"label":["na_21"],"name":[52],"type":["chr"],"align":["left"]},{"label":["na_22"],"name":[53],"type":["chr"],"align":["left"]},{"label":["na_23"],"name":[54],"type":["chr"],"align":["left"]},{"label":["na_24"],"name":[55],"type":["chr"],"align":["left"]},{"label":["na_25"],"name":[56],"type":["chr"],"align":["left"]},{"label":["na_26"],"name":[57],"type":["chr"],"align":["left"]},{"label":["na_27"],"name":[58],"type":["chr"],"align":["left"]},{"label":["na_28"],"name":[59],"type":["chr"],"align":["left"]},{"label":["na_29"],"name":[60],"type":["chr"],"align":["left"]},{"label":["na_30"],"name":[61],"type":["chr"],"align":["left"]},{"label":["na_31"],"name":[62],"type":["chr"],"align":["left"]},{"label":["na_32"],"name":[63],"type":["chr"],"align":["left"]},{"label":["na_33"],"name":[64],"type":["chr"],"align":["left"]},{"label":["na_34"],"name":[65],"type":["chr"],"align":["left"]},{"label":["na_35"],"name":[66],"type":["chr"],"align":["left"]},{"label":["na_36"],"name":[67],"type":["chr"],"align":["left"]},{"label":["na_37"],"name":[68],"type":["chr"],"align":["left"]},{"label":["na_38"],"name":[69],"type":["chr"],"align":["left"]},{"label":["na_39"],"name":[70],"type":["chr"],"align":["left"]},{"label":["na_40"],"name":[71],"type":["chr"],"align":["left"]},{"label":["na_41"],"name":[72],"type":["chr"],"align":["left"]},{"label":["na_42"],"name":[73],"type":["chr"],"align":["left"]},{"label":["na_43"],"name":[74],"type":["chr"],"align":["left"]},{"label":["na_44"],"name":[75],"type":["chr"],"align":["left"]},{"label":["na_45"],"name":[76],"type":["chr"],"align":["left"]},{"label":["na_46"],"name":[77],"type":["chr"],"align":["left"]},{"label":["na_47"],"name":[78],"type":["chr"],"align":["left"]},{"label":["na_48"],"name":[79],"type":["chr"],"align":["left"]},{"label":["na_49"],"name":[80],"type":["chr"],"align":["left"]},{"label":["na_50"],"name":[81],"type":["chr"],"align":["left"]},{"label":["na_51"],"name":[82],"type":["chr"],"align":["left"]},{"label":["na_52"],"name":[83],"type":["chr"],"align":["left"]},{"label":["na_53"],"name":[84],"type":["chr"],"align":["left"]},{"label":["na_54"],"name":[85],"type":["chr"],"align":["left"]},{"label":["na_55"],"name":[86],"type":["chr"],"align":["left"]},{"label":["na_56"],"name":[87],"type":["chr"],"align":["left"]},{"label":["na_57"],"name":[88],"type":["chr"],"align":["left"]},{"label":["na_58"],"name":[89],"type":["chr"],"align":["left"]},{"label":["na_59"],"name":[90],"type":["chr"],"align":["left"]},{"label":["na_60"],"name":[91],"type":["chr"],"align":["left"]},{"label":["na_61"],"name":[92],"type":["chr"],"align":["left"]},{"label":["na_62"],"name":[93],"type":["chr"],"align":["left"]},{"label":["na_63"],"name":[94],"type":["chr"],"align":["left"]},{"label":["na_64"],"name":[95],"type":["chr"],"align":["left"]},{"label":["na_65"],"name":[96],"type":["chr"],"align":["left"]},{"label":["na_66"],"name":[97],"type":["chr"],"align":["left"]},{"label":["na_67"],"name":[98],"type":["chr"],"align":["left"]},{"label":["na_68"],"name":[99],"type":["chr"],"align":["left"]},{"label":["na_69"],"name":[100],"type":["chr"],"align":["left"]},{"label":["na_70"],"name":[101],"type":["chr"],"align":["left"]},{"label":["na_71"],"name":[102],"type":["chr"],"align":["left"]},{"label":["na_72"],"name":[103],"type":["chr"],"align":["left"]},{"label":["na_73"],"name":[104],"type":["chr"],"align":["left"]}],"data":[{"1":"2020-09-14","2":"1","3":"DEN","4":"","5":"TEN","6":"L 14-16","7":"*","8":"15","9":"78","10":"5.20","11":"1","12":"3","13":"3","14":"8","15":"2.67","16":"0","17":"100.0%","18":"2.67","19":"1","20":"1","21":"1","22":"0","23":"0","24":"0","25":"0","26":"37","27":"63%","28":"0","29":"0%","30":"0","31":"0%","32":"NA","33":"NA","34":"NA","35":"NA","36":"NA","37":"NA","38":"NA","39":"NA","40":"NA","41":"NA","42":"NA","43":"NA","44":"NA","45":"NA","46":"NA","47":"NA","48":"NA","49":"NA","50":"NA","51":"NA","52":"NA","53":"NA","54":"NA","55":"NA","56":"NA","57":"NA","58":"NA","59":"NA","60":"NA","61":"NA","62":"NA","63":"NA","64":"NA","65":"NA","66":"NA","67":"NA","68":"NA","69":"NA","70":"NA","71":"NA","72":"NA","73":"NA","74":"NA","75":"NA","76":"NA","77":"NA","78":"NA","79":"NA","80":"NA","81":"NA","82":"NA","83":"NA","84":"NA","85":"NA","86":"NA","87":"NA","88":"NA","89":"NA","90":"NA","91":"NA","92":"NA","93":"NA","94":"NA","95":"NA","96":"NA","97":"NA","98":"NA","99":"NA","100":"NA","101":"NA","102":"NA","103":"NA","104":"NA","_rn_":"2"},{"1":"2020-09-20","2":"2","3":"DEN","4":"@","5":"PIT","6":"L 21-26","7":"*","8":"19","9":"70","10":"3.68","11":"0","12":"3","13":"2","14":"14","15":"7.00","16":"1","17":"66.7%","18":"4.67","19":"1","20":"0","21":"0","22":"0","23":"0","24":"0","25":"0","26":"61","27":"79%","28":"0","29":"0%","30":"0","31":"0%","32":"NA","33":"NA","34":"NA","35":"NA","36":"NA","37":"NA","38":"NA","39":"NA","40":"NA","41":"NA","42":"NA","43":"NA","44":"NA","45":"NA","46":"NA","47":"NA","48":"NA","49":"NA","50":"NA","51":"NA","52":"NA","53":"NA","54":"NA","55":"NA","56":"NA","57":"NA","58":"NA","59":"NA","60":"NA","61":"NA","62":"NA","63":"NA","64":"NA","65":"NA","66":"NA","67":"NA","68":"NA","69":"NA","70":"NA","71":"NA","72":"NA","73":"NA","74":"NA","75":"NA","76":"NA","77":"NA","78":"NA","79":"NA","80":"NA","81":"NA","82":"NA","83":"NA","84":"NA","85":"NA","86":"NA","87":"NA","88":"NA","89":"NA","90":"NA","91":"NA","92":"NA","93":"NA","94":"NA","95":"NA","96":"NA","97":"NA","98":"NA","99":"NA","100":"NA","101":"NA","102":"NA","103":"NA","104":"NA","_rn_":"3"},{"1":"2020-09-27","2":"3","3":"DEN","4":"","5":"TAM","6":"L 10-28","7":"*","8":"8","9":"26","10":"3.25","11":"0","12":"6","13":"4","14":"12","15":"3.00","16":"0","17":"66.7%","18":"2.00","19":"0","20":"0","21":"0","22":"0","23":"0","24":"0","25":"0","26":"39","27":"62%","28":"0","29":"0%","30":"0","31":"0%","32":"NA","33":"NA","34":"NA","35":"NA","36":"NA","37":"NA","38":"NA","39":"NA","40":"NA","41":"NA","42":"NA","43":"NA","44":"NA","45":"NA","46":"NA","47":"NA","48":"NA","49":"NA","50":"NA","51":"NA","52":"NA","53":"NA","54":"NA","55":"NA","56":"NA","57":"NA","58":"NA","59":"NA","60":"NA","61":"NA","62":"NA","63":"NA","64":"NA","65":"NA","66":"NA","67":"NA","68":"NA","69":"NA","70":"NA","71":"NA","72":"NA","73":"NA","74":"NA","75":"NA","76":"NA","77":"NA","78":"NA","79":"NA","80":"NA","81":"NA","82":"NA","83":"NA","84":"NA","85":"NA","86":"NA","87":"NA","88":"NA","89":"NA","90":"NA","91":"NA","92":"NA","93":"NA","94":"NA","95":"NA","96":"NA","97":"NA","98":"NA","99":"NA","100":"NA","101":"NA","102":"NA","103":"NA","104":"NA","_rn_":"4"},{"1":"Upcoming Games · Bye in Week 8","2":"Upcoming Games · Bye in Week 8","3":"Upcoming Games · Bye in Week 8","4":"Upcoming Games · Bye in Week 8","5":"Upcoming Games · Bye in Week 8","6":"Upcoming Games · Bye in Week 8","7":"Upcoming Games · Bye in Week 8","8":"Upcoming Games · Bye in Week 8","9":"Upcoming Games · Bye in Week 8","10":"Upcoming Games · Bye in Week 8","11":"Upcoming Games · Bye in Week 8","12":"Upcoming Games · Bye in Week 8","13":"Upcoming Games · Bye in Week 8","14":"Upcoming Games · Bye in Week 8","15":"Upcoming Games · Bye in Week 8","16":"Upcoming Games · Bye in Week 8","17":"Upcoming Games · Bye in Week 8","18":"Upcoming Games · Bye in Week 8","19":"Upcoming Games · Bye in Week 8","20":"Upcoming Games · Bye in Week 8","21":"Upcoming Games · Bye in Week 8","22":"Upcoming Games · Bye in Week 8","23":"Upcoming Games · Bye in Week 8","24":"Upcoming Games · Bye in Week 8","25":"Upcoming Games · Bye in Week 8","26":"Upcoming Games · Bye in Week 8","27":"Upcoming Games · Bye in Week 8","28":"Upcoming Games · Bye in Week 8","29":"Upcoming Games · Bye in Week 8","30":"Upcoming Games · Bye in Week 8","31":"Upcoming Games · Bye in Week 8","32":"NA","33":"NA","34":"NA","35":"NA","36":"NA","37":"NA","38":"NA","39":"NA","40":"NA","41":"NA","42":"NA","43":"NA","44":"NA","45":"NA","46":"NA","47":"NA","48":"NA","49":"NA","50":"NA","51":"NA","52":"NA","53":"NA","54":"NA","55":"NA","56":"NA","57":"NA","58":"NA","59":"NA","60":"NA","61":"NA","62":"NA","63":"NA","64":"NA","65":"NA","66":"NA","67":"NA","68":"NA","69":"NA","70":"NA","71":"NA","72":"NA","73":"NA","74":"NA","75":"NA","76":"NA","77":"NA","78":"NA","79":"NA","80":"NA","81":"NA","82":"NA","83":"NA","84":"NA","85":"NA","86":"NA","87":"NA","88":"NA","89":"NA","90":"NA","91":"NA","92":"NA","93":"NA","94":"NA","95":"NA","96":"NA","97":"NA","98":"NA","99":"NA","100":"NA","101":"NA","102":"NA","103":"NA","104":"NA","_rn_":"5"},{"1":"2020-10-01","2":"4","3":"DEN","4":"@","5":"NYJ","6":"Preview · Stats for 1 game vs. Jets ·   19 rush, 81 yds, 1 TD (in 2017)","7":"Preview · Stats for 1 game vs. Jets ·   19 rush, 81 yds, 1 TD (in 2017)","8":"Preview · Stats for 1 game vs. Jets ·   19 rush, 81 yds, 1 TD (in 2017)","9":"Preview · Stats for 1 game vs. Jets ·   19 rush, 81 yds, 1 TD (in 2017)","10":"Preview · Stats for 1 game vs. Jets ·   19 rush, 81 yds, 1 TD (in 2017)","11":"Preview · Stats for 1 game vs. Jets ·   19 rush, 81 yds, 1 TD (in 2017)","12":"Preview · Stats for 1 game vs. Jets ·   19 rush, 81 yds, 1 TD (in 2017)","13":"Preview · Stats for 1 game vs. Jets ·   19 rush, 81 yds, 1 TD (in 2017)","14":"Preview · Stats for 1 game vs. Jets ·   19 rush, 81 yds, 1 TD (in 2017)","15":"Preview · Stats for 1 game vs. Jets ·   19 rush, 81 yds, 1 TD (in 2017)","16":"Preview · Stats for 1 game vs. Jets ·   19 rush, 81 yds, 1 TD (in 2017)","17":"Preview · Stats for 1 game vs. Jets ·   19 rush, 81 yds, 1 TD (in 2017)","18":"Preview · Stats for 1 game vs. Jets ·   19 rush, 81 yds, 1 TD (in 2017)","19":"Preview · Stats for 1 game vs. Jets ·   19 rush, 81 yds, 1 TD (in 2017)","20":"Preview · Stats for 1 game vs. Jets ·   19 rush, 81 yds, 1 TD (in 2017)","21":"Preview · Stats for 1 game vs. Jets ·   19 rush, 81 yds, 1 TD (in 2017)","22":"Preview · Stats for 1 game vs. Jets ·   19 rush, 81 yds, 1 TD (in 2017)","23":"Preview · Stats for 1 game vs. Jets ·   19 rush, 81 yds, 1 TD (in 2017)","24":"Preview · Stats for 1 game vs. Jets ·   19 rush, 81 yds, 1 TD (in 2017)","25":"Preview · Stats for 1 game vs. Jets ·   19 rush, 81 yds, 1 TD (in 2017)","26":"Preview · Stats for 1 game vs. Jets ·   19 rush, 81 yds, 1 TD (in 2017)","27":"Preview · Stats for 1 game vs. Jets ·   19 rush, 81 yds, 1 TD (in 2017)","28":"Preview · Stats for 1 game vs. Jets ·   19 rush, 81 yds, 1 TD (in 2017)","29":"Preview · Stats for 1 game vs. Jets ·   19 rush, 81 yds, 1 TD (in 2017)","30":"Preview · Stats for 1 game vs. Jets ·   19 rush, 81 yds, 1 TD (in 2017)","31":"Preview · Stats for 1 game vs. Jets ·   19 rush, 81 yds, 1 TD (in 2017)","32":"Preview · Stats for 1 game vs. Jets ·   19 rush, 81 yds, 1 TD (in 2017)","33":"Preview · Stats for 1 game vs. Jets ·   19 rush, 81 yds, 1 TD (in 2017)","34":"Preview · Stats for 1 game vs. Jets ·   19 rush, 81 yds, 1 TD (in 2017)","35":"Preview · Stats for 1 game vs. Jets ·   19 rush, 81 yds, 1 TD (in 2017)","36":"Preview · Stats for 1 game vs. Jets ·   19 rush, 81 yds, 1 TD (in 2017)","37":"Preview · Stats for 1 game vs. Jets ·   19 rush, 81 yds, 1 TD (in 2017)","38":"Preview · Stats for 1 game vs. Jets ·   19 rush, 81 yds, 1 TD (in 2017)","39":"Preview · Stats for 1 game vs. Jets ·   19 rush, 81 yds, 1 TD (in 2017)","40":"Preview · Stats for 1 game vs. Jets ·   19 rush, 81 yds, 1 TD (in 2017)","41":"Preview · Stats for 1 game vs. Jets ·   19 rush, 81 yds, 1 TD (in 2017)","42":"Preview · Stats for 1 game vs. Jets ·   19 rush, 81 yds, 1 TD (in 2017)","43":"Preview · Stats for 1 game vs. Jets ·   19 rush, 81 yds, 1 TD (in 2017)","44":"Preview · Stats for 1 game vs. Jets ·   19 rush, 81 yds, 1 TD (in 2017)","45":"Preview · Stats for 1 game vs. Jets ·   19 rush, 81 yds, 1 TD (in 2017)","46":"Preview · Stats for 1 game vs. Jets ·   19 rush, 81 yds, 1 TD (in 2017)","47":"Preview · Stats for 1 game vs. Jets ·   19 rush, 81 yds, 1 TD (in 2017)","48":"Preview · Stats for 1 game vs. Jets ·   19 rush, 81 yds, 1 TD (in 2017)","49":"Preview · Stats for 1 game vs. Jets ·   19 rush, 81 yds, 1 TD (in 2017)","50":"Preview · Stats for 1 game vs. Jets ·   19 rush, 81 yds, 1 TD (in 2017)","51":"Preview · Stats for 1 game vs. Jets ·   19 rush, 81 yds, 1 TD (in 2017)","52":"Preview · Stats for 1 game vs. Jets ·   19 rush, 81 yds, 1 TD (in 2017)","53":"Preview · Stats for 1 game vs. Jets ·   19 rush, 81 yds, 1 TD (in 2017)","54":"Preview · Stats for 1 game vs. Jets ·   19 rush, 81 yds, 1 TD (in 2017)","55":"Preview · Stats for 1 game vs. Jets ·   19 rush, 81 yds, 1 TD (in 2017)","56":"Preview · Stats for 1 game vs. Jets ·   19 rush, 81 yds, 1 TD (in 2017)","57":"Preview · Stats for 1 game vs. Jets ·   19 rush, 81 yds, 1 TD (in 2017)","58":"Preview · Stats for 1 game vs. Jets ·   19 rush, 81 yds, 1 TD (in 2017)","59":"Preview · Stats for 1 game vs. Jets ·   19 rush, 81 yds, 1 TD (in 2017)","60":"Preview · Stats for 1 game vs. Jets ·   19 rush, 81 yds, 1 TD (in 2017)","61":"Preview · Stats for 1 game vs. Jets ·   19 rush, 81 yds, 1 TD (in 2017)","62":"Preview · Stats for 1 game vs. Jets ·   19 rush, 81 yds, 1 TD (in 2017)","63":"Preview · Stats for 1 game vs. Jets ·   19 rush, 81 yds, 1 TD (in 2017)","64":"Preview · Stats for 1 game vs. Jets ·   19 rush, 81 yds, 1 TD (in 2017)","65":"Preview · Stats for 1 game vs. Jets ·   19 rush, 81 yds, 1 TD (in 2017)","66":"Preview · Stats for 1 game vs. Jets ·   19 rush, 81 yds, 1 TD (in 2017)","67":"Preview · Stats for 1 game vs. Jets ·   19 rush, 81 yds, 1 TD (in 2017)","68":"Preview · Stats for 1 game vs. Jets ·   19 rush, 81 yds, 1 TD (in 2017)","69":"Preview · Stats for 1 game vs. Jets ·   19 rush, 81 yds, 1 TD (in 2017)","70":"Preview · Stats for 1 game vs. Jets ·   19 rush, 81 yds, 1 TD (in 2017)","71":"Preview · Stats for 1 game vs. Jets ·   19 rush, 81 yds, 1 TD (in 2017)","72":"Preview · Stats for 1 game vs. Jets ·   19 rush, 81 yds, 1 TD (in 2017)","73":"Preview · Stats for 1 game vs. Jets ·   19 rush, 81 yds, 1 TD (in 2017)","74":"Preview · Stats for 1 game vs. Jets ·   19 rush, 81 yds, 1 TD (in 2017)","75":"Preview · Stats for 1 game vs. Jets ·   19 rush, 81 yds, 1 TD (in 2017)","76":"Preview · Stats for 1 game vs. Jets ·   19 rush, 81 yds, 1 TD (in 2017)","77":"Preview · Stats for 1 game vs. Jets ·   19 rush, 81 yds, 1 TD (in 2017)","78":"Preview · Stats for 1 game vs. Jets ·   19 rush, 81 yds, 1 TD (in 2017)","79":"Preview · Stats for 1 game vs. Jets ·   19 rush, 81 yds, 1 TD (in 2017)","80":"Preview · Stats for 1 game vs. Jets ·   19 rush, 81 yds, 1 TD (in 2017)","81":"Preview · Stats for 1 game vs. Jets ·   19 rush, 81 yds, 1 TD (in 2017)","82":"Preview · Stats for 1 game vs. Jets ·   19 rush, 81 yds, 1 TD (in 2017)","83":"Preview · Stats for 1 game vs. Jets ·   19 rush, 81 yds, 1 TD (in 2017)","84":"Preview · Stats for 1 game vs. Jets ·   19 rush, 81 yds, 1 TD (in 2017)","85":"Preview · Stats for 1 game vs. Jets ·   19 rush, 81 yds, 1 TD (in 2017)","86":"Preview · Stats for 1 game vs. Jets ·   19 rush, 81 yds, 1 TD (in 2017)","87":"Preview · Stats for 1 game vs. Jets ·   19 rush, 81 yds, 1 TD (in 2017)","88":"Preview · Stats for 1 game vs. Jets ·   19 rush, 81 yds, 1 TD (in 2017)","89":"Preview · Stats for 1 game vs. Jets ·   19 rush, 81 yds, 1 TD (in 2017)","90":"Preview · Stats for 1 game vs. Jets ·   19 rush, 81 yds, 1 TD (in 2017)","91":"Preview · Stats for 1 game vs. Jets ·   19 rush, 81 yds, 1 TD (in 2017)","92":"Preview · Stats for 1 game vs. Jets ·   19 rush, 81 yds, 1 TD (in 2017)","93":"Preview · Stats for 1 game vs. Jets ·   19 rush, 81 yds, 1 TD (in 2017)","94":"Preview · Stats for 1 game vs. Jets ·   19 rush, 81 yds, 1 TD (in 2017)","95":"Preview · Stats for 1 game vs. Jets ·   19 rush, 81 yds, 1 TD (in 2017)","96":"Preview · Stats for 1 game vs. Jets ·   19 rush, 81 yds, 1 TD (in 2017)","97":"Preview · Stats for 1 game vs. Jets ·   19 rush, 81 yds, 1 TD (in 2017)","98":"Preview · Stats for 1 game vs. Jets ·   19 rush, 81 yds, 1 TD (in 2017)","99":"Preview · Stats for 1 game vs. Jets ·   19 rush, 81 yds, 1 TD (in 2017)","100":"Preview · Stats for 1 game vs. Jets ·   19 rush, 81 yds, 1 TD (in 2017)","101":"Preview · Stats for 1 game vs. Jets ·   19 rush, 81 yds, 1 TD (in 2017)","102":"Preview · Stats for 1 game vs. Jets ·   19 rush, 81 yds, 1 TD (in 2017)","103":"Preview · Stats for 1 game vs. Jets ·   19 rush, 81 yds, 1 TD (in 2017)","104":"Preview · Stats for 1 game vs. Jets ·   19 rush, 81 yds, 1 TD (in 2017)","_rn_":"6"},{"1":"2020-10-11","2":"5","3":"DEN","4":"@","5":"NWE","6":"Preview · Stats for 1 game vs. Patriots ·   14 rush, 132 yds, 1 TD (in 2017)","7":"Preview · Stats for 1 game vs. Patriots ·   14 rush, 132 yds, 1 TD (in 2017)","8":"Preview · Stats for 1 game vs. Patriots ·   14 rush, 132 yds, 1 TD (in 2017)","9":"Preview · Stats for 1 game vs. Patriots ·   14 rush, 132 yds, 1 TD (in 2017)","10":"Preview · Stats for 1 game vs. Patriots ·   14 rush, 132 yds, 1 TD (in 2017)","11":"Preview · Stats for 1 game vs. Patriots ·   14 rush, 132 yds, 1 TD (in 2017)","12":"Preview · Stats for 1 game vs. Patriots ·   14 rush, 132 yds, 1 TD (in 2017)","13":"Preview · Stats for 1 game vs. Patriots ·   14 rush, 132 yds, 1 TD (in 2017)","14":"Preview · Stats for 1 game vs. Patriots ·   14 rush, 132 yds, 1 TD (in 2017)","15":"Preview · Stats for 1 game vs. Patriots ·   14 rush, 132 yds, 1 TD (in 2017)","16":"Preview · Stats for 1 game vs. Patriots ·   14 rush, 132 yds, 1 TD (in 2017)","17":"Preview · Stats for 1 game vs. Patriots ·   14 rush, 132 yds, 1 TD (in 2017)","18":"Preview · Stats for 1 game vs. Patriots ·   14 rush, 132 yds, 1 TD (in 2017)","19":"Preview · Stats for 1 game vs. Patriots ·   14 rush, 132 yds, 1 TD (in 2017)","20":"Preview · Stats for 1 game vs. Patriots ·   14 rush, 132 yds, 1 TD (in 2017)","21":"Preview · Stats for 1 game vs. Patriots ·   14 rush, 132 yds, 1 TD (in 2017)","22":"Preview · Stats for 1 game vs. Patriots ·   14 rush, 132 yds, 1 TD (in 2017)","23":"Preview · Stats for 1 game vs. Patriots ·   14 rush, 132 yds, 1 TD (in 2017)","24":"Preview · Stats for 1 game vs. Patriots ·   14 rush, 132 yds, 1 TD (in 2017)","25":"Preview · Stats for 1 game vs. Patriots ·   14 rush, 132 yds, 1 TD (in 2017)","26":"Preview · Stats for 1 game vs. Patriots ·   14 rush, 132 yds, 1 TD (in 2017)","27":"Preview · Stats for 1 game vs. Patriots ·   14 rush, 132 yds, 1 TD (in 2017)","28":"Preview · Stats for 1 game vs. Patriots ·   14 rush, 132 yds, 1 TD (in 2017)","29":"Preview · Stats for 1 game vs. Patriots ·   14 rush, 132 yds, 1 TD (in 2017)","30":"Preview · Stats for 1 game vs. Patriots ·   14 rush, 132 yds, 1 TD (in 2017)","31":"Preview · Stats for 1 game vs. Patriots ·   14 rush, 132 yds, 1 TD (in 2017)","32":"Preview · Stats for 1 game vs. Patriots ·   14 rush, 132 yds, 1 TD (in 2017)","33":"Preview · Stats for 1 game vs. Patriots ·   14 rush, 132 yds, 1 TD (in 2017)","34":"Preview · Stats for 1 game vs. Patriots ·   14 rush, 132 yds, 1 TD (in 2017)","35":"Preview · Stats for 1 game vs. Patriots ·   14 rush, 132 yds, 1 TD (in 2017)","36":"Preview · Stats for 1 game vs. Patriots ·   14 rush, 132 yds, 1 TD (in 2017)","37":"Preview · Stats for 1 game vs. Patriots ·   14 rush, 132 yds, 1 TD (in 2017)","38":"Preview · Stats for 1 game vs. Patriots ·   14 rush, 132 yds, 1 TD (in 2017)","39":"Preview · Stats for 1 game vs. Patriots ·   14 rush, 132 yds, 1 TD (in 2017)","40":"Preview · Stats for 1 game vs. Patriots ·   14 rush, 132 yds, 1 TD (in 2017)","41":"Preview · Stats for 1 game vs. Patriots ·   14 rush, 132 yds, 1 TD (in 2017)","42":"Preview · Stats for 1 game vs. Patriots ·   14 rush, 132 yds, 1 TD (in 2017)","43":"Preview · Stats for 1 game vs. Patriots ·   14 rush, 132 yds, 1 TD (in 2017)","44":"Preview · Stats for 1 game vs. Patriots ·   14 rush, 132 yds, 1 TD (in 2017)","45":"Preview · Stats for 1 game vs. Patriots ·   14 rush, 132 yds, 1 TD (in 2017)","46":"Preview · Stats for 1 game vs. Patriots ·   14 rush, 132 yds, 1 TD (in 2017)","47":"Preview · Stats for 1 game vs. Patriots ·   14 rush, 132 yds, 1 TD (in 2017)","48":"Preview · Stats for 1 game vs. Patriots ·   14 rush, 132 yds, 1 TD (in 2017)","49":"Preview · Stats for 1 game vs. Patriots ·   14 rush, 132 yds, 1 TD (in 2017)","50":"Preview · Stats for 1 game vs. Patriots ·   14 rush, 132 yds, 1 TD (in 2017)","51":"Preview · Stats for 1 game vs. Patriots ·   14 rush, 132 yds, 1 TD (in 2017)","52":"Preview · Stats for 1 game vs. Patriots ·   14 rush, 132 yds, 1 TD (in 2017)","53":"Preview · Stats for 1 game vs. Patriots ·   14 rush, 132 yds, 1 TD (in 2017)","54":"Preview · Stats for 1 game vs. Patriots ·   14 rush, 132 yds, 1 TD (in 2017)","55":"Preview · Stats for 1 game vs. Patriots ·   14 rush, 132 yds, 1 TD (in 2017)","56":"Preview · Stats for 1 game vs. Patriots ·   14 rush, 132 yds, 1 TD (in 2017)","57":"Preview · Stats for 1 game vs. Patriots ·   14 rush, 132 yds, 1 TD (in 2017)","58":"Preview · Stats for 1 game vs. Patriots ·   14 rush, 132 yds, 1 TD (in 2017)","59":"Preview · Stats for 1 game vs. Patriots ·   14 rush, 132 yds, 1 TD (in 2017)","60":"Preview · Stats for 1 game vs. Patriots ·   14 rush, 132 yds, 1 TD (in 2017)","61":"Preview · Stats for 1 game vs. Patriots ·   14 rush, 132 yds, 1 TD (in 2017)","62":"Preview · Stats for 1 game vs. Patriots ·   14 rush, 132 yds, 1 TD (in 2017)","63":"Preview · Stats for 1 game vs. Patriots ·   14 rush, 132 yds, 1 TD (in 2017)","64":"Preview · Stats for 1 game vs. Patriots ·   14 rush, 132 yds, 1 TD (in 2017)","65":"Preview · Stats for 1 game vs. Patriots ·   14 rush, 132 yds, 1 TD (in 2017)","66":"Preview · Stats for 1 game vs. Patriots ·   14 rush, 132 yds, 1 TD (in 2017)","67":"Preview · Stats for 1 game vs. Patriots ·   14 rush, 132 yds, 1 TD (in 2017)","68":"Preview · Stats for 1 game vs. Patriots ·   14 rush, 132 yds, 1 TD (in 2017)","69":"Preview · Stats for 1 game vs. Patriots ·   14 rush, 132 yds, 1 TD (in 2017)","70":"Preview · Stats for 1 game vs. Patriots ·   14 rush, 132 yds, 1 TD (in 2017)","71":"Preview · Stats for 1 game vs. Patriots ·   14 rush, 132 yds, 1 TD (in 2017)","72":"Preview · Stats for 1 game vs. Patriots ·   14 rush, 132 yds, 1 TD (in 2017)","73":"Preview · Stats for 1 game vs. Patriots ·   14 rush, 132 yds, 1 TD (in 2017)","74":"Preview · Stats for 1 game vs. Patriots ·   14 rush, 132 yds, 1 TD (in 2017)","75":"Preview · Stats for 1 game vs. Patriots ·   14 rush, 132 yds, 1 TD (in 2017)","76":"Preview · Stats for 1 game vs. Patriots ·   14 rush, 132 yds, 1 TD (in 2017)","77":"Preview · Stats for 1 game vs. Patriots ·   14 rush, 132 yds, 1 TD (in 2017)","78":"Preview · Stats for 1 game vs. Patriots ·   14 rush, 132 yds, 1 TD (in 2017)","79":"Preview · Stats for 1 game vs. Patriots ·   14 rush, 132 yds, 1 TD (in 2017)","80":"Preview · Stats for 1 game vs. Patriots ·   14 rush, 132 yds, 1 TD (in 2017)","81":"Preview · Stats for 1 game vs. Patriots ·   14 rush, 132 yds, 1 TD (in 2017)","82":"Preview · Stats for 1 game vs. Patriots ·   14 rush, 132 yds, 1 TD (in 2017)","83":"Preview · Stats for 1 game vs. Patriots ·   14 rush, 132 yds, 1 TD (in 2017)","84":"Preview · Stats for 1 game vs. Patriots ·   14 rush, 132 yds, 1 TD (in 2017)","85":"Preview · Stats for 1 game vs. Patriots ·   14 rush, 132 yds, 1 TD (in 2017)","86":"Preview · Stats for 1 game vs. Patriots ·   14 rush, 132 yds, 1 TD (in 2017)","87":"Preview · Stats for 1 game vs. Patriots ·   14 rush, 132 yds, 1 TD (in 2017)","88":"Preview · Stats for 1 game vs. Patriots ·   14 rush, 132 yds, 1 TD (in 2017)","89":"Preview · Stats for 1 game vs. Patriots ·   14 rush, 132 yds, 1 TD (in 2017)","90":"Preview · Stats for 1 game vs. Patriots ·   14 rush, 132 yds, 1 TD (in 2017)","91":"Preview · Stats for 1 game vs. Patriots ·   14 rush, 132 yds, 1 TD (in 2017)","92":"Preview · Stats for 1 game vs. Patriots ·   14 rush, 132 yds, 1 TD (in 2017)","93":"Preview · Stats for 1 game vs. Patriots ·   14 rush, 132 yds, 1 TD (in 2017)","94":"Preview · Stats for 1 game vs. Patriots ·   14 rush, 132 yds, 1 TD (in 2017)","95":"Preview · Stats for 1 game vs. Patriots ·   14 rush, 132 yds, 1 TD (in 2017)","96":"Preview · Stats for 1 game vs. Patriots ·   14 rush, 132 yds, 1 TD (in 2017)","97":"Preview · Stats for 1 game vs. Patriots ·   14 rush, 132 yds, 1 TD (in 2017)","98":"Preview · Stats for 1 game vs. Patriots ·   14 rush, 132 yds, 1 TD (in 2017)","99":"Preview · Stats for 1 game vs. Patriots ·   14 rush, 132 yds, 1 TD (in 2017)","100":"Preview · Stats for 1 game vs. Patriots ·   14 rush, 132 yds, 1 TD (in 2017)","101":"Preview · Stats for 1 game vs. Patriots ·   14 rush, 132 yds, 1 TD (in 2017)","102":"Preview · Stats for 1 game vs. Patriots ·   14 rush, 132 yds, 1 TD (in 2017)","103":"Preview · Stats for 1 game vs. Patriots ·   14 rush, 132 yds, 1 TD (in 2017)","104":"Preview · Stats for 1 game vs. Patriots ·   14 rush, 132 yds, 1 TD (in 2017)","_rn_":"7"},{"1":"2020-10-18","2":"6","3":"DEN","4":"","5":"MIA","6":"Preview · Stats for 3 games vs. Dolphins ·  Avg. 16.0 rush, 41.3 yds, 0.3 TD (Last in 2017)","7":"Preview · Stats for 3 games vs. Dolphins ·  Avg. 16.0 rush, 41.3 yds, 0.3 TD (Last in 2017)","8":"Preview · Stats for 3 games vs. Dolphins ·  Avg. 16.0 rush, 41.3 yds, 0.3 TD (Last in 2017)","9":"Preview · Stats for 3 games vs. Dolphins ·  Avg. 16.0 rush, 41.3 yds, 0.3 TD (Last in 2017)","10":"Preview · Stats for 3 games vs. Dolphins ·  Avg. 16.0 rush, 41.3 yds, 0.3 TD (Last in 2017)","11":"Preview · Stats for 3 games vs. Dolphins ·  Avg. 16.0 rush, 41.3 yds, 0.3 TD (Last in 2017)","12":"Preview · Stats for 3 games vs. Dolphins ·  Avg. 16.0 rush, 41.3 yds, 0.3 TD (Last in 2017)","13":"Preview · Stats for 3 games vs. Dolphins ·  Avg. 16.0 rush, 41.3 yds, 0.3 TD (Last in 2017)","14":"Preview · Stats for 3 games vs. Dolphins ·  Avg. 16.0 rush, 41.3 yds, 0.3 TD (Last in 2017)","15":"Preview · Stats for 3 games vs. Dolphins ·  Avg. 16.0 rush, 41.3 yds, 0.3 TD (Last in 2017)","16":"Preview · Stats for 3 games vs. Dolphins ·  Avg. 16.0 rush, 41.3 yds, 0.3 TD (Last in 2017)","17":"Preview · Stats for 3 games vs. Dolphins ·  Avg. 16.0 rush, 41.3 yds, 0.3 TD (Last in 2017)","18":"Preview · Stats for 3 games vs. Dolphins ·  Avg. 16.0 rush, 41.3 yds, 0.3 TD (Last in 2017)","19":"Preview · Stats for 3 games vs. Dolphins ·  Avg. 16.0 rush, 41.3 yds, 0.3 TD (Last in 2017)","20":"Preview · Stats for 3 games vs. Dolphins ·  Avg. 16.0 rush, 41.3 yds, 0.3 TD (Last in 2017)","21":"Preview · Stats for 3 games vs. Dolphins ·  Avg. 16.0 rush, 41.3 yds, 0.3 TD (Last in 2017)","22":"Preview · Stats for 3 games vs. Dolphins ·  Avg. 16.0 rush, 41.3 yds, 0.3 TD (Last in 2017)","23":"Preview · Stats for 3 games vs. Dolphins ·  Avg. 16.0 rush, 41.3 yds, 0.3 TD (Last in 2017)","24":"Preview · Stats for 3 games vs. Dolphins ·  Avg. 16.0 rush, 41.3 yds, 0.3 TD (Last in 2017)","25":"Preview · Stats for 3 games vs. Dolphins ·  Avg. 16.0 rush, 41.3 yds, 0.3 TD (Last in 2017)","26":"Preview · Stats for 3 games vs. Dolphins ·  Avg. 16.0 rush, 41.3 yds, 0.3 TD (Last in 2017)","27":"Preview · Stats for 3 games vs. Dolphins ·  Avg. 16.0 rush, 41.3 yds, 0.3 TD (Last in 2017)","28":"Preview · Stats for 3 games vs. Dolphins ·  Avg. 16.0 rush, 41.3 yds, 0.3 TD (Last in 2017)","29":"Preview · Stats for 3 games vs. Dolphins ·  Avg. 16.0 rush, 41.3 yds, 0.3 TD (Last in 2017)","30":"Preview · Stats for 3 games vs. Dolphins ·  Avg. 16.0 rush, 41.3 yds, 0.3 TD (Last in 2017)","31":"Preview · Stats for 3 games vs. Dolphins ·  Avg. 16.0 rush, 41.3 yds, 0.3 TD (Last in 2017)","32":"Preview · Stats for 3 games vs. Dolphins ·  Avg. 16.0 rush, 41.3 yds, 0.3 TD (Last in 2017)","33":"Preview · Stats for 3 games vs. Dolphins ·  Avg. 16.0 rush, 41.3 yds, 0.3 TD (Last in 2017)","34":"Preview · Stats for 3 games vs. Dolphins ·  Avg. 16.0 rush, 41.3 yds, 0.3 TD (Last in 2017)","35":"Preview · Stats for 3 games vs. Dolphins ·  Avg. 16.0 rush, 41.3 yds, 0.3 TD (Last in 2017)","36":"Preview · Stats for 3 games vs. Dolphins ·  Avg. 16.0 rush, 41.3 yds, 0.3 TD (Last in 2017)","37":"Preview · Stats for 3 games vs. Dolphins ·  Avg. 16.0 rush, 41.3 yds, 0.3 TD (Last in 2017)","38":"Preview · Stats for 3 games vs. Dolphins ·  Avg. 16.0 rush, 41.3 yds, 0.3 TD (Last in 2017)","39":"Preview · Stats for 3 games vs. Dolphins ·  Avg. 16.0 rush, 41.3 yds, 0.3 TD (Last in 2017)","40":"Preview · Stats for 3 games vs. Dolphins ·  Avg. 16.0 rush, 41.3 yds, 0.3 TD (Last in 2017)","41":"Preview · Stats for 3 games vs. Dolphins ·  Avg. 16.0 rush, 41.3 yds, 0.3 TD (Last in 2017)","42":"Preview · Stats for 3 games vs. Dolphins ·  Avg. 16.0 rush, 41.3 yds, 0.3 TD (Last in 2017)","43":"Preview · Stats for 3 games vs. Dolphins ·  Avg. 16.0 rush, 41.3 yds, 0.3 TD (Last in 2017)","44":"Preview · Stats for 3 games vs. Dolphins ·  Avg. 16.0 rush, 41.3 yds, 0.3 TD (Last in 2017)","45":"Preview · Stats for 3 games vs. Dolphins ·  Avg. 16.0 rush, 41.3 yds, 0.3 TD (Last in 2017)","46":"Preview · Stats for 3 games vs. Dolphins ·  Avg. 16.0 rush, 41.3 yds, 0.3 TD (Last in 2017)","47":"Preview · Stats for 3 games vs. Dolphins ·  Avg. 16.0 rush, 41.3 yds, 0.3 TD (Last in 2017)","48":"Preview · Stats for 3 games vs. Dolphins ·  Avg. 16.0 rush, 41.3 yds, 0.3 TD (Last in 2017)","49":"Preview · Stats for 3 games vs. Dolphins ·  Avg. 16.0 rush, 41.3 yds, 0.3 TD (Last in 2017)","50":"Preview · Stats for 3 games vs. Dolphins ·  Avg. 16.0 rush, 41.3 yds, 0.3 TD (Last in 2017)","51":"Preview · Stats for 3 games vs. Dolphins ·  Avg. 16.0 rush, 41.3 yds, 0.3 TD (Last in 2017)","52":"Preview · Stats for 3 games vs. Dolphins ·  Avg. 16.0 rush, 41.3 yds, 0.3 TD (Last in 2017)","53":"Preview · Stats for 3 games vs. Dolphins ·  Avg. 16.0 rush, 41.3 yds, 0.3 TD (Last in 2017)","54":"Preview · Stats for 3 games vs. Dolphins ·  Avg. 16.0 rush, 41.3 yds, 0.3 TD (Last in 2017)","55":"Preview · Stats for 3 games vs. Dolphins ·  Avg. 16.0 rush, 41.3 yds, 0.3 TD (Last in 2017)","56":"Preview · Stats for 3 games vs. Dolphins ·  Avg. 16.0 rush, 41.3 yds, 0.3 TD (Last in 2017)","57":"Preview · Stats for 3 games vs. Dolphins ·  Avg. 16.0 rush, 41.3 yds, 0.3 TD (Last in 2017)","58":"Preview · Stats for 3 games vs. Dolphins ·  Avg. 16.0 rush, 41.3 yds, 0.3 TD (Last in 2017)","59":"Preview · Stats for 3 games vs. Dolphins ·  Avg. 16.0 rush, 41.3 yds, 0.3 TD (Last in 2017)","60":"Preview · Stats for 3 games vs. Dolphins ·  Avg. 16.0 rush, 41.3 yds, 0.3 TD (Last in 2017)","61":"Preview · Stats for 3 games vs. Dolphins ·  Avg. 16.0 rush, 41.3 yds, 0.3 TD (Last in 2017)","62":"Preview · Stats for 3 games vs. Dolphins ·  Avg. 16.0 rush, 41.3 yds, 0.3 TD (Last in 2017)","63":"Preview · Stats for 3 games vs. Dolphins ·  Avg. 16.0 rush, 41.3 yds, 0.3 TD (Last in 2017)","64":"Preview · Stats for 3 games vs. Dolphins ·  Avg. 16.0 rush, 41.3 yds, 0.3 TD (Last in 2017)","65":"Preview · Stats for 3 games vs. Dolphins ·  Avg. 16.0 rush, 41.3 yds, 0.3 TD (Last in 2017)","66":"Preview · Stats for 3 games vs. Dolphins ·  Avg. 16.0 rush, 41.3 yds, 0.3 TD (Last in 2017)","67":"Preview · Stats for 3 games vs. Dolphins ·  Avg. 16.0 rush, 41.3 yds, 0.3 TD (Last in 2017)","68":"Preview · Stats for 3 games vs. Dolphins ·  Avg. 16.0 rush, 41.3 yds, 0.3 TD (Last in 2017)","69":"Preview · Stats for 3 games vs. Dolphins ·  Avg. 16.0 rush, 41.3 yds, 0.3 TD (Last in 2017)","70":"Preview · Stats for 3 games vs. Dolphins ·  Avg. 16.0 rush, 41.3 yds, 0.3 TD (Last in 2017)","71":"Preview · Stats for 3 games vs. Dolphins ·  Avg. 16.0 rush, 41.3 yds, 0.3 TD (Last in 2017)","72":"Preview · Stats for 3 games vs. Dolphins ·  Avg. 16.0 rush, 41.3 yds, 0.3 TD (Last in 2017)","73":"Preview · Stats for 3 games vs. Dolphins ·  Avg. 16.0 rush, 41.3 yds, 0.3 TD (Last in 2017)","74":"Preview · Stats for 3 games vs. Dolphins ·  Avg. 16.0 rush, 41.3 yds, 0.3 TD (Last in 2017)","75":"Preview · Stats for 3 games vs. Dolphins ·  Avg. 16.0 rush, 41.3 yds, 0.3 TD (Last in 2017)","76":"Preview · Stats for 3 games vs. Dolphins ·  Avg. 16.0 rush, 41.3 yds, 0.3 TD (Last in 2017)","77":"Preview · Stats for 3 games vs. Dolphins ·  Avg. 16.0 rush, 41.3 yds, 0.3 TD (Last in 2017)","78":"Preview · Stats for 3 games vs. Dolphins ·  Avg. 16.0 rush, 41.3 yds, 0.3 TD (Last in 2017)","79":"Preview · Stats for 3 games vs. Dolphins ·  Avg. 16.0 rush, 41.3 yds, 0.3 TD (Last in 2017)","80":"Preview · Stats for 3 games vs. Dolphins ·  Avg. 16.0 rush, 41.3 yds, 0.3 TD (Last in 2017)","81":"Preview · Stats for 3 games vs. Dolphins ·  Avg. 16.0 rush, 41.3 yds, 0.3 TD (Last in 2017)","82":"Preview · Stats for 3 games vs. Dolphins ·  Avg. 16.0 rush, 41.3 yds, 0.3 TD (Last in 2017)","83":"Preview · Stats for 3 games vs. Dolphins ·  Avg. 16.0 rush, 41.3 yds, 0.3 TD (Last in 2017)","84":"Preview · Stats for 3 games vs. Dolphins ·  Avg. 16.0 rush, 41.3 yds, 0.3 TD (Last in 2017)","85":"Preview · Stats for 3 games vs. Dolphins ·  Avg. 16.0 rush, 41.3 yds, 0.3 TD (Last in 2017)","86":"Preview · Stats for 3 games vs. Dolphins ·  Avg. 16.0 rush, 41.3 yds, 0.3 TD (Last in 2017)","87":"Preview · Stats for 3 games vs. Dolphins ·  Avg. 16.0 rush, 41.3 yds, 0.3 TD (Last in 2017)","88":"Preview · Stats for 3 games vs. Dolphins ·  Avg. 16.0 rush, 41.3 yds, 0.3 TD (Last in 2017)","89":"Preview · Stats for 3 games vs. Dolphins ·  Avg. 16.0 rush, 41.3 yds, 0.3 TD (Last in 2017)","90":"Preview · Stats for 3 games vs. Dolphins ·  Avg. 16.0 rush, 41.3 yds, 0.3 TD (Last in 2017)","91":"Preview · Stats for 3 games vs. Dolphins ·  Avg. 16.0 rush, 41.3 yds, 0.3 TD (Last in 2017)","92":"Preview · Stats for 3 games vs. Dolphins ·  Avg. 16.0 rush, 41.3 yds, 0.3 TD (Last in 2017)","93":"Preview · Stats for 3 games vs. Dolphins ·  Avg. 16.0 rush, 41.3 yds, 0.3 TD (Last in 2017)","94":"Preview · Stats for 3 games vs. Dolphins ·  Avg. 16.0 rush, 41.3 yds, 0.3 TD (Last in 2017)","95":"Preview · Stats for 3 games vs. Dolphins ·  Avg. 16.0 rush, 41.3 yds, 0.3 TD (Last in 2017)","96":"Preview · Stats for 3 games vs. Dolphins ·  Avg. 16.0 rush, 41.3 yds, 0.3 TD (Last in 2017)","97":"Preview · Stats for 3 games vs. Dolphins ·  Avg. 16.0 rush, 41.3 yds, 0.3 TD (Last in 2017)","98":"Preview · Stats for 3 games vs. Dolphins ·  Avg. 16.0 rush, 41.3 yds, 0.3 TD (Last in 2017)","99":"Preview · Stats for 3 games vs. Dolphins ·  Avg. 16.0 rush, 41.3 yds, 0.3 TD (Last in 2017)","100":"Preview · Stats for 3 games vs. Dolphins ·  Avg. 16.0 rush, 41.3 yds, 0.3 TD (Last in 2017)","101":"Preview · Stats for 3 games vs. Dolphins ·  Avg. 16.0 rush, 41.3 yds, 0.3 TD (Last in 2017)","102":"Preview · Stats for 3 games vs. Dolphins ·  Avg. 16.0 rush, 41.3 yds, 0.3 TD (Last in 2017)","103":"Preview · Stats for 3 games vs. Dolphins ·  Avg. 16.0 rush, 41.3 yds, 0.3 TD (Last in 2017)","104":"Preview · Stats for 3 games vs. Dolphins ·  Avg. 16.0 rush, 41.3 yds, 0.3 TD (Last in 2017)","_rn_":"8"},{"1":"Broncos 2020 Stats and Schedule · Melvin Gordon Splits · Melvin Gordon Gamelogs · Penalties","2":"Broncos 2020 Stats and Schedule · Melvin Gordon Splits · Melvin Gordon Gamelogs · Penalties","3":"Broncos 2020 Stats and Schedule · Melvin Gordon Splits · Melvin Gordon Gamelogs · Penalties","4":"Broncos 2020 Stats and Schedule · Melvin Gordon Splits · Melvin Gordon Gamelogs · Penalties","5":"Broncos 2020 Stats and Schedule · Melvin Gordon Splits · Melvin Gordon Gamelogs · Penalties","6":"Broncos 2020 Stats and Schedule · Melvin Gordon Splits · Melvin Gordon Gamelogs · Penalties","7":"Broncos 2020 Stats and Schedule · Melvin Gordon Splits · Melvin Gordon Gamelogs · Penalties","8":"Broncos 2020 Stats and Schedule · Melvin Gordon Splits · Melvin Gordon Gamelogs · Penalties","9":"Broncos 2020 Stats and Schedule · Melvin Gordon Splits · Melvin Gordon Gamelogs · Penalties","10":"Broncos 2020 Stats and Schedule · Melvin Gordon Splits · Melvin Gordon Gamelogs · Penalties","11":"Broncos 2020 Stats and Schedule · Melvin Gordon Splits · Melvin Gordon Gamelogs · Penalties","12":"Broncos 2020 Stats and Schedule · Melvin Gordon Splits · Melvin Gordon Gamelogs · Penalties","13":"Broncos 2020 Stats and Schedule · Melvin Gordon Splits · Melvin Gordon Gamelogs · Penalties","14":"Broncos 2020 Stats and Schedule · Melvin Gordon Splits · Melvin Gordon Gamelogs · Penalties","15":"Broncos 2020 Stats and Schedule · Melvin Gordon Splits · Melvin Gordon Gamelogs · Penalties","16":"Broncos 2020 Stats and Schedule · Melvin Gordon Splits · Melvin Gordon Gamelogs · Penalties","17":"Broncos 2020 Stats and Schedule · Melvin Gordon Splits · Melvin Gordon Gamelogs · Penalties","18":"Broncos 2020 Stats and Schedule · Melvin Gordon Splits · Melvin Gordon Gamelogs · Penalties","19":"Broncos 2020 Stats and Schedule · Melvin Gordon Splits · Melvin Gordon Gamelogs · Penalties","20":"Broncos 2020 Stats and Schedule · Melvin Gordon Splits · Melvin Gordon Gamelogs · Penalties","21":"Broncos 2020 Stats and Schedule · Melvin Gordon Splits · Melvin Gordon Gamelogs · Penalties","22":"Broncos 2020 Stats and Schedule · Melvin Gordon Splits · Melvin Gordon Gamelogs · Penalties","23":"Broncos 2020 Stats and Schedule · Melvin Gordon Splits · Melvin Gordon Gamelogs · Penalties","24":"Broncos 2020 Stats and Schedule · Melvin Gordon Splits · Melvin Gordon Gamelogs · Penalties","25":"Broncos 2020 Stats and Schedule · Melvin Gordon Splits · Melvin Gordon Gamelogs · Penalties","26":"Broncos 2020 Stats and Schedule · Melvin Gordon Splits · Melvin Gordon Gamelogs · Penalties","27":"Broncos 2020 Stats and Schedule · Melvin Gordon Splits · Melvin Gordon Gamelogs · Penalties","28":"Broncos 2020 Stats and Schedule · Melvin Gordon Splits · Melvin Gordon Gamelogs · Penalties","29":"Broncos 2020 Stats and Schedule · Melvin Gordon Splits · Melvin Gordon Gamelogs · Penalties","30":"Broncos 2020 Stats and Schedule · Melvin Gordon Splits · Melvin Gordon Gamelogs · Penalties","31":"Broncos 2020 Stats and Schedule · Melvin Gordon Splits · Melvin Gordon Gamelogs · Penalties","32":"NA","33":"NA","34":"NA","35":"NA","36":"NA","37":"NA","38":"NA","39":"NA","40":"NA","41":"NA","42":"NA","43":"NA","44":"NA","45":"NA","46":"NA","47":"NA","48":"NA","49":"NA","50":"NA","51":"NA","52":"NA","53":"NA","54":"NA","55":"NA","56":"NA","57":"NA","58":"NA","59":"NA","60":"NA","61":"NA","62":"NA","63":"NA","64":"NA","65":"NA","66":"NA","67":"NA","68":"NA","69":"NA","70":"NA","71":"NA","72":"NA","73":"NA","74":"NA","75":"NA","76":"NA","77":"NA","78":"NA","79":"NA","80":"NA","81":"NA","82":"NA","83":"NA","84":"NA","85":"NA","86":"NA","87":"NA","88":"NA","89":"NA","90":"NA","91":"NA","92":"NA","93":"NA","94":"NA","95":"NA","96":"NA","97":"NA","98":"NA","99":"NA","100":"NA","101":"NA","102":"NA","103":"NA","104":"NA","_rn_":"9"}],"options":{"columns":{"min":{},"max":[10]},"rows":{"min":[10],"max":[10]},"pages":{}}}
+  </script>
+</div>
+<p>Again, these data need some work before they are useful, but we will defer to the next chapter. Right now, let’s focus on taking this methodology and applying it for every player on the 2020 Denver Broncos team who recorded statistics in rushing or receiving categories. We’ll need the web address for each player in the Rushing and Receiving table. Thankfully, this information must exist within the node which contains the table. Otherwise, the hyperlinks would not exist.</p>
+<p>We’ll start by isolating the node containing the Rushing and Receiving statistics before scraping the web addresses.</p>
+<div class="sourceCode" id="cb21"><pre class="sourceCode r chunk-style"><code class="sourceCode r"><a class="sourceLine" id="cb21-1" title="1"><span class="st">&#39;https://www.pro-football-reference.com/boxscores/201709100cle.htm&#39;</span> <span class="op">%&gt;%</span></a>
+<a class="sourceLine" id="cb21-2" title="2"><span class="st">  </span><span class="kw">read_html</span>() <span class="op">%&gt;%</span></a>
+<a class="sourceLine" id="cb21-3" title="3"><span class="st">  </span><span class="kw">html_node</span>(<span class="st">&#39;body&#39;</span>) <span class="op">%&gt;%</span></a>
+<a class="sourceLine" id="cb21-4" title="4"><span class="st">  </span><span class="kw">html_node</span>(<span class="st">&#39;#all_game_info&#39;</span>) <span class="op">%&gt;%</span></a>
+<a class="sourceLine" id="cb21-5" title="5"><span class="st">  </span><span class="kw">html_nodes</span>(<span class="dt">xpath =</span> <span class="st">&#39;comment()&#39;</span>) <span class="op">%&gt;%</span></a>
+<a class="sourceLine" id="cb21-6" title="6"><span class="st">  </span><span class="kw">html_text</span>() <span class="op">%&gt;%</span></a>
+<a class="sourceLine" id="cb21-7" title="7"><span class="st">  </span><span class="kw">read_html</span>() <span class="op">%&gt;%</span></a>
+<a class="sourceLine" id="cb21-8" title="8"><span class="st">  </span><span class="kw">html_node</span>(<span class="st">&#39;table&#39;</span>) <span class="op">%&gt;%</span></a>
+<a class="sourceLine" id="cb21-9" title="9"><span class="st">  </span><span class="kw">html_table</span>() <span class="op">%&gt;%</span></a>
+<a class="sourceLine" id="cb21-10" title="10"><span class="st">  </span><span class="kw">data.frame</span>()</a>
+<a class="sourceLine" id="cb21-11" title="11"></a>
+<a class="sourceLine" id="cb21-12" title="12">broncos_url <span class="op">%&gt;%</span></a>
+<a class="sourceLine" id="cb21-13" title="13"><span class="st">  </span><span class="kw">read_html</span>() <span class="op">%&gt;%</span></a>
+<a class="sourceLine" id="cb21-14" title="14"><span class="st">  </span><span class="kw">html_node</span>(., <span class="dt">css =</span> <span class="st">&#39;body&#39;</span>) <span class="op">%&gt;%</span></a>
+<a class="sourceLine" id="cb21-15" title="15"><span class="st">  </span><span class="kw">html_node</span>(., <span class="dt">css =</span> <span class="st">&#39;#all_rushing_and_receiving&#39;</span>) <span class="op">%&gt;%</span></a>
+<a class="sourceLine" id="cb21-16" title="16"><span class="st">  </span><span class="kw">html_nodes</span>(., <span class="dt">xpath =</span> <span class="st">&#39;comment()&#39;</span>) <span class="op">%&gt;%</span></a>
+<a class="sourceLine" id="cb21-17" title="17"><span class="st">  </span><span class="kw">html_text</span>() <span class="op">%&gt;%</span></a>
+<a class="sourceLine" id="cb21-18" title="18"><span class="st">  </span><span class="kw">read_html</span>() <span class="op">%&gt;%</span></a>
+<a class="sourceLine" id="cb21-19" title="19"><span class="st">  </span><span class="kw">html_nodes</span>(., <span class="st">&#39;a&#39;</span>) <span class="op">%&gt;%</span></a>
+<a class="sourceLine" id="cb21-20" title="20"><span class="st">  </span><span class="kw">html_attr</span>(., <span class="st">&#39;href&#39;</span>)</a></code></pre></div>
+<div data-pagedtable="false">
+<script data-pagedtable-source type="application/json">
+{"columns":[{"label":["X1"],"name":[1],"type":["chr"],"align":["left"]},{"label":["X2"],"name":[2],"type":["chr"],"align":["left"]}],"data":[{"1":"Game Info","2":"Game Info"},{"1":"Won Toss","2":"Steelers (deferred)"},{"1":"Roof","2":"outdoors"},{"1":"Surface","2":"grass"},{"1":"Duration","2":"2:59"},{"1":"Attendance","2":"67,431"},{"1":"Weather","2":"63 degrees, wind 11 mph"},{"1":"Vegas Line","2":"Pittsburgh Steelers -10.0"},{"1":"Over/Under","2":"47.0 (under)"}],"options":{"columns":{"min":{},"max":[10]},"rows":{"min":[10],"max":[10]},"pages":{}}}
+  </script>
+</div>
+<pre class="output-style"><code> [1] &quot;/players/G/GordMe00.htm&quot;      &quot;/players/L/LindPh00.htm&quot;     
+ [3] &quot;/players/F/FreeRo00.htm&quot;      &quot;/players/D/DrisJe00.htm&quot;     
+ [5] &quot;/players/L/LockDr00.htm&quot;      &quot;/players/H/HamlKJ00.htm&quot;     
+ [7] &quot;/players/M/MartSa01.htm&quot;      &quot;/players/F/FantNo00.htm&quot;     
+ [9] &quot;/players/J/JeudJe00.htm&quot;      &quot;/players/P/PatrTi00.htm&quot;     
+[11] &quot;/players/S/SuttCo00.htm&quot;      &quot;/players/B/ButtJa00.htm&quot;     
+[13] &quot;/players/H/HamiDa01.htm&quot;      &quot;/players/C/ClevTy00.htm&quot;     
+[15] &quot;/players/S/SpenDi00.htm&quot;      &quot;/players/V/VannNi00.htm&quot;     
+[17] &quot;/players/G/GordMe00.htm&quot;      &quot;/teams/den/2020_advanced.htm&quot;</code></pre>
+<div class="feedback">
+<p>
+Any feedback for this section? Click <a href="https://docs.google.com/forms/d/e/1FAIpQLSePQZ3lIaCIPo9J2owXImHZ_9wBEgTo21A0s-A1ty28u4yfvw/viewform?entry.1684471501=The%20R%20Community">here</a>
+</p>
+</div>
+
+</div>
+<!-- </div> -->
+
+
+
+
+
+
+            </section>
+
+          </div>
+        </div>
+      </div>
+<a href="scraping-nfl-data.html" class="navigation navigation-prev navigation-unique" aria-label="Previous page"><i class="fa fa-angle-left"></i></a>
+
+    </div>
+  </div>
+<script src="libs/gitbook-2.6.7/js/app.min.js"></script>
+<script src="libs/gitbook-2.6.7/js/lunr.js"></script>
+<script src="libs/gitbook-2.6.7/js/clipboard.min.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-search.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-sharing.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-fontsettings.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-bookdown.js"></script>
+<script src="libs/gitbook-2.6.7/js/jquery.highlight.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-clipboard.js"></script>
+<script>
+gitbook.require(["gitbook"], function(gitbook) {
+gitbook.start({
+"sharing": {
+"github": false,
+"facebook": true,
+"twitter": true,
+"linkedin": false,
+"weibo": false,
+"instapaper": false,
+"vk": false,
+"all": ["facebook", "twitter", "linkedin", "weibo", "instapaper"]
+},
+"fontsettings": {
+"theme": "white",
+"family": "sans",
+"size": 2
+},
+"edit": {
+"link": null,
+"text": null
+},
+"history": {
+"link": null,
+"text": null
+},
+"view": {
+"link": null,
+"text": null
+},
+"download": ["Module2.pdf", "Module2.epub"],
+"toc": {
+"collapse": "subsection"
+},
+"toolbar": {
+"position": "static"
+}
+});
+});
+</script>
+
+</body>
+
+</html>

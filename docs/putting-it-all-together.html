@@ -1,0 +1,307 @@
+<!DOCTYPE html>
+<html lang="" xml:lang="">
+<head>
+
+  <meta charset="utf-8" />
+  <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+  <title>3.3 Putting It All Together | R Module 2</title>
+  <meta name="description" content="This is the second installment for the book for the R Intro Course at CSU." />
+  <meta name="generator" content="bookdown 0.20 and GitBook 2.6.7" />
+
+  <meta property="og:title" content="3.3 Putting It All Together | R Module 2" />
+  <meta property="og:type" content="book" />
+  
+  
+  <meta property="og:description" content="This is the second installment for the book for the R Intro Course at CSU." />
+  
+
+  <meta name="twitter:card" content="summary" />
+  <meta name="twitter:title" content="3.3 Putting It All Together | R Module 2" />
+  
+  <meta name="twitter:description" content="This is the second installment for the book for the R Intro Course at CSU." />
+  
+
+<meta name="author" content="Connor Gibbs" />
+
+
+
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="apple-mobile-web-app-capable" content="yes" />
+  <meta name="apple-mobile-web-app-status-bar-style" content="black" />
+  
+  
+<link rel="prev" href="scraping-nfl-data.html"/>
+
+<script src="libs/jquery-2.2.3/jquery.min.js"></script>
+<link href="libs/gitbook-2.6.7/css/style.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-table.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-bookdown.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-highlight.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-search.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-fontsettings.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-clipboard.css" rel="stylesheet" />
+
+
+
+
+
+
+
+
+
+<link href="libs/pagedtable-1.1/css/pagedtable.css" rel="stylesheet" />
+<script src="libs/pagedtable-1.1/js/pagedtable.js"></script>
+
+
+<style type="text/css">
+a.sourceLine { display: inline-block; line-height: 1.25; }
+a.sourceLine { pointer-events: none; color: inherit; text-decoration: inherit; }
+a.sourceLine:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode { white-space: pre; position: relative; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+code.sourceCode { white-space: pre-wrap; }
+a.sourceLine { text-indent: -1em; padding-left: 1em; }
+}
+pre.numberSource a.sourceLine
+  { position: relative; left: -4em; }
+pre.numberSource a.sourceLine::before
+  { content: attr(title);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; pointer-events: all; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+    color: #aaaaaa;
+  }
+pre.numberSource { margin-left: 3em; border-left: 1px solid #aaaaaa;  padding-left: 4px; }
+div.sourceCode
+  {  }
+@media screen {
+a.sourceLine::before { text-decoration: underline; }
+}
+code span.al { color: #ff0000; font-weight: bold; } /* Alert */
+code span.an { color: #60a0b0; font-weight: bold; font-style: italic; } /* Annotation */
+code span.at { color: #7d9029; } /* Attribute */
+code span.bn { color: #40a070; } /* BaseN */
+code span.bu { } /* BuiltIn */
+code span.cf { color: #007020; font-weight: bold; } /* ControlFlow */
+code span.ch { color: #4070a0; } /* Char */
+code span.cn { color: #880000; } /* Constant */
+code span.co { color: #60a0b0; font-style: italic; } /* Comment */
+code span.cv { color: #60a0b0; font-weight: bold; font-style: italic; } /* CommentVar */
+code span.do { color: #ba2121; font-style: italic; } /* Documentation */
+code span.dt { color: #902000; } /* DataType */
+code span.dv { color: #40a070; } /* DecVal */
+code span.er { color: #ff0000; font-weight: bold; } /* Error */
+code span.ex { } /* Extension */
+code span.fl { color: #40a070; } /* Float */
+code span.fu { color: #06287e; } /* Function */
+code span.im { } /* Import */
+code span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Information */
+code span.kw { color: #007020; font-weight: bold; } /* Keyword */
+code span.op { color: #666666; } /* Operator */
+code span.ot { color: #007020; } /* Other */
+code span.pp { color: #bc7a00; } /* Preprocessor */
+code span.sc { color: #4070a0; } /* SpecialChar */
+code span.ss { color: #bb6688; } /* SpecialString */
+code span.st { color: #4070a0; } /* String */
+code span.va { color: #19177c; } /* Variable */
+code span.vs { color: #4070a0; } /* VerbatimString */
+code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warning */
+</style>
+
+<link rel="stylesheet" href="src\style.css" type="text/css" />
+<link rel="stylesheet" href="src\environments.css" type="text/css" />
+</head>
+
+<body>
+
+
+
+  <div class="book without-animation with-summary font-size-2 font-family-1" data-basepath=".">
+
+    <div class="book-summary">
+      <nav role="navigation">
+
+<ul class="summary">
+<li><a href="./">R Module 2</a></li>
+
+<li class="divider"></li>
+<li class="chapter" data-level="1" data-path="index.html"><a href="index.html"><i class="fa fa-check"></i><b>1</b> Welcome!</a><ul>
+<li class="chapter" data-level="1.0.1" data-path="index.html"><a href="index.html#how-to-navigate-this-book"><i class="fa fa-check"></i><b>1.0.1</b> How To Navigate This Book</a></li>
+<li class="chapter" data-level="1.1" data-path="associated-csu-course.html"><a href="associated-csu-course.html"><i class="fa fa-check"></i><b>1.1</b> Associated CSU Course</a></li>
+</ul></li>
+<li class="chapter" data-level="2" data-path="AccessingData.html"><a href="AccessingData.html"><i class="fa fa-check"></i><b>2</b> Accessing Data</a><ul>
+<li class="chapter" data-level="2.1" data-path="rectangular-vs-non-rectangular-data.html"><a href="rectangular-vs-non-rectangular-data.html"><i class="fa fa-check"></i><b>2.1</b> Rectangular vs. Non-rectangular Data</a><ul>
+<li class="chapter" data-level="2.1.1" data-path="rectangular-vs-non-rectangular-data.html"><a href="rectangular-vs-non-rectangular-data.html#reading-and-writing-rectangular-data"><i class="fa fa-check"></i><b>2.1.1</b> Reading and Writing Rectangular Data</a></li>
+<li class="chapter" data-level="2.1.2" data-path="rectangular-vs-non-rectangular-data.html"><a href="rectangular-vs-non-rectangular-data.html#reading-and-writing-non-rectangular-data"><i class="fa fa-check"></i><b>2.1.2</b> Reading and Writing Non-rectangular Data</a></li>
+</ul></li>
+<li class="chapter" data-level="2.2" data-path="apis-clean-and-curated.html"><a href="apis-clean-and-curated.html"><i class="fa fa-check"></i><b>2.2</b> APIs: Clean and Curated</a></li>
+<li class="chapter" data-level="2.3" data-path="scraping-messy-and-mangled.html"><a href="scraping-messy-and-mangled.html"><i class="fa fa-check"></i><b>2.3</b> Scraping: Messy and Mangled</a><ul>
+<li class="chapter" data-level="2.3.1" data-path="scraping-messy-and-mangled.html"><a href="scraping-messy-and-mangled.html#scraping-vs-api"><i class="fa fa-check"></i><b>2.3.1</b> Scraping vs API</a></li>
+<li class="chapter" data-level="2.3.2" data-path="scraping-messy-and-mangled.html"><a href="scraping-messy-and-mangled.html#hypertext-markup-language-html"><i class="fa fa-check"></i><b>2.3.2</b> Hypertext Markup Language (HTML)</a></li>
+<li class="chapter" data-level="2.3.3" data-path="scraping-messy-and-mangled.html"><a href="scraping-messy-and-mangled.html#selector-gadgets"><i class="fa fa-check"></i><b>2.3.3</b> Selector Gadgets</a></li>
+</ul></li>
+</ul></li>
+<li class="chapter" data-level="3" data-path="ScrapingInTheWild.html"><a href="ScrapingInTheWild.html"><i class="fa fa-check"></i><b>3</b> Scraping in the Wild</a><ul>
+<li class="chapter" data-level="3.1" data-path="LessonsLearnedFromScraping.html"><a href="LessonsLearnedFromScraping.html"><i class="fa fa-check"></i><b>3.1</b> Lessons Learned from Scraping</a></li>
+<li class="chapter" data-level="3.2" data-path="scraping-nfl-data.html"><a href="scraping-nfl-data.html"><i class="fa fa-check"></i><b>3.2</b> Scraping NFL Data</a><ul>
+<li class="chapter" data-level="3.2.1" data-path="scraping-nfl-data.html"><a href="scraping-nfl-data.html#html-tables-team-statistics"><i class="fa fa-check"></i><b>3.2.1</b> HTML Tables: Team Statistics</a></li>
+<li class="chapter" data-level="3.2.2" data-path="scraping-nfl-data.html"><a href="scraping-nfl-data.html#commented-and-hidden-html-tables-player-statistics"><i class="fa fa-check"></i><b>3.2.2</b> Commented and Hidden HTML Tables: Player Statistics</a></li>
+<li class="chapter" data-level="3.2.3" data-path="scraping-nfl-data.html"><a href="scraping-nfl-data.html#attributes-player-statistics-by-game"><i class="fa fa-check"></i><b>3.2.3</b> Attributes: Player Statistics by Game</a></li>
+</ul></li>
+<li class="chapter" data-level="3.3" data-path="putting-it-all-together.html"><a href="putting-it-all-together.html"><i class="fa fa-check"></i><b>3.3</b> Putting It All Together</a></li>
+</ul></li>
+<li class="divider"></li>
+<li><a href="https://github.com/rstudio/bookdown" target="blank">Published with bookdown</a></li>
+
+</ul>
+
+      </nav>
+    </div>
+
+    <div class="book-body">
+      <div class="body-inner">
+        <div class="book-header" role="navigation">
+          <h1>
+            <i class="fa fa-circle-o-notch fa-spin"></i><a href="./">R Module 2</a>
+          </h1>
+        </div>
+
+        <div class="page-wrapper" tabindex="-1" role="main">
+          <div class="page-inner">
+
+            <section class="normal" id="section-">
+<div id="putting-it-all-together" class="section level2">
+<h2><span class="header-section-number">3.3</span> Putting It All Together</h2>
+<p>Let’s consider how we can gather data regarding racial demographics across each state in the United States of America. Perusing Wikipedia, notice that each state has a table documenting the state’s ‘racial population breakdown’.</p>
+<div class="figure" style="text-align: center"><span id="fig:unnamed-chunk-40"></span>
+<img src="src/images/alabama_demo_webpage.png" alt="part of brainstorming is exploring different websites which may have the data you desire" width="800" />
+<p class="caption">
+Figure 3.4: part of brainstorming is exploring different websites which may have the data you desire
+</p>
+</div>
+<p>If we were to go to Georgia, we would notice that the web address is similar to Alabama, but since Georgia is also a country, the web address specifies that you are currently on the webpage for the state rather than the country. This effectively rules out editing the web address to iterate over each state.</p>
+<p>If we broaden our search to ‘US States’, we find a Wikipedia page with a list of each state. Each state has a hyperlink which takes us to the state’s webpage with the demographic information we desire. Remember: hyperlinks are our friend! If they exist, we can scrape them, iterating over the web addresses to get data from each state. Let’s use what we just learned to attain the web addresses for each state. We’ll start with the web address containing a list of every state.</p>
+<div class="sourceCode" id="cb27"><pre class="sourceCode r chunk-style"><code class="sourceCode r"><a class="sourceLine" id="cb27-1" title="1">wiki_url &lt;-<span class="st"> &quot;https://www.wikipedia.org&quot;</span></a>
+<a class="sourceLine" id="cb27-2" title="2">states_url &lt;-<span class="st"> </span><span class="kw">str_c</span>(wiki_url, <span class="st">&#39;/wiki/U.S._state#States_of_the_United_States&#39;</span>)</a></code></pre></div>
+<p>Let’s use the page source to find where the hyperlinks exist in the HTML code. To do this, I am going to search for the phrase ‘The 50 U.S. states, in alphabetical order, along with each state’s flag’ in the page source since the list of states is just below this phrase.</p>
+<div class="figure" style="text-align: center"><span id="fig:unnamed-chunk-42"></span>
+<img src="src/images/usstates_page_source.png" alt="finding the element containing the list of states with their cooresponding web addresses using the page source" width="800" />
+<p class="caption">
+Figure 3.5: finding the element containing the list of states with their cooresponding web addresses using the page source
+</p>
+</div>
+<p>We find that the list of states, among other information, exists in an element tagged <code>div</code> with the attribute <code>class</code> set to an attribute value of <code>plainlist</code>. Within this node, the list of states exists in an element tagged <code>ul</code> and each state exists in an element tagged <code>li</code>. Within each state, the web address corresponding to that state’s individual Wikipedia article is given in the <code>href</code> attribute to an element tagged <code>a</code>. Let’s use this information to extract the web addresses corresponding to each state. We may also want to extract the state name which is the content of the element tagged <code>a</code>.</p>
+<div class="sourceCode" id="cb28"><pre class="sourceCode r chunk-style"><code class="sourceCode r"><a class="sourceLine" id="cb28-1" title="1">node_w_states &lt;-<span class="st"> </span>states_url <span class="op">%&gt;%</span></a>
+<a class="sourceLine" id="cb28-2" title="2"><span class="st">  </span><span class="kw">read_html</span>() <span class="op">%&gt;%</span></a>
+<a class="sourceLine" id="cb28-3" title="3"><span class="st">  </span><span class="kw">html_nodes</span>(<span class="dt">xpath =</span> <span class="st">&quot;//div[@class=&#39;plainlist&#39;]&quot;</span>) <span class="op">%&gt;%</span></a>
+<a class="sourceLine" id="cb28-4" title="4"><span class="st">  </span><span class="kw">html_nodes</span>(<span class="st">&#39;ul&#39;</span>) <span class="op">%&gt;%</span></a>
+<a class="sourceLine" id="cb28-5" title="5"><span class="st">  </span><span class="kw">html_nodes</span>(<span class="st">&#39;li&#39;</span>) <span class="op">%&gt;%</span></a>
+<a class="sourceLine" id="cb28-6" title="6"><span class="st">  </span><span class="kw">html_nodes</span>(<span class="st">&#39;a&#39;</span>)</a>
+<a class="sourceLine" id="cb28-7" title="7"></a>
+<a class="sourceLine" id="cb28-8" title="8">ind_states &lt;-<span class="st"> </span><span class="kw">tibble</span>(<span class="dt">state =</span> node_w_states <span class="op">%&gt;%</span></a>
+<a class="sourceLine" id="cb28-9" title="9"><span class="st">                       </span><span class="kw">html_text</span>(),</a>
+<a class="sourceLine" id="cb28-10" title="10">                     <span class="dt">url =</span> node_w_states <span class="op">%&gt;%</span></a>
+<a class="sourceLine" id="cb28-11" title="11"><span class="st">                       </span><span class="kw">html_attr</span>(., <span class="st">&#39;href&#39;</span>) <span class="op">%&gt;%</span></a>
+<a class="sourceLine" id="cb28-12" title="12"><span class="st">                       </span><span class="kw">str_c</span>(wiki_url, .))</a>
+<a class="sourceLine" id="cb28-13" title="13">ind_states</a></code></pre></div>
+<div data-pagedtable="false">
+<script data-pagedtable-source type="application/json">
+{"columns":[{"label":["state"],"name":[1],"type":["chr"],"align":["left"]},{"label":["url"],"name":[2],"type":["chr"],"align":["left"]}],"data":[{"1":"Alabama","2":"https://www.wikipedia.org/wiki/Alabama"},{"1":"Alaska","2":"https://www.wikipedia.org/wiki/Alaska"},{"1":"Arizona","2":"https://www.wikipedia.org/wiki/Arizona"},{"1":"Arkansas","2":"https://www.wikipedia.org/wiki/Arkansas"},{"1":"California","2":"https://www.wikipedia.org/wiki/California"},{"1":"Colorado","2":"https://www.wikipedia.org/wiki/Colorado"},{"1":"Connecticut","2":"https://www.wikipedia.org/wiki/Connecticut"},{"1":"Delaware","2":"https://www.wikipedia.org/wiki/Delaware"},{"1":"Florida","2":"https://www.wikipedia.org/wiki/Florida"},{"1":"Georgia","2":"https://www.wikipedia.org/wiki/Georgia_(U.S._state)"},{"1":"Hawaii","2":"https://www.wikipedia.org/wiki/Hawaii"},{"1":"Idaho","2":"https://www.wikipedia.org/wiki/Idaho"},{"1":"Illinois","2":"https://www.wikipedia.org/wiki/Illinois"},{"1":"Indiana","2":"https://www.wikipedia.org/wiki/Indiana"},{"1":"Iowa","2":"https://www.wikipedia.org/wiki/Iowa"},{"1":"Kansas","2":"https://www.wikipedia.org/wiki/Kansas"},{"1":"Kentucky","2":"https://www.wikipedia.org/wiki/Kentucky"},{"1":"Louisiana","2":"https://www.wikipedia.org/wiki/Louisiana"},{"1":"Maine","2":"https://www.wikipedia.org/wiki/Maine"},{"1":"Maryland","2":"https://www.wikipedia.org/wiki/Maryland"},{"1":"Massachusetts","2":"https://www.wikipedia.org/wiki/Massachusetts"},{"1":"Michigan","2":"https://www.wikipedia.org/wiki/Michigan"},{"1":"Minnesota","2":"https://www.wikipedia.org/wiki/Minnesota"},{"1":"Mississippi","2":"https://www.wikipedia.org/wiki/Mississippi"},{"1":"Missouri","2":"https://www.wikipedia.org/wiki/Missouri"},{"1":"Montana","2":"https://www.wikipedia.org/wiki/Montana"},{"1":"Nebraska","2":"https://www.wikipedia.org/wiki/Nebraska"},{"1":"Nevada","2":"https://www.wikipedia.org/wiki/Nevada"},{"1":"New Hampshire","2":"https://www.wikipedia.org/wiki/New_Hampshire"},{"1":"New Jersey","2":"https://www.wikipedia.org/wiki/New_Jersey"},{"1":"New Mexico","2":"https://www.wikipedia.org/wiki/New_Mexico"},{"1":"New York","2":"https://www.wikipedia.org/wiki/New_York_(state)"},{"1":"North Carolina","2":"https://www.wikipedia.org/wiki/North_Carolina"},{"1":"North Dakota","2":"https://www.wikipedia.org/wiki/North_Dakota"},{"1":"Ohio","2":"https://www.wikipedia.org/wiki/Ohio"},{"1":"Oklahoma","2":"https://www.wikipedia.org/wiki/Oklahoma"},{"1":"Oregon","2":"https://www.wikipedia.org/wiki/Oregon"},{"1":"Pennsylvania","2":"https://www.wikipedia.org/wiki/Pennsylvania"},{"1":"Rhode Island","2":"https://www.wikipedia.org/wiki/Rhode_Island"},{"1":"South Carolina","2":"https://www.wikipedia.org/wiki/South_Carolina"},{"1":"South Dakota","2":"https://www.wikipedia.org/wiki/South_Dakota"},{"1":"Tennessee","2":"https://www.wikipedia.org/wiki/Tennessee"},{"1":"Texas","2":"https://www.wikipedia.org/wiki/Texas"},{"1":"Utah","2":"https://www.wikipedia.org/wiki/Utah"},{"1":"Vermont","2":"https://www.wikipedia.org/wiki/Vermont"},{"1":"Virginia","2":"https://www.wikipedia.org/wiki/Virginia"},{"1":"Washington","2":"https://www.wikipedia.org/wiki/Washington_(state)"},{"1":"West Virginia","2":"https://www.wikipedia.org/wiki/West_Virginia"},{"1":"Wisconsin","2":"https://www.wikipedia.org/wiki/Wisconsin"},{"1":"Wyoming","2":"https://www.wikipedia.org/wiki/Wyoming"}],"options":{"columns":{"min":{},"max":[10]},"rows":{"min":[10],"max":[10]},"pages":{}}}
+  </script>
+</div>
+<p>Let’s consider how we would scrape the racial demographics. Use either the selector gadget or the page source to identify where the desired table exists in the HTML code.</p>
+<div class="sourceCode" id="cb29"><pre class="sourceCode r chunk-style"><code class="sourceCode r"><a class="sourceLine" id="cb29-1" title="1">ind_states<span class="op">$</span>url[<span class="dv">1</span>] <span class="op">%&gt;%</span></a>
+<a class="sourceLine" id="cb29-2" title="2"><span class="st">  </span><span class="kw">read_html</span>() <span class="op">%&gt;%</span></a>
+<a class="sourceLine" id="cb29-3" title="3"><span class="st">  </span><span class="kw">html_nodes</span>(., <span class="dt">xpath =</span> <span class="st">&quot;//table[@class=&#39;wikitable sortable collapsible&#39;]&quot;</span>) <span class="op">%&gt;%</span></a>
+<a class="sourceLine" id="cb29-4" title="4"><span class="st">  </span><span class="kw">html_table</span>() <span class="op">%&gt;%</span></a>
+<a class="sourceLine" id="cb29-5" title="5"><span class="st">  </span><span class="kw">as.data.frame</span>()</a></code></pre></div>
+<div data-pagedtable="false">
+<script data-pagedtable-source type="application/json">
+{"columns":[{"label":["Racial.composition"],"name":[1],"type":["chr"],"align":["left"]},{"label":["X1990.128."],"name":[2],"type":["chr"],"align":["left"]},{"label":["X2000.129."],"name":[3],"type":["chr"],"align":["left"]},{"label":["X2010.130."],"name":[4],"type":["chr"],"align":["left"]}],"data":[{"1":"White","2":"73.6%","3":"71.1%","4":"68.5%"},{"1":"Black","2":"25.3%","3":"26.0%","4":"26.2%"},{"1":"Asian","2":"0.5%","3":"0.7%","4":"1.1%"},{"1":"Native","2":"0.4%","3":"0.5%","4":"0.6%"},{"1":"Native Hawaiian andother Pacific Islander","2":"—","3":"—","4":"0.1%"},{"1":"Other race","2":"0.1%","3":"0.6%","4":"2.0%"},{"1":"Two or more races","2":"—","3":"1.0%","4":"1.5%"}],"options":{"columns":{"min":{},"max":[10]},"rows":{"min":[10],"max":[10]},"pages":{}}}
+  </script>
+</div>
+<p>In the next chapter, we will learn the tools to scrape the racial demographics for each state using the vector of web addresses we attained through this process as well as cleaning up these data according to tidy principles.</p>
+<div class="feedback">
+<p>
+Any feedback for this section? Click <a href="https://docs.google.com/forms/d/e/1FAIpQLSePQZ3lIaCIPo9J2owXImHZ_9wBEgTo21A0s-A1ty28u4yfvw/viewform?entry.1684471501=The%20R%20Community">here</a>
+</p>
+</div>
+
+</div>
+<!-- </div> -->
+
+
+
+
+
+
+            </section>
+
+          </div>
+        </div>
+      </div>
+<a href="scraping-nfl-data.html" class="navigation navigation-prev navigation-unique" aria-label="Previous page"><i class="fa fa-angle-left"></i></a>
+
+    </div>
+  </div>
+<script src="libs/gitbook-2.6.7/js/app.min.js"></script>
+<script src="libs/gitbook-2.6.7/js/lunr.js"></script>
+<script src="libs/gitbook-2.6.7/js/clipboard.min.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-search.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-sharing.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-fontsettings.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-bookdown.js"></script>
+<script src="libs/gitbook-2.6.7/js/jquery.highlight.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-clipboard.js"></script>
+<script>
+gitbook.require(["gitbook"], function(gitbook) {
+gitbook.start({
+"sharing": {
+"github": false,
+"facebook": true,
+"twitter": true,
+"linkedin": false,
+"weibo": false,
+"instapaper": false,
+"vk": false,
+"all": ["facebook", "twitter", "linkedin", "weibo", "instapaper"]
+},
+"fontsettings": {
+"theme": "white",
+"family": "sans",
+"size": 2
+},
+"edit": {
+"link": null,
+"text": null
+},
+"history": {
+"link": null,
+"text": null
+},
+"view": {
+"link": null,
+"text": null
+},
+"download": ["Module2.pdf", "Module2.epub"],
+"toc": {
+"collapse": "subsection"
+},
+"toolbar": {
+"position": "static"
+}
+});
+});
+</script>
+
+</body>
+
+</html>
