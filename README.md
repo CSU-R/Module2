@@ -13,16 +13,17 @@ Output is placed in the docs directory (instead of _book), so that github pages 
 The project is still under construction, and we welcome any feedback or contributions you wish to make.
 Feel free to open an issue, create a pull request, or just directly contact one of the contributors below:
 
-The following individuals have or are currently contributing to the project
+The following individuals have contributed or are currently contributing to the project.
 * [Alex Fout](https://github.com/fouticus)
 * [Connor Gibbs](https://github.com/congibbs10)
-* Kathleen Wendt
+* [Kathleen Wendt](https://github.com/wendtke)
 * Liz McConnell
 * Matt Ross
 * Ben Prytherch
 
 
-With thanks to the following for blazing the _bookdown book for an R course_ trail:
-* Brook Anderson
+With thanks to the following for blazing the trail on R programming curricula at Colorado State University:
+* [Brooke Anderson](https://github.com/geanders/RProgrammingForResearch)
+* [John Volckens](https://github.com/SmogDr/edar_coursebook)
 
 
