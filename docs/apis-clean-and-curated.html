@@ -145,18 +145,9 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <li class="chapter" data-level="2.2" data-path="apis-clean-and-curated.html"><a href="apis-clean-and-curated.html"><i class="fa fa-check"></i><b>2.2</b> APIs: Clean and Curated</a></li>
 <li class="chapter" data-level="2.3" data-path="scraping-messy-and-mangled.html"><a href="scraping-messy-and-mangled.html"><i class="fa fa-check"></i><b>2.3</b> Scraping: Messy and Mangled</a><ul>
 <li class="chapter" data-level="2.3.1" data-path="scraping-messy-and-mangled.html"><a href="scraping-messy-and-mangled.html#scraping-vs-api"><i class="fa fa-check"></i><b>2.3.1</b> Scraping vs API</a></li>
-<li class="chapter" data-level="2.3.2" data-path="scraping-messy-and-mangled.html"><a href="scraping-messy-and-mangled.html#hypertext-markup-language-html"><i class="fa fa-check"></i><b>2.3.2</b> Hypertext Markup Language (HTML)</a></li>
-<li class="chapter" data-level="2.3.3" data-path="scraping-messy-and-mangled.html"><a href="scraping-messy-and-mangled.html#selector-gadgets"><i class="fa fa-check"></i><b>2.3.3</b> Selector Gadgets</a></li>
+<li class="chapter" data-level="2.3.2" data-path="scraping-messy-and-mangled.html"><a href="scraping-messy-and-mangled.html#tools-for-scraping"><i class="fa fa-check"></i><b>2.3.2</b> Tools for Scraping</a></li>
 </ul></li>
-</ul></li>
-<li class="chapter" data-level="3" data-path="ScrapingInTheWild.html"><a href="ScrapingInTheWild.html"><i class="fa fa-check"></i><b>3</b> Scraping in the Wild</a><ul>
-<li class="chapter" data-level="3.1" data-path="LessonsLearnedFromScraping.html"><a href="LessonsLearnedFromScraping.html"><i class="fa fa-check"></i><b>3.1</b> Lessons Learned from Scraping</a></li>
-<li class="chapter" data-level="3.2" data-path="scraping-nfl-data.html"><a href="scraping-nfl-data.html"><i class="fa fa-check"></i><b>3.2</b> Scraping NFL Data</a><ul>
-<li class="chapter" data-level="3.2.1" data-path="scraping-nfl-data.html"><a href="scraping-nfl-data.html#html-tables-team-statistics"><i class="fa fa-check"></i><b>3.2.1</b> HTML Tables: Team Statistics</a></li>
-<li class="chapter" data-level="3.2.2" data-path="scraping-nfl-data.html"><a href="scraping-nfl-data.html#commented-and-hidden-html-tables-player-statistics"><i class="fa fa-check"></i><b>3.2.2</b> Commented and Hidden HTML Tables: Player Statistics</a></li>
-<li class="chapter" data-level="3.2.3" data-path="scraping-nfl-data.html"><a href="scraping-nfl-data.html#attributes-player-statistics-by-game"><i class="fa fa-check"></i><b>3.2.3</b> Attributes: Player Statistics by Game</a></li>
-</ul></li>
-<li class="chapter" data-level="3.3" data-path="putting-it-all-together.html"><a href="putting-it-all-together.html"><i class="fa fa-check"></i><b>3.3</b> Putting It All Together</a></li>
+<li class="chapter" data-level="2.4" data-path="LessonsLearnedFromScraping.html"><a href="LessonsLearnedFromScraping.html"><i class="fa fa-check"></i><b>2.4</b> Lessons Learned from Scraping</a></li>
 </ul></li>
 <li class="divider"></li>
 <li><a href="https://github.com/rstudio/bookdown" target="blank">Published with bookdown</a></li>
@@ -190,10 +181,10 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <div class="sourceCode" id="cb8"><pre class="sourceCode r chunk-style"><code class="sourceCode r"><a class="sourceLine" id="cb8-1" title="1">bov_req &lt;-<span class="st"> </span>httr<span class="op">::</span><span class="kw">GET</span>(<span class="dt">url =</span> bov_nfl_api)</a>
 <a class="sourceLine" id="cb8-2" title="2">bov_req</a></code></pre></div>
 <pre class="output-style"><code>Response [https://www.bovada.lv/services/sports/event/v2/events/A/description/football/nfl]
-  Date: 2020-09-30 18:51
+  Date: 2020-10-08 19:26
   Status: 200
   Content-Type: application/json;charset=utf-8
-  Size: 1.12 MB</code></pre>
+  Size: 1.19 MB</code></pre>
 <p>If the request was successful, then the status of the request will read 200. Otherwise, there was some error with your request. For a list of HTTP status codes and their respective definitions, follow this <a href="https://www.w3.org/Protocols/rfc2616/rfc2616-sec10.html">link</a>. Since the response clarifies that the content is indeed driven by JavaScript, then we will utilize the <code>jsonlite</code> package to read the JSON structured data. A handy function we will use will be <code>fromJSON()</code> which converts a character vector containing data in JSON structure to native structures in <code>R</code> like lists. So, in order, we will</p>
 <ol style="list-style-type: decimal">
 <li>Extract the content from the server’s response</li>

@@ -1,0 +1,243 @@
+# Supplemental
+
+> “You can have data without information, but you cannot have information without data.” — Daniel Keys Moran, Computer Scientist and Author
+
+## Scraping in the Wild
+
+In Chapter \@ref(AccessingData), we introduced the idea of rectangular data vs. non-rectangular data, providing examples for each and demonstrating the process of rectangularization. We outlined how to use a web-API before introducing the concept of web scraping by illustrating the language of the web: HTML. Since webpages can be complicated, scraping can be complicated. In this chapter, we will leverage the Selector Gadget and our knowledge of HTML elements to scrape data from various sources. It is our belief that the only way to teach web scraping is through examples. Each example will become slightly more difficult than the previous.
+
+### Lessons Learned from Scraping {#LessonsLearned}
+
+Scraping is a necessary evil that requires patience. While some tasks may prove easy, you will quickly find others seem insurmountable. In this section, we will outline a few tips to help you become a web scraper.
+
+1. __Brainstorm__! Before jumping into your scraping project, ask yourself _what data do I need_ and _where can I find it_? If you discover you need data from various sources, _what is the unique identifier_, the link which ties these data together? Taking the time to explore different websites can save you a vast amount of time in the long run. As a general rule, simplistic looking websites are generally easier to scrape and often contain the same information as more complicated websites with several bells and whistles.
+
+2. __Start small__! Sometimes a scraping task can feel daunting, but it is important to _view your project as a war, splitting it up into small battles_. If you are interested in the racial demographics of each of the United States, consider how you can first scrape this information for one state. In this process, don't forget tip 1! 
+
+3. __Hyperlinks are your friend__! They can lead to websites with more detailed information or serve as the unique identifier you need between different data sources. Sometimes you won't even need to scrape the hyperlinks to navigate between webpages, making minor adjustments to the web address will sometimes do.
+
+4. __Data is everywhere__! Text color, font, or highlighting may serve as valuable data that you need. If these features exist on the webpage, then they exist within the HTML code which generated the document. Sometimes these features are well hidden or even inaccessible, leading to the last and final tip.
+
+5. __Ready your search engine__! Just like coding in `R` is an art, web developing is an art. When asking distinct developers to create the same website with the same functionality, the final result may be similar but the underlying HTML code could be drastically different. Why does this matter? You will run into an issue that hasn't been addressed in this text. Thankfully, if you've run into an issue, someone else probably has too. We cannot recommend websites like [Stack Overflow](https://stackoverflow.com/) enough. 
+
+### Scraping NFL Data
+
+In Chapter \@ref(AccessingData), we gathered some betting data pertaining to the NFL through a web-API. We may wish to supplement these betting data with data pertaining to NFL teams, players, or even playing conditions. As we progress through this sub-section, examples will become increasingly problematic or troublesome. The goal in this subsection is to introduce you to scraping by heeding the advice given in the Chapter \@ref(LessonsLearned).
+
+Following our own advice, let's brainstorm. When you think of NFL data, you probably think of [NFL.com](https://www.nfl.com/stats) or [ESPN](https://www.espn.com/nfl/stats). After further digging, we will explore [Pro Football Reference](https://www.pro-football-reference.com/), a reliable archive for football statistics (with a reasonably simple webpage). This is an exhaustive source which boasts team statistics, player statistics, and playing conditions for various seasons. Let's now start small by focusing on team statistics, but further, let's limit our scope to the [2020 Denver Broncos](https://www.pro-football-reference.com/teams/den/2020.htm). Notice, there are hyperlinks for each [player](https://www.pro-football-reference.com/players/G/GordMe00.htm) documented in any of the categories, as well hyperlinks for each game's [boxscore](https://www.pro-football-reference.com/boxscores/202009140den.htm) where there is information about playing conditions and outcomes. Hence, we have a common thread between team statistics, players, and boxscores. If, for example, we chose to scrape team statistics from one website and player statistics from another website, we may have to worry about a unique identifier (being team) if the websites have different naming conventions.
+
+#### HTML Tables: Team Statistics
+
+We'll start with the team statistics for the 2020 Denver Broncos which can be found in a table entitled 'Team Stats and Rankings'. We'll need to figure in which element or __node__ the table lives within the underlying HTML. To do this, we will utilize the CSS selector gadget. If we highlight over and click the table with the selector gadget, we will see that the desired table lives in an element called '#team_stats'.
+
+```{r, fig.cap="finding the team statistics element using the selector gadget", echo=F}
+knitr::include_graphics("src/images/broncos_selector_gadget.png")
+```
+
+Alternatively, we could view the page source and search for the table name. I've highlighted the information identified by the selector gadget with the cursor.
+
+```{r, fig.cap="finding the team statistics element using the page source", echo=F}
+knitr::include_graphics("src/images/broncos_page_source.png")
+```
+
+```{block, type = 'caution'}
+While the selector gadget is always a great first option, it is not always reliable. There are instances when the selector gadget identifies a node that is hidden or inaccessible without JavaScript. In these situations, it is best view the page source directly for more guidance on how to proceed. Practice with both the selector gadget and the page source.
+```
+
+Once we have found the name of the element containing the desired data, we can utilize the `rvest` package to scrape the table. The general process for scraping an HTML table is
+
+1. Read the HTML identified by the web address.
+2. Isolate the node containing the data we desire.
+3. Parse the HTML table.
+4. Take a look at the data to ensure the columns are appropriate labels.
+
+```{r}
+library(rvest)
+library(janitor)
+
+pfr_url <- "https://www.pro-football-reference.com"
+broncos_url <- str_c(pfr_url, '/teams/den/2020.htm')
+
+broncos_url %>%
+  # read the HTML
+  read_html(.) %>%
+  # isolate the node containing the HTML table
+  html_node(., css = '#team_conversions') %>%
+  # parse the html table
+  html_table(.) %>%
+  # make the first row of the table column headers and clean up column names
+  row_to_names(., row_number = 1) %>%
+  clean_names()
+```
+
+While these data need cleaning up before they can be used in practice, we will defer these responsibilities to Chapter \@ref(Wrangling).
+
+```{block, type = 'progress'}
+In the next subsection, we will take a deeper dive into scraping HTML tables using information attained from attribute values, a common occurrence in web scraping. Take this time to scrape the 'Team Conversions' table on your own.
+```
+
+```{block, type='feedback'}
+Any feedback for this section? Click [here](https://docs.google.com/forms/d/e/1FAIpQLSePQZ3lIaCIPo9J2owXImHZ_9wBEgTo21A0s-A1ty28u4yfvw/viewform?entry.1684471501=The%20R%20Community)
+``` 
+
+#### Commented and Hidden HTML Tables: Player Statistics
+
+Let's transition to gathering player statistics, particularly for those players who have recorded statistics in the rushing or receiving category. These data are given in the table entitled 'Rushing and Receiving'. Let's use the selector gadget to identify the node containing the table and scrape the table according to the previous section.
+
+```{r, error=TRUE}
+broncos_url %>%
+  # read the HTML
+  read_html(.) %>%
+  # isolate the node containing the HTML table
+  html_node(., css = '#rushing_and_receiving') %>%
+  # parse the html table
+  html_table(.)
+```
+
+We get an error stating that the node '#rushing_and_receiving' does not contain an HTML table. In fact, there doesn't appear to be anything in that node at all.
+
+```{r}
+broncos_url %>%
+  # read the HTML
+  read_html(.) %>%
+  # isolate the node containing the HTML table
+  html_node(., css = '#rushing_and_receiving')
+```
+
+This, of course, is contrary to the selector gadget declaring a node '#rushing_and_receiving' as the one containing the table we desire and directly see on the webpage. Generally when this happens, it means the node containing the information in the table has either been __commented out__ or __hidden__. A node is commented out when it is contained in a __comment tag__: `<!-- -->`. For example, if we were to comment out the paragraph element in Chapter \@ref(AccessingData), it would look like this:
+
+`<!-- <p class = "fancy"> This is the paragraph you want to scrape which has been formatted in a fancy script. </p> -->`.
+
+When a node is commented out, it exists in the HTML, but it cannot be accessed until we step into the comment tag. Otherwise said, we can't bypass the comment node. If you would like to scrape information contained with a comment tag, the general strategy is
+
+1. Read the HTML identified by the web address.
+2. Isolate the node containing the comment tag. Inside the comment tag are the data we desire.
+3. Isolate the comment tag.
+4. Convert the content to HTML.
+5. Isolate the node containing the table.
+6. Parse the HTML table.
+7. Take a look at the data to ensure the columns are appropriate labels.
+
+```{r}
+broncos_url %>%
+  read_html() %>%
+  html_node(., css = '#all_rushing_and_receiving') %>%
+  html_nodes(., xpath = 'comment()') %>%
+  html_text() %>%
+  read_html() %>%
+  html_node(., 'table') %>%
+  html_table() %>%
+  set_names(., str_c(names(.), .[1,], sep = '_')) %>%
+  clean_names() %>%
+  slice(., -1)
+```
+
+#### Attributes: Player Statistics by Game
+
+Suppose now that we wish to scrape the same player statistics, but rather than get the aggregated total, we want the players' statistics by game. Within the Rushing and Receiving table scraped in the previous example, there are hyperlinks for each player. When you click on this hyperlink, you will find the player's statistics for each game played. These are the data we desire. We want rushing and receiving statistics for each player on each team for a variety of years. Using the lessons learned in Chapter \@ref(LessonsLearned), we have brainstormed the problem and have a road map to the solution. We will first scrape the hyperlink attribute to get the web address associated with each player for a given team. Within each of these web addresses, we will scrape the game by game statistics before iterating over each team in the NFL. After this, we can repeat the procedure for a variety of years. This is, of course, a big job, so let's scale down the problem to one player: Melvin Gordon III, running back. To do this, we will:
+
+1. Get the web addresses associated with each player in the Rushing and Receiving table, before isolating the address associated with Melvin Gordon's rushing and receiving statistics.
+2. Read the HTML identified by the web address.
+3. Isolate the node containing the data we desire.
+4. Parse the HTML table.
+5. Take a look at the data to ensure the columns are appropriate labels.
+
+Let's figure out where the hyperlinks exist within the HTML code. To do this, I will look at the page source and search for Melvin Gordon. We find that the web address corresponding to his game by game player statistics exist in the hidden HTML table that we scraped in the previous example. In particular, they are the `href` attribute to a node entitled `a` which is embedded within the hidden HTML table. Phew. Let's consider how we can scrape these web addresses step by step:
+
+1.1 Isolate the hidden HTML table, similar to the previous example.
+1.2 Isolate nodes with tag `a`.
+1.3 Extract the `href` attribute from these nodes.
+
+Steps 1.1 and 1.2 should be familiar from previous examples, but step 1.3 requires a new function within `rvest` called `html_attr`. Let's see how to do this in `R`.
+
+```{r, fig.cap="finding the element containing the web address cooresponding to Melvin Gordon III game by game player statistics using the page source", echo=F}
+knitr::include_graphics("src/images/broncos_gordon_page_source.png")
+```
+
+```{r}
+player_urls <- broncos_url %>%
+  read_html() %>%
+  html_node(., css = '#all_rushing_and_receiving') %>%
+  html_nodes(., xpath = 'comment()') %>%
+  html_text() %>%
+  read_html() %>%
+  html_nodes(., 'table') %>%
+  html_nodes(., 'a') %>%
+  html_attr(., 'href') %>%
+  str_c(pfr_url, .)
+player_urls
+```
+
+Since the web addresses are given as an extension to the Pro Football Reference homepage, we will need to concatenate the strings with `str_c()` before saving the result for future use. Now, lets continue to step two in our excursion to get Melvin Gordon's game by game statistics.
+
+```{r}
+player_urls[1] %>%
+  read_html() %>%
+  html_node(., css = '#all_stats') %>%
+  html_node(., 'table') %>%
+  html_table(., fill = TRUE) %>%
+  set_names(., str_c(names(.), .[1,], sep = '_')) %>%
+  clean_names() %>%
+  slice(., -1)
+```
+
+```{block, type='feedback'}
+Any feedback for this section? Click [here](https://docs.google.com/forms/d/e/1FAIpQLSePQZ3lIaCIPo9J2owXImHZ_9wBEgTo21A0s-A1ty28u4yfvw/viewform?entry.1684471501=The%20R%20Community)
+``` 
+
+### Putting It All Together
+
+Let's consider how we can gather data regarding racial demographics across each state in the United States of America. Perusing Wikipedia, notice that each state has a table documenting the state's 'racial population breakdown'.
+
+```{r, fig.cap="part of brainstorming is exploring different websites which may have the data you desire", echo=F}
+knitr::include_graphics("src/images/alabama_demo_webpage.png")
+```
+
+If we were to go to Georgia, we would notice that the web address is similar to Alabama, but since Georgia is also a country, the web address specifies that you are currently on the webpage for the state rather than the country. This effectively rules out editing the web address to iterate over each state.
+
+If we broaden our search to 'US States', we find a Wikipedia page with a list of each state. Each state has a hyperlink which takes us to the state's webpage with the demographic information we desire. Remember: hyperlinks are our friend! If they exist, we can scrape them, iterating over the web addresses to get data from each state. Let's use what we just learned to attain the web addresses for each state. We'll start with the web address containing a list of every state.
+
+```{r}
+wiki_url <- "https://www.wikipedia.org"
+states_url <- str_c(wiki_url, '/wiki/U.S._state#States_of_the_United_States')
+```
+
+Let's use the page source to find where the hyperlinks exist in the HTML code. To do this, I am going to search for the phrase 'The 50 U.S. states, in alphabetical order, along with each state's flag' in the page source since the list of states is just below this phrase.
+
+```{r, fig.cap="finding the element containing the list of states with their cooresponding web addresses using the page source", echo=F}
+knitr::include_graphics("src/images/usstates_page_source.png")
+```
+
+We find that the list of states, among other information, exists in an element tagged `div` with the attribute `class` set to an attribute value of `plainlist`. Within this node, the list of states exists in an element tagged `ul` and each state exists in an element tagged `li`. Within each state, the web address corresponding to that state's individual Wikipedia article is given in the `href` attribute to an element tagged `a`. Let's use this information to extract the web addresses corresponding to each state. We may also want to extract the state name which is the content of the element tagged `a`.
+
+```{r}
+node_w_states <- states_url %>%
+  read_html() %>%
+  html_nodes(xpath = "//div[@class='plainlist']") %>%
+  html_nodes('ul') %>%
+  html_nodes('li') %>%
+  html_nodes('a')
+
+ind_states <- tibble(state = node_w_states %>%
+                       html_text(),
+                     url = node_w_states %>%
+                       html_attr(., 'href') %>%
+                       str_c(wiki_url, .))
+ind_states
+```
+
+Let's consider how we would scrape the racial demographics. Use either the selector gadget or the page source to identify where the desired table exists in the HTML code.
+
+```{r}
+ind_states$url[1] %>%
+  read_html() %>%
+  html_nodes(., xpath = "//table[@class='wikitable sortable collapsible']") %>%
+  html_table() %>%
+  as.data.frame()
+```
+
+In the next chapter, we will learn the tools to scrape the racial demographics for each state using the vector of web addresses we attained through this process as well as cleaning up these data according to tidy principles.
+
+```{block, type='feedback'}
+Any feedback for this section? Click [here](https://docs.google.com/forms/d/e/1FAIpQLSePQZ3lIaCIPo9J2owXImHZ_9wBEgTo21A0s-A1ty28u4yfvw/viewform?entry.1684471501=The%20R%20Community)
+``` 

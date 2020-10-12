@@ -4,11 +4,11 @@
 
   <meta charset="utf-8" />
   <meta http-equiv="X-UA-Compatible" content="IE=edge" />
-  <title>3.1 Lessons Learned from Scraping | R Module 2</title>
+  <title>2.2 APIs: Clean and Curated | R Module 2</title>
   <meta name="description" content="This is the second installment for the book for the R Intro Course at CSU." />
   <meta name="generator" content="bookdown 0.20 and GitBook 2.6.7" />
 
-  <meta property="og:title" content="3.1 Lessons Learned from Scraping | R Module 2" />
+  <meta property="og:title" content="2.2 APIs: Clean and Curated | R Module 2" />
   <meta property="og:type" content="book" />
   
   
@@ -16,7 +16,7 @@
   
 
   <meta name="twitter:card" content="summary" />
-  <meta name="twitter:title" content="3.1 Lessons Learned from Scraping | R Module 2" />
+  <meta name="twitter:title" content="2.2 APIs: Clean and Curated | R Module 2" />
   
   <meta name="twitter:description" content="This is the second installment for the book for the R Intro Course at CSU." />
   
@@ -30,8 +30,8 @@
   <meta name="apple-mobile-web-app-status-bar-style" content="black" />
   
   
-<link rel="prev" href="ScrapingInTheWild.html"/>
-<link rel="next" href="scraping-nfl-data-1.html"/>
+<link rel="prev" href="rectangular-vs-non-rectangular-data.html"/>
+<link rel="next" href="scraping-messy-and-mangled.html"/>
 <script src="libs/jquery-2.2.3/jquery.min.js"></script>
 <link href="libs/gitbook-2.6.7/css/style.css" rel="stylesheet" />
 <link href="libs/gitbook-2.6.7/css/plugin-table.css" rel="stylesheet" />
@@ -150,14 +150,12 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <li class="chapter" data-level="2.3.4" data-path="scraping-messy-and-mangled.html"><a href="scraping-messy-and-mangled.html#scraping-nfl-data"><i class="fa fa-check"></i><b>2.3.4</b> Scraping NFL Data</a></li>
 </ul></li>
 </ul></li>
-<li class="chapter" data-level="3" data-path="ScrapingInTheWild.html"><a href="ScrapingInTheWild.html"><i class="fa fa-check"></i><b>3</b> Scraping in the Wild</a><ul>
-<li class="chapter" data-level="3.1" data-path="scraping-messy-and-mangled.html"><a href="scraping-messy-and-mangled.html#LessonsLearnedFromScraping"><i class="fa fa-check"></i><b>3.1</b> Lessons Learned from Scraping</a></li>
-<li class="chapter" data-level="3.2" data-path="scraping-nfl-data-1.html"><a href="scraping-nfl-data-1.html"><i class="fa fa-check"></i><b>3.2</b> Scraping NFL Data</a><ul>
-<li class="chapter" data-level="3.2.1" data-path="scraping-nfl-data-1.html"><a href="scraping-nfl-data-1.html#html-tables-team-statistics-1"><i class="fa fa-check"></i><b>3.2.1</b> HTML Tables: Team Statistics</a></li>
-<li class="chapter" data-level="3.2.2" data-path="scraping-nfl-data-1.html"><a href="scraping-nfl-data-1.html#commented-and-hidden-html-tables-player-statistics"><i class="fa fa-check"></i><b>3.2.2</b> Commented and Hidden HTML Tables: Player Statistics</a></li>
-<li class="chapter" data-level="3.2.3" data-path="scraping-nfl-data-1.html"><a href="scraping-nfl-data-1.html#attributes-player-statistics-by-game"><i class="fa fa-check"></i><b>3.2.3</b> Attributes: Player Statistics by Game</a></li>
+<li class="chapter" data-level="3" data-path="supplemental.html"><a href="supplemental.html"><i class="fa fa-check"></i><b>3</b> Supplemental</a><ul>
+<li class="chapter" data-level="3.1" data-path="scraping-in-the-wild.html"><a href="scraping-in-the-wild.html"><i class="fa fa-check"></i><b>3.1</b> Scraping in the Wild</a><ul>
+<li class="chapter" data-level="3.1.1" data-path="scraping-in-the-wild.html"><a href="scraping-in-the-wild.html#LessonsLearned"><i class="fa fa-check"></i><b>3.1.1</b> Lessons Learned from Scraping</a></li>
+<li class="chapter" data-level="3.1.2" data-path="scraping-in-the-wild.html"><a href="scraping-in-the-wild.html#scraping-nfl-data-1"><i class="fa fa-check"></i><b>3.1.2</b> Scraping NFL Data</a></li>
+<li class="chapter" data-level="3.1.3" data-path="scraping-in-the-wild.html"><a href="scraping-in-the-wild.html#putting-it-all-together"><i class="fa fa-check"></i><b>3.1.3</b> Putting It All Together</a></li>
 </ul></li>
-<li class="chapter" data-level="3.3" data-path="putting-it-all-together.html"><a href="putting-it-all-together.html"><i class="fa fa-check"></i><b>3.3</b> Putting It All Together</a></li>
 </ul></li>
 <li class="divider"></li>
 <li><a href="https://github.com/rstudio/bookdown" target="blank">Published with bookdown</a></li>
@@ -179,24 +177,62 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
           <div class="page-inner">
 
             <section class="normal" id="section-">
-<div id="LessonsLearnedFromScraping" class="section level2">
-<h2><span class="header-section-number">3.1</span> Lessons Learned from Scraping</h2>
-<p>Scraping is a necessary evil that requires patience. While some tasks may prove easy, you will quickly find others seem insurmountable. In this section, we will outline a few tips to help you become a web scraper.</p>
+<div id="APIs" class="section level2">
+<h2><span class="header-section-number">2.2</span> APIs: Clean and Curated</h2>
+<p>An application programming interface (API) is a set of functions and procedures which allows one computer program to interact with another. To simplify the concept remarkably, we will consider web-APIs where there is a server (computer waiting to provide data) and a client (computer making a request for data).</p>
+<p>The benefit of APIs is the result: clean and curated data from the host. The pre-processing needed to get the data in a workable form is entirely done on the server side. We, however, are responsible for making the request. Web-APIs often utilize JavaScript Object Notation (JSON), another example of non-rectangular data. We will utilize the <code>httr</code> and the <code>jsonlite</code> packages to retrieve the latest sports lines from Bovada, an online sportsbook.</p>
+<p>Before we start, we’ll need to download the <code>httr</code> and <code>jsonlite</code> packages and load them into our current environment. Furthermore, we will need to find the address of the server to which we will send the request.</p>
+<div class="sourceCode" id="cb7"><pre class="sourceCode r chunk-style"><code class="sourceCode r"><a class="sourceLine" id="cb7-1" title="1"><span class="kw">library</span>(httr, <span class="dt">quietly =</span> <span class="ot">TRUE</span>)</a>
+<a class="sourceLine" id="cb7-2" title="2"><span class="kw">library</span>(jsonlite, <span class="dt">quietly =</span> <span class="ot">TRUE</span>)</a>
+<a class="sourceLine" id="cb7-3" title="3">bov_nfl_api &lt;-<span class="st"> &quot;https://www.bovada.lv/services/sports/event/v2/events/A/description/football/nfl&quot;</span></a></code></pre></div>
+<p>To ask for data through a web-API, we will need to make a <code>GET</code> request with the <code>httr</code> package’s <code>GET()</code> function. After making the request, we can read about the server’s response.</p>
+<div class="sourceCode" id="cb8"><pre class="sourceCode r chunk-style"><code class="sourceCode r"><a class="sourceLine" id="cb8-1" title="1">bov_req &lt;-<span class="st"> </span>httr<span class="op">::</span><span class="kw">GET</span>(<span class="dt">url =</span> bov_nfl_api)</a>
+<a class="sourceLine" id="cb8-2" title="2">bov_req</a></code></pre></div>
+<pre class="output-style"><code>Response [https://www.bovada.lv/services/sports/event/v2/events/A/description/football/nfl]
+  Date: 2020-10-12 19:14
+  Status: 200
+  Content-Type: application/json;charset=utf-8
+  Size: 960 kB</code></pre>
+<p>If the request was successful, then the status of the request will read 200. Otherwise, there was some error with your request. For a list of HTTP status codes and their respective definitions, follow this <a href="https://www.w3.org/Protocols/rfc2616/rfc2616-sec10.html">link</a>. Since the response clarifies that the content is indeed driven by JavaScript, then we will utilize the <code>jsonlite</code> package to read the JSON structured data. A handy function we will use will be <code>fromJSON()</code> which converts a character vector containing data in JSON structure to native structures in <code>R</code> like lists. So, in order, we will</p>
 <ol style="list-style-type: decimal">
-<li><p><strong>Brainstorm</strong>! Before jumping into your scraping project, ask yourself <em>what data do I need</em> and <em>where can I find it</em>? If you discover you need data from various sources, <em>what is the unique identifier</em>, the link which ties these data together? Taking the time to explore different websites can save you a vast amount of time in the long run. As a general rule, simplistic looking websites are generally easier to scrape and often contain the same information as more complicated websites with several bells and whistles.</p></li>
-<li><p><strong>Start small</strong>! Sometimes a scraping task can feel daunting, but it is important to <em>view your project as a war, splitting it up into small battles</em>. If you are interested in the racial demographics of each of the United States, consider how you can first scrape this information for one state. In this process, don’t forget tip 1!</p></li>
-<li><p><strong>Hyperlinks are your friend</strong>! They can lead to websites with more detailed information or serve as the unique identifier you need between different data sources. Sometimes you won’t even need to scrape the hyperlinks to navigate between webpages, making minor adjustments to the web address will sometimes do.</p></li>
-<li><p><strong>Data is everywhere</strong>! Text color, font, or highlighting may serve as valuable data that you need. If these features exist on the webpage, then they exist within the HTML code which generated the document. Sometimes these features are well hidden or even inaccessible, leading to the last and final tip.</p></li>
-<li><p><strong>Ready your search engine</strong>! Just like coding in <code>R</code> is an art, web developing is an art. When asking distinct developers to create the same website with the same functionality, the final result may be similar but the underlying HTML code could be drastically different. Why does this matter? You will run into an issue that hasn’t been addressed in this text. Thankfully, if you’ve run into an issue, someone else probably has too. We cannot recommend websites like <a href="https://stackoverflow.com/">Stack Overflow</a> enough.</p></li>
+<li>Extract the content from the server’s response</li>
+<li>Convert the content to a character vector, maintaining the JSON structure</li>
+<li>Restructure the data into native <code>R</code> structures, using <code>fromJSON()</code>.</li>
 </ol>
+<div class="sourceCode" id="cb10"><pre class="sourceCode r chunk-style"><code class="sourceCode r"><a class="sourceLine" id="cb10-1" title="1">content &lt;-<span class="st"> </span>bov_req<span class="op">$</span>content</a>
+<a class="sourceLine" id="cb10-2" title="2">content_char &lt;-<span class="st"> </span><span class="kw">rawToChar</span>(content)</a>
+<a class="sourceLine" id="cb10-3" title="3">bov_res &lt;-<span class="st"> </span>jsonlite<span class="op">::</span><span class="kw">fromJSON</span>(content_char)</a></code></pre></div>
+<p>Of course, we could also create a function which takes the server’s response and converts the content to native <code>R</code> structures. We will want to code in a force stop if the response status is not 200. We will also want to require the <code>httr</code> and <code>jsonlite</code> packages which will automatically install the packages if a user calls the function without having the packages installed.</p>
+<div class="sourceCode" id="cb11"><pre class="sourceCode r chunk-style"><code class="sourceCode r"><a class="sourceLine" id="cb11-1" title="1">convert_JSON &lt;-<span class="st"> </span><span class="cf">function</span>(resp){</a>
+<a class="sourceLine" id="cb11-2" title="2">  <span class="co"># call needed packages</span></a>
+<a class="sourceLine" id="cb11-3" title="3">  <span class="kw">require</span>(httr)</a>
+<a class="sourceLine" id="cb11-4" title="4">  <span class="kw">require</span>(jsonlite)</a>
+<a class="sourceLine" id="cb11-5" title="5">  <span class="co"># stop if the server returned an error</span></a>
+<a class="sourceLine" id="cb11-6" title="6">  httr<span class="op">::</span><span class="kw">stop_for_status</span>(resp)</a>
+<a class="sourceLine" id="cb11-7" title="7">  <span class="co"># return JSON content in native R structures</span></a>
+<a class="sourceLine" id="cb11-8" title="8">  <span class="kw">return</span>(jsonlite<span class="op">::</span><span class="kw">fromJSON</span>(<span class="kw">rawToChar</span>(resp<span class="op">$</span>content)))</a>
+<a class="sourceLine" id="cb11-9" title="9">}</a></code></pre></div>
+<p>Finally, we can get the same output by simply calling the function.</p>
+<div class="sourceCode" id="cb12"><pre class="sourceCode r chunk-style"><code class="sourceCode r"><a class="sourceLine" id="cb12-1" title="1"><span class="kw">identical</span>(<span class="kw">convert_JSON</span>(bov_req), bov_res)</a></code></pre></div>
+<pre class="output-style"><code>[1] TRUE</code></pre>
+<div class="bonus">
+<p>
+Some web-APIs require additional information from the us as outlined in the documentation for the API. In this case, the user would need to provide additional query parameters in their GET request. Thankfully, this functionality is ingrained in the <code>httr</code> package’s <code>GET()</code> function. For more information on how to include query parameters, type <code>??GET</code> into your <code>R</code> console.
+</p>
+</div>
+<div class="feedback">
+<p>
+Any feedback for this section? Click <a href="https://docs.google.com/forms/d/e/1FAIpQLSePQZ3lIaCIPo9J2owXImHZ_9wBEgTo21A0s-A1ty28u4yfvw/viewform?entry.1684471501=The%20R%20Community">here</a>
+</p>
+</div>
 </div>
             </section>
 
           </div>
         </div>
       </div>
-<a href="ScrapingInTheWild.html" class="navigation navigation-prev " aria-label="Previous page"><i class="fa fa-angle-left"></i></a>
-<a href="scraping-nfl-data-1.html" class="navigation navigation-next " aria-label="Next page"><i class="fa fa-angle-right"></i></a>
+<a href="rectangular-vs-non-rectangular-data.html" class="navigation navigation-prev " aria-label="Previous page"><i class="fa fa-angle-left"></i></a>
+<a href="scraping-messy-and-mangled.html" class="navigation navigation-next " aria-label="Next page"><i class="fa fa-angle-right"></i></a>
     </div>
   </div>
 <script src="libs/gitbook-2.6.7/js/app.min.js"></script>

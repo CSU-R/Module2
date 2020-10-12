@@ -7,7 +7,7 @@ language:
 rmd_files:
   - "index.Rmd"
   - "src/02-AccessingData.Rmd"
-  - "src/03-ScrapingInTheWild.Rmd"
+  - "src/Supp.Rmd"
 output_dir: "docs"
 df_print: paged
 
