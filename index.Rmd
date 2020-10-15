@@ -9,6 +9,7 @@ bibliography:
 - src/book.bib
 site: bookdown::bookdown_site
 biblio-style: apalike
+citation_package: natbib
 ---
 
 

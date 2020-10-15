@@ -31,7 +31,7 @@
   
   
 <link rel="prev" href="APIs.html"/>
-<link rel="next" href="supplemental.html"/>
+<link rel="next" href="Wrangling.html"/>
 <script src="libs/jquery-2.2.3/jquery.min.js"></script>
 <link href="libs/gitbook-2.6.7/css/style.css" rel="stylesheet" />
 <link href="libs/gitbook-2.6.7/css/plugin-table.css" rel="stylesheet" />
@@ -150,13 +150,22 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <li class="chapter" data-level="2.3.4" data-path="scraping-messy-and-mangled.html"><a href="scraping-messy-and-mangled.html#scraping-nfl-data"><i class="fa fa-check"></i><b>2.3.4</b> Scraping NFL Data</a></li>
 </ul></li>
 </ul></li>
-<li class="chapter" data-level="3" data-path="supplemental.html"><a href="supplemental.html"><i class="fa fa-check"></i><b>3</b> Supplemental</a><ul>
-<li class="chapter" data-level="3.1" data-path="scraping-in-the-wild.html"><a href="scraping-in-the-wild.html"><i class="fa fa-check"></i><b>3.1</b> Scraping in the Wild</a><ul>
-<li class="chapter" data-level="3.1.1" data-path="scraping-in-the-wild.html"><a href="scraping-in-the-wild.html#LessonsLearned"><i class="fa fa-check"></i><b>3.1.1</b> Lessons Learned from Scraping</a></li>
-<li class="chapter" data-level="3.1.2" data-path="scraping-in-the-wild.html"><a href="scraping-in-the-wild.html#scraping-nfl-data-1"><i class="fa fa-check"></i><b>3.1.2</b> Scraping NFL Data</a></li>
-<li class="chapter" data-level="3.1.3" data-path="scraping-in-the-wild.html"><a href="scraping-in-the-wild.html#putting-it-all-together"><i class="fa fa-check"></i><b>3.1.3</b> Putting It All Together</a></li>
+<li class="chapter" data-level="3" data-path="Wrangling.html"><a href="Wrangling.html"><i class="fa fa-check"></i><b>3</b> Wrangling</a><ul>
+<li class="chapter" data-level="3.1" data-path="core-tidyverse.html"><a href="core-tidyverse.html"><i class="fa fa-check"></i><b>3.1</b> Core Tidyverse</a><ul>
+<li class="chapter" data-level="3.1.1" data-path="core-tidyverse.html"><a href="core-tidyverse.html#tidyr"><i class="fa fa-check"></i><b>3.1.1</b> tidyr</a></li>
+<li class="chapter" data-level="3.1.2" data-path="core-tidyverse.html"><a href="core-tidyverse.html#dplyr"><i class="fa fa-check"></i><b>3.1.2</b> dplyr</a></li>
+</ul></li>
+<li class="chapter" data-level="3.2" data-path="functional-programming-with-purrr.html"><a href="functional-programming-with-purrr.html"><i class="fa fa-check"></i><b>3.2</b> Functional Programming with purrr</a></li>
+<li class="chapter" data-level="3.3" data-path="iterative-procedures-with-foreach.html"><a href="iterative-procedures-with-foreach.html"><i class="fa fa-check"></i><b>3.3</b> Iterative Procedures with foreach</a></li>
+</ul></li>
+<li class="chapter" data-level="4" data-path="supplemental.html"><a href="supplemental.html"><i class="fa fa-check"></i><b>4</b> Supplemental</a><ul>
+<li class="chapter" data-level="4.1" data-path="scraping-in-the-wild.html"><a href="scraping-in-the-wild.html"><i class="fa fa-check"></i><b>4.1</b> Scraping in the Wild</a><ul>
+<li class="chapter" data-level="4.1.1" data-path="scraping-in-the-wild.html"><a href="scraping-in-the-wild.html#LessonsLearned"><i class="fa fa-check"></i><b>4.1.1</b> Lessons Learned from Scraping</a></li>
+<li class="chapter" data-level="4.1.2" data-path="scraping-in-the-wild.html"><a href="scraping-in-the-wild.html#scraping-nfl-data-1"><i class="fa fa-check"></i><b>4.1.2</b> Scraping NFL Data</a></li>
+<li class="chapter" data-level="4.1.3" data-path="scraping-in-the-wild.html"><a href="scraping-in-the-wild.html#putting-it-all-together"><i class="fa fa-check"></i><b>4.1.3</b> Putting It All Together</a></li>
 </ul></li>
 </ul></li>
+<li class="chapter" data-level="" data-path="references.html"><a href="references.html"><i class="fa fa-check"></i>References</a></li>
 <li class="divider"></li>
 <li><a href="https://github.com/rstudio/bookdown" target="blank">Published with bookdown</a></li>
 
@@ -184,61 +193,61 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <h3><span class="header-section-number">2.3.1</span> Scraping vs APIs</h3>
 <p>The benefit of using an API are clean data. For example, we can traverse the result to find the latest NFL events.</p>
 <div class="sourceCode" id="cb14"><pre class="sourceCode r chunk-style"><code class="sourceCode r"><a class="sourceLine" id="cb14-1" title="1"><span class="kw">head</span>(bov_res[[<span class="dv">2</span>]][[<span class="dv">1</span>]][,<span class="dv">2</span>])</a></code></pre></div>
-<pre class="output-style"><code>[1] &quot;Los Angeles Chargers @ New Orleans Saints&quot;
-[2] &quot;Buffalo Bills @ Tennessee Titans&quot;         
-[3] &quot;Atlanta Falcons @ Minnesota Vikings&quot;      
-[4] &quot;Baltimore Ravens @ Philadelphia Eagles&quot;   
-[5] &quot;Chicago Bears @ Carolina Panthers&quot;        
-[6] &quot;Cincinnati Bengals @ Indianapolis Colts&quot;  </code></pre>
+<pre class="output-style"><code>[1] &quot;Atlanta Falcons @ Minnesota Vikings&quot;    
+[2] &quot;Baltimore Ravens @ Philadelphia Eagles&quot; 
+[3] &quot;Chicago Bears @ Carolina Panthers&quot;      
+[4] &quot;Cincinnati Bengals @ Indianapolis Colts&quot;
+[5] &quot;Cleveland Browns @ Pittsburgh Steelers&quot; 
+[6] &quot;Denver Broncos @ New England Patriots&quot;  </code></pre>
 <p>With more digging, we can find which teams are playing at home.</p>
 <div class="sourceCode" id="cb16"><pre class="sourceCode r chunk-style"><code class="sourceCode r"><a class="sourceLine" id="cb16-1" title="1"><span class="kw">head</span>(bov_res[[<span class="dv">2</span>]][[<span class="dv">1</span>]][[<span class="dv">16</span>]])</a></code></pre></div>
 <pre class="output-style"><code>[[1]]
-                id                 name  home
-1 7759933-11904221   New Orleans Saints  TRUE
-2 7759933-11904248 Los Angeles Chargers FALSE
-
-[[2]]
-                id             name  home
-1 7800334-11904229 Tennessee Titans  TRUE
-2 7800334-11904215    Buffalo Bills FALSE
-
-[[3]]
                 id              name  home
 1 7783039-11904246 Minnesota Vikings  TRUE
 2 7783039-11904242   Atlanta Falcons FALSE
 
-[[4]]
+[[2]]
                 id                name  home
 1 7783032-11904222 Philadelphia Eagles  TRUE
 2 7783032-11903831    Baltimore Ravens FALSE
 
-[[5]]
+[[3]]
                 id              name  home
 1 7783035-11904216 Carolina Panthers  TRUE
 2 7783035-11903832     Chicago Bears FALSE
 
-[[6]]
+[[4]]
                 id               name  home
 1 7783033-11904232 Indianapolis Colts  TRUE
-2 7783033-11904217 Cincinnati Bengals FALSE</code></pre>
+2 7783033-11904217 Cincinnati Bengals FALSE
+
+[[5]]
+                id                name  home
+1 7783037-11904223 Pittsburgh Steelers  TRUE
+2 7783037-11904219    Cleveland Browns FALSE
+
+[[6]]
+            id                 name  home
+1 7802463-3826 New England Patriots  TRUE
+2 7802463-2410       Denver Broncos FALSE</code></pre>
 <p>We can also find the current line of each of these games. Here, I have created a function called <code>get_bovada_lines()</code> which traverses this complicated (yet clean) JSON object using methods explored in Chapter 3 and combines the information together into a rectangular data set.</p>
 <div class="sourceCode" id="cb18"><pre class="sourceCode r chunk-style"><code class="sourceCode r"><a class="sourceLine" id="cb18-1" title="1">bov_res <span class="op">%&gt;%</span></a>
 <a class="sourceLine" id="cb18-2" title="2"><span class="st">  </span><span class="kw">get_bovada_lines</span>() <span class="op">%&gt;%</span></a>
 <a class="sourceLine" id="cb18-3" title="3"><span class="st">  </span><span class="kw">print</span>(<span class="dt">n =</span> <span class="dv">10</span>)</a></code></pre></div>
-<pre class="output-style"><code># A tibble: 24 x 16
+<pre class="output-style"><code># A tibble: 28 x 16
    id    link  description startTime           live  type  lastModified       
    &lt;chr&gt; &lt;chr&gt; &lt;chr&gt;       &lt;dttm&gt;              &lt;lgl&gt; &lt;chr&gt; &lt;dttm&gt;             
- 1 7759~ /foo~ Los Angele~ 2020-10-12 17:15:00 FALSE GAME~ 2020-10-12 12:12:14
- 2 7759~ /foo~ Los Angele~ 2020-10-12 17:15:00 FALSE GAME~ 2020-10-12 12:12:14
- 3 7800~ /foo~ Buffalo Bi~ 2020-10-13 16:00:00 FALSE GAME~ 2020-10-12 11:30:44
- 4 7800~ /foo~ Buffalo Bi~ 2020-10-13 16:00:00 FALSE GAME~ 2020-10-12 11:30:44
- 5 7783~ /foo~ Atlanta Fa~ 2020-10-18 10:00:00 FALSE GAME~ 2020-10-12 11:44:26
- 6 7783~ /foo~ Atlanta Fa~ 2020-10-18 10:00:00 FALSE GAME~ 2020-10-12 11:44:26
- 7 7783~ /foo~ Baltimore ~ 2020-10-18 10:00:00 FALSE GAME~ 2020-10-12 09:31:47
- 8 7783~ /foo~ Baltimore ~ 2020-10-18 10:00:00 FALSE GAME~ 2020-10-12 09:31:47
- 9 7783~ /foo~ Chicago Be~ 2020-10-18 10:00:00 FALSE GAME~ 2020-10-12 11:43:55
-10 7783~ /foo~ Chicago Be~ 2020-10-18 10:00:00 FALSE GAME~ 2020-10-12 11:43:55
-# ... with 14 more rows, and 9 more variables: team_id &lt;chr&gt;, name &lt;chr&gt;,
+ 1 7783~ /foo~ Atlanta Fa~ 2020-10-18 10:00:00 FALSE GAME~ 2020-10-14 10:58:30
+ 2 7783~ /foo~ Atlanta Fa~ 2020-10-18 10:00:00 FALSE GAME~ 2020-10-14 10:58:30
+ 3 7783~ /foo~ Baltimore ~ 2020-10-18 10:00:00 FALSE GAME~ 2020-10-14 09:40:55
+ 4 7783~ /foo~ Baltimore ~ 2020-10-18 10:00:00 FALSE GAME~ 2020-10-14 09:40:55
+ 5 7783~ /foo~ Chicago Be~ 2020-10-18 10:00:00 FALSE GAME~ 2020-10-14 11:38:27
+ 6 7783~ /foo~ Chicago Be~ 2020-10-18 10:00:00 FALSE GAME~ 2020-10-14 11:38:27
+ 7 7783~ /foo~ Cincinnati~ 2020-10-18 10:00:00 FALSE GAME~ 2020-10-14 11:45:21
+ 8 7783~ /foo~ Cincinnati~ 2020-10-18 10:00:00 FALSE GAME~ 2020-10-14 11:45:21
+ 9 7783~ /foo~ Cleveland ~ 2020-10-18 10:00:00 FALSE GAME~ 2020-10-14 10:33:57
+10 7783~ /foo~ Cleveland ~ 2020-10-18 10:00:00 FALSE GAME~ 2020-10-14 10:33:57
+# ... with 18 more rows, and 9 more variables: team_id &lt;chr&gt;, name &lt;chr&gt;,
 #   home &lt;lgl&gt;, juice_money &lt;dbl&gt;, handicap_spread &lt;dbl&gt;, juice_spread &lt;dbl&gt;,
 #   handicap_total &lt;dbl&gt;, juice_over &lt;dbl&gt;, juice_under &lt;dbl&gt;</code></pre>
 <p>While traversing these sometimes complicated lists may seem intimidating, with practice, working with data from an API will be made easier after discussing mapping functions in Chapter 3 which are useful for traversing complicated lists. Hopefully, after the scraping section, you will find working with APIs like a walk in the park compared to scraping data directly from the web.</p>
@@ -339,10 +348,10 @@ While the selector gadget is always a great first option, it is not always relia
 <a class="sourceLine" id="cb20-16" title="16"><span class="st">  </span><span class="kw">clean_names</span>()</a></code></pre></div>
 <div data-pagedtable="false">
 <script data-pagedtable-source type="application/json">
-{"columns":[{"label":[""],"name":["_rn_"],"type":[""],"align":["left"]},{"label":["player"],"name":[1],"type":["chr"],"align":["left"]},{"label":["x3d_att"],"name":[2],"type":["chr"],"align":["left"]},{"label":["x3d_conv"],"name":[3],"type":["chr"],"align":["left"]},{"label":["x3d_percent"],"name":[4],"type":["chr"],"align":["left"]},{"label":["x4d_att"],"name":[5],"type":["chr"],"align":["left"]},{"label":["x4d_conv"],"name":[6],"type":["chr"],"align":["left"]},{"label":["x4d_percent"],"name":[7],"type":["chr"],"align":["left"]},{"label":["rz_att"],"name":[8],"type":["chr"],"align":["left"]},{"label":["rztd"],"name":[9],"type":["chr"],"align":["left"]},{"label":["rz_pct"],"name":[10],"type":["chr"],"align":["left"]}],"data":[{"1":"Team Stats","2":"50","3":"19","4":"38.0","5":"4","6":"0","7":"0.0","8":"13","9":"6","10":"46.2","_rn_":"2"},{"1":"Opp. Stats","2":"63","3":"25","4":"39.7","5":"6","6":"3","7":"50.0","8":"13","9":"6","10":"46.2","_rn_":"3"},{"1":"Lg Rank Offense","2":"","3":"","4":"25","5":"","6":"","7":"30","8":"","9":"","10":"28","_rn_":"4"},{"1":"Lg Rank Defense","2":"","3":"","4":"12","5":"","6":"","7":"12","8":"","9":"","10":"4","_rn_":"5"}],"options":{"columns":{"min":{},"max":[10]},"rows":{"min":[10],"max":[10]},"pages":{}}}
+{"columns":[{"label":[""],"name":["_rn_"],"type":[""],"align":["left"]},{"label":["player"],"name":[1],"type":["chr"],"align":["left"]},{"label":["x3d_att"],"name":[2],"type":["chr"],"align":["left"]},{"label":["x3d_conv"],"name":[3],"type":["chr"],"align":["left"]},{"label":["x3d_percent"],"name":[4],"type":["chr"],"align":["left"]},{"label":["x4d_att"],"name":[5],"type":["chr"],"align":["left"]},{"label":["x4d_conv"],"name":[6],"type":["chr"],"align":["left"]},{"label":["x4d_percent"],"name":[7],"type":["chr"],"align":["left"]},{"label":["rz_att"],"name":[8],"type":["chr"],"align":["left"]},{"label":["rztd"],"name":[9],"type":["chr"],"align":["left"]},{"label":["rz_pct"],"name":[10],"type":["chr"],"align":["left"]}],"data":[{"1":"Team Stats","2":"50","3":"19","4":"38.0","5":"4","6":"0","7":"0.0","8":"13","9":"6","10":"46.2","_rn_":"2"},{"1":"Opp. Stats","2":"63","3":"25","4":"39.7","5":"6","6":"3","7":"50.0","8":"13","9":"6","10":"46.2","_rn_":"3"},{"1":"Lg Rank Offense","2":"","3":"","4":"25","5":"","6":"","7":"30","8":"","9":"","10":"28","_rn_":"4"},{"1":"Lg Rank Defense","2":"","3":"","4":"13","5":"","6":"","7":"12","8":"","9":"","10":"3","_rn_":"5"}],"options":{"columns":{"min":{},"max":[10]},"rows":{"min":[10],"max":[10]},"pages":{}}}
   </script>
 </div>
-<p>While these data need cleaning up before they can be used in practice, we will defer these responsibilities to Chapter <a href="#Wrangling"><strong>??</strong></a>.</p>
+<p>While these data need cleaning up before they can be used in practice, we will defer these responsibilities to Chapter <a href="Wrangling.html#Wrangling">3</a>.</p>
 <div class="progress">
 <p>
 Take this time to scrape the ‘Team Conversions’ table on your own.
@@ -369,7 +378,7 @@ Any feedback for this section? Click <a href="https://docs.google.com/forms/d/e/
         </div>
       </div>
 <a href="APIs.html" class="navigation navigation-prev " aria-label="Previous page"><i class="fa fa-angle-left"></i></a>
-<a href="supplemental.html" class="navigation navigation-next " aria-label="Next page"><i class="fa fa-angle-right"></i></a>
+<a href="Wrangling.html" class="navigation navigation-next " aria-label="Next page"><i class="fa fa-angle-right"></i></a>
     </div>
   </div>
 <script src="libs/gitbook-2.6.7/js/app.min.js"></script>
