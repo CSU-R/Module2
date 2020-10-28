@@ -19,6 +19,7 @@ get_players <- function(team_url){
   require(janitor)
   require(tidyverse)
   require(rvest)
+  pfr_url <- str_extract(team_url, "(.*?).com")
   team_url %>%
     read_html() %>%
     html_node(., css = '#all_rushing_and_receiving') %>%
@@ -27,25 +28,30 @@ get_players <- function(team_url){
     read_html() %>%
     html_nodes(., 'table') %>%
     html_nodes(., 'a') %>%
-    html_attr(., 'href')
+    html_attr(., 'href') %>%
+    str_c(pfr_url, .)
 }
 ## get team statistics
 get_team_conversions <- function(team_url){
   require(janitor)
   require(tidyverse)
   require(rvest)
+  team_abbr <- str_sub(team_url, start = 46, end = 48)
   team_url %>%
     read_html(.) %>%
     html_node(., css = '#team_conversions') %>%
     html_table(.) %>%
     row_to_names(., row_number = 1) %>%
-    clean_names()
+    clean_names() %>%
+    mutate(., team = team_abbr) %>%
+    select(., team, everything())
 }
 ## get aggregated player statistics
 get_team_stats <- function(team_url){
   require(janitor)
   require(tidyverse)
   require(rvest)
+  team_abbr <- str_sub(team_url, start = 46, end = 48)
   team_url %>%
     read_html() %>%
     html_node(., css = '#all_rushing_and_receiving') %>%
@@ -59,7 +65,8 @@ get_team_stats <- function(team_url){
     slice(., -1) %>%
     rename_at(., vars(starts_with('total')), ~str_sub(.x, start = 7)) %>%
     rename(., rushing_fmb = fmb) %>%
-    select(., no, player, age, pos, starts_with('games_'), starts_with('rushing_'),
+    mutate(., team = team_abbr) %>%
+    select(., team, no, player, age, pos, starts_with('games_'), starts_with('rushing_'),
            starts_with('receiving_'), starts_with('yds_'))
 }
 ## get game by game player statistics
@@ -67,6 +74,7 @@ get_player_stats <- function(player_url){
   require(janitor)
   require(tidyverse)
   require(rvest)
+  team_abbr <- str_sub(team_url, start = 46, end = 48)
   player_url %>%
     read_html() %>%
     html_node(., css = '#all_stats') %>%
@@ -74,14 +82,15 @@ get_player_stats <- function(player_url){
     html_table(., fill = TRUE) %>%
     set_names(., str_c(names(.), .[1,], sep = '_')) %>%
     clean_names() %>%
-    slice(., -1)
+    slice(., -1) %>%
+    mutate(., team = team_abbr) %>%
+    select(., team, everything())
 }
-
 ```
 
-> "The work that you do with data wrangling others would call ‘data plumbing’ or even janitorial work, but when you have somebody who knows how to wrangle data and gets into a flow of data wrangling, it’s an elegant dance to watch." —Stephanie McReynolds, Strategic Advisor, Nexla
+> "The work that you do with data wrangling others would call ‘data plumbing’ or even janitorial work, but when you have somebody who knows how to wrangle data and gets into a flow of data wrangling, it’s an elegant dance to watch." —Stephanie McReynolds, Strategic Adviser, Nexla
 
-In Chapter \@ref(AccessingData), we introduced the idea of rectangular data vs. non-rectangular data, providing examples for each and demonstrating the process of rectangularization. We outlined how to use a web-API before a light introduction to web scraping. In this chapter, we will famaliarize ourselves with data wrangling, the art of cleaning up our data.
+In Chapter \@ref(AccessingData), we introduced the idea of rectangular data vs. non-rectangular data, providing examples for each and demonstrating the process of rectangularization. We outlined how to use a web-API before a light introduction to web scraping. In this chapter, we will familiarize ourselves with data wrangling, the art of cleaning up our data.
 
 Furthermore, in Chapter \@ref(AccessingData), we briefly touched on the notion of tidy data: data structures where observations are given by rows, variables are given by columns, and values are given by cells. The notion of tidy data was formalized by @wickham2014tidy, Chief Scientist at RStudio and creator of the Tidyverse universe, to reduce the amount of work involved in preparing data. Data preparation, or data cleaning, is often a time consuming task with real data. Since it's necessary to format data as tidy data to use the vast network of packages within the Tidyverse, we always need to first structure our data as tidy data.
 
@@ -99,7 +108,7 @@ Any feedback for this section? Click [here](https://docs.google.com/forms/d/e/1F
 
 At the heart of Tidyverse are a few packages: `dplyr`, `tidyr`, `stringr`, and `forcats`. Each package serves a powerful purpose. `tidyr` helps you create tidy data, while `dplyr` is used for data manipulation. Think of `tidyr` as the crowbar or saw in your toolbox, allowing you to bend and shape your data into tidy shape. `dplyr`, on the other hand, is more like the screwdriver, hammer, or level, allowing you to fix pesky issues with the data. `stringr` and `forcats` are useful when working with strings and factors (categorical variables that have a fixed and known set of possible values).
 
-While we will make the effort to teach `tidyr` and `dplyr` seperately within their own subsections, we recognize that these packages are ultimately created to be used together. Since we may need to make use of functions across packages, we will explicitly state the origin each function by `package::function()`.
+While we will make the effort to teach `tidyr` and `dplyr` separately within their own subsections, we recognize that these packages are ultimately created to be used together. Since we may need to make use of functions across packages, we will explicitly state the origin each function by `package::function()`.
 
 ### tidyr
 
@@ -116,7 +125,7 @@ as_tibble(team_urls)
 ```
 
 ```{block, type ='bonus'}
-Pipes (`%>%`) make your code much more readable and avoid unnessary assignments. While not required in many cases, I use a period to indicate where the result to the left of the pipe belongs in the argument to the right of the pipe.
+Pipes (`%>%`) make your code much more readable and avoid unnecessary assignments. While not required in many cases, I use a period to indicate where the result to the left of the pipe belongs in the argument to the right of the pipe.
 ```
 
 Now that we have the web addresses for every 2020 NFL team, let's isolate the 2020 Denver Broncos and scrape their players' aggregated rushing and receiving statistics. We will use `dplyr::glimpse()` to see the data types and a few values for each column in the data set. 
@@ -136,7 +145,7 @@ There are a few things to note after looking at the data, but let's first consid
 knitr::include_graphics("src/images/widevlong.png")
 ```
 
-Let's consider how we can use `tidyr::pivot_longer()` to tidy these data in preperation for comparing players across their statistical categories. In each row, we should expect to have (1) the player's name, age, and position, (2) the statistical category, and (3) the value of the statistical category. Imagine taking every other column and pushing them into the rows, duplicating the information above as needed. To do this in `R`, we will use the `dplyr` functions `dplyr::vars()` which allows us to select which variables to push into the rows and `dplyr::starts_with()` which allows us to pick only variables whose names start with some string. These are two handy functions to know. Further, we will use `tidyr::seperate` to split the statistical categories into a more general category (i.e. rushing, receiving, etc) and a statistic (i.e. yards per rushing attempt, catch percentage, etc).
+Let's consider how we can use `tidyr::pivot_longer()` to tidy these data in preparation for comparing players across their statistical categories. In each row, we should expect to have (1) the player's name, age, and position, (2) the statistical category, and (3) the value of the statistical category. Imagine taking every other column and pushing them into the rows, duplicating the information above as needed. To do this in `R`, we will use the `dplyr` functions `dplyr::vars()` which allows us to select which variables to push into the rows and `dplyr::starts_with()` which allows us to pick only variables whose names start with some string. These are two handy functions to know. Further, we will use `tidyr::seperate` to split the statistical categories into a more general category (i.e. rushing, receiving, etc) and a statistic (i.e. yards per rushing attempt, catch percentage, etc).
 
 ```{r}
 den_stats_long <- den_stats %>%
@@ -184,7 +193,7 @@ den_stats_wking <- den_stats %>%
          receiving_ctch_percent = str_remove_all(receiving_ctch_percent, '%'))
 den_stats_wking
 ```
-Within one `mutate()` call, we (1) recoded the players' age as a numeric variable, (2) changed the players' position to uppercase, replaced empty strings with `NA` values, and recoded the result as a factor, and (3) removed all percent signs from the catch percent statistic. We still need to change all of the players' statistics to numeric variable. We could do this similarly to the players' age, but listing out every variable one by one would be painstakingly inefficent. To complete this task, we can use a commmon variant of the `mutate()` function called `mutate_at()` to change every specified column in a similar manner. We can then use `mutate_all()` to replace every missing string with an `NA` value, the proper way to specify a missing value in `R`.
+Within one `mutate()` call, we (1) recoded the players' age as a numeric variable, (2) changed the players' position to uppercase, replaced empty strings with `NA` values, and recoded the result as a factor, and (3) removed all percent signs from the catch percent statistic. We still need to change all of the players' statistics to numeric variable. We could do this similarly to the players' age, but listing out every variable one by one would be painstakingly inefficient. To complete this task, we can use a common variant of the `mutate()` function called `mutate_at()` to change every specified column in a similar manner. We can then use `mutate_all()` to replace every missing string with an `NA` value, the proper way to specify a missing value in `R`.
 
 ```{r}
 den_stats_wking <- den_stats_wking %>%
@@ -196,7 +205,7 @@ den_stats_wking <- den_stats_wking %>%
   mutate_all(., ~na_if(.x, ''))
 ```
 
-These variants of `mutate()` (e.g. `mutate_at` and `mutate_all`) are aimed to condense code when the same transformation is applied to many columns. To specify the transformation which will be applied to all of the identified columns, you will need a __lambda expression__. The lambda expressions start with `~` and are followed by a function specifying the transformation such as `as.numeric`. One of the arguments of the function will be `.x` which indicates an arbitary column. To break down the `mutate_at()` specified above, we seek to transform all columns starting with `games_`, `rushing_`, `receiving_`, and `yds_`. Overall, there are `r den_stats %>% select(., starts_with('games_'), starts_with('rushing_'), starts_with('receiving_'), starts_with('yds_')) %>% ncol()` columns we will be transforming with this single mutate function. The lambda expression `~as.numeric(.x)` specifies how to transform each of these `r den_stats %>% select(., starts_with('games_'), starts_with('rushing_'), starts_with('receiving_'), starts_with('yds_')) %>% ncol()` columns. That is, for a given column called `.x`, change `.x` to be a numeric column. For more information on these variants, also known as __scoped verbs__ (e.g. `_if`, `_at`, `_all`), type `?mutate_if` into the console. Several functions we will discuss throughout this chapter also can be used with one of these scoped verbs.
+These variants of `mutate()` (e.g. `mutate_at` and `mutate_all`) are aimed to condense code when the same transformation is applied to many columns. To specify the transformation which will be applied to all of the identified columns, you will need a __lambda expression__. The lambda expressions start with `~` and are followed by a function specifying the transformation such as `as.numeric`. One of the arguments of the function will be `.x` which indicates an arbitrary column. To break down the `mutate_at()` specified above, we seek to transform all columns starting with `games_`, `rushing_`, `receiving_`, and `yds_`. Overall, there are `r den_stats %>% select(., starts_with('games_'), starts_with('rushing_'), starts_with('receiving_'), starts_with('yds_')) %>% ncol()` columns we will be transforming with this single mutate function. The lambda expression `~as.numeric(.x)` specifies how to transform each of these `r den_stats %>% select(., starts_with('games_'), starts_with('rushing_'), starts_with('receiving_'), starts_with('yds_')) %>% ncol()` columns. That is, for a given column called `.x`, change `.x` to be a numeric column. For more information on these variants, also known as __scoped verbs__ (e.g. `_if`, `_at`, `_all`), type `?mutate_if` into the console. Several functions we will discuss throughout this chapter also can be used with one of these scoped verbs.
 
 #### `slice` and `filter`
 
@@ -224,12 +233,235 @@ den_stats_wking
 
 #### `select`
 
-Suppose we're interested in only rushing plays. In this case, we may wish to keep columns containing information on the players and the players' rushing statistics. If we 
+Suppose we're interested in only rushing and receiving statistics for each of the players.. In this case, we may wish to keep columns containing information on the players and the players' rushing and receiving statistics. If we want to keep certain columns based on the column names, then we can utilize the `select()` function. A verbose (but acceptable) solution would be to specify each column we want to keep. To demonstrate, I will keep only information pertaining to the player (e.g. jersey number, name, age, and position).
 
+```{r}
+den_stats_wking %>%
+  select(., no, player, age, pos)
+```
+
+Since there are several variables for rushing and receiving statistics, we may not want to specify every column name we want to keep. Instead, we can use scoped verbs and helper functions, similar to `mutate()`.
+
+```{r}
+den_stats_wking <- den_stats_wking %>%
+  select_at(., vars(team, no, player, age, pos, starts_with('rushing_'), starts_with('receiving_')))
+```
+
+#### `group_by`
+
+Designed to be used with other functions, `group_by` groups rows of data set by an attribute. Suppose we're interested in positions rather than players. In this case, we would like to group players in common positions. When we invoke the `group_by` function, we are creating a tibble which looks a lot like the original but indicates which rows belong to which group.
+
+```{r}
+den_grouped <- den_stats_wking %>%
+  group_by(., pos)
+
+class(den_grouped)
+group_vars(den_grouped)
+```
+
+Any functions invoked on grouped data will be conducted on the specified groups, rather than the data set as a whole. For example, suppose we're interested in determining the player with the most receptions by potion. We could utilize the helper `slice_max()` which will return the row with the largest value for the specified attribute. If we forgot to group the data set by position, then we would return the player with the most receptions, clearly a wide receiver. 
+
+```{r}
+den_stats_wking %>%
+  slice_max(., receiving_rec)
+```
+
+If we group by position before invoking `slice_max` then we would return the players with the most receptions at each of the listed positions. When operating on grouped data, it is important to `ungroup` when we no longer want operations to be conducted on the groups.
+
+```{r}
+den_stats_wking %>%
+  group_by(., pos) %>%
+  slice_max(., receiving_rec) %>%
+  ungroup(.)
+```
+
+```{block, type = 'reflect'}
+If grouping data confuses you, don't worry! You are not alone. When using the `group_by` function, I like to imagine partitioning rows into literal groups and then asking myself what I would like to do with each of the groups. In this case, imagine the coach held a meeting on the field. To start the meeting, he asks all of his running backs (RB) to stand in the home end zone, his wide receivers to stand in the away end zone, and his tight ends (TE) to stand at the home sidelines. All of the other players (with unknown positions) are asked to stand at the away sidelines. In this sense, the coach has created four groups where each group consists of same positioned players. Now, the coach walks to each group individually and asks for the player with the most receptions to follow him. At the end of the day, each group sends one player, so the result is four players.
+
+The `group_by` function is the coach asking his players to organize themselves on the field, and the `slice_max` function is asking the player with the largest number of receptions to follow him. Since the `slice_max` follows the `group_by` function, the coach for a player from each group.
+```
+
+#### `summarize`
+
+The `summarize` function allows us to calculate summary statistics for specified columns. When paired with `group_by`, the `summarize` function allows us to calculate summary statistics for each of the groups. For example, suppose I wanted to calculate the average rushing and receiving yards, as well as standard deviations, for each of non-missing positions except for punter. Similar to the `mutate`, we can specify how we what we want the new columns to be called and how we want to define them.
+
+```{r}
+den_stats_wking %>%
+  filter(., pos !='P', !is.na(pos)) %>%
+  group_by(., pos) %>%
+  summarize(., mean_rushing_yds = mean(rushing_yds),
+            sd_rushing_yds = sd(rushing_yds),
+            mean_receiving_yds = mean(receiving_yds),
+            sd_receiving_yds = sd(receiving_yds))
+```
 
 ## Functional Programming with purrr
 
+In the previous subsection, we explored how to reshape and wrangle data with the `tidyr` and `dplyr` packages. We broke the functions up into sections for easier cross reference, but in reality, they can (and should) be combined together using pipes to avoid intermediate assignments. The following outlines all steps necessary to clean the rushing and receiving statistics for the 2020 Denver Broncos.
+
+```{r}
+"https://www.pro-football-reference.com/teams/den/2020.htm" %>%
+  # scrape team stats
+  get_team_stats(.) %>%
+  # clean results of scrape
+  mutate(., age = as.numeric(age),
+         pos = pos %>% 
+           str_to_upper() %>% 
+           na_if(., '') %>% 
+           as_factor(),
+         receiving_ctch_percent = str_remove_all(receiving_ctch_percent, '%')) %>%
+  mutate_at(., vars(starts_with('games_'), 
+                    starts_with('rushing_'), 
+                    starts_with('receiving_'), 
+                    starts_with('yds_')), 
+            ~as.numeric(.x)) %>%
+  mutate_all(., ~na_if(.x, '')) %>%
+  filter(., !(player %in% c('Team Total', 'Opp Total')), !is.na(pos), pos != 'P') %>%
+  select_at(., vars(team, no, player, age, pos, 
+                    starts_with('games_'),
+                    starts_with('rushing_'), 
+                    starts_with('receiving_')))
+```
+
+We've outlined how to get rushing and receiving statistics for the 2020 Denver Broncos, but now, we would like to attain the same statistics for every NFL team. Since Pro-Football Reference reports the same statistics for each team in the same manner,  we hope to scrape and clean each team's statistics using the code above, changing only the web address.
+
+When we need to iterate over an object, we should reach for the `purrr` package which contains functions allowing us to `map` over different elements of a vector, data frame, or list. In our case, we have a vector of webpages, and for each webpage, we would like to scrape the rushing and receiving statistics before cleaning the result. First, we will use the `map` function to iterate over the vector of webpages. For each webpage, we will invoke `get_team_stats`. The result is a list of data frames where each element of the list corresponds to a specific team's scraped rushing and receiving statistics. The helper function `set_names` allows us to specify the name of each element of the resulting list. The lambda function `str_sub` extracts the three letter code in the team web address which specifies the team. 
+
+```{r}
+team_stats <- team_urls %>%
+  # create list where each element is the result of the function get_team_stats
+  # applied to the cooresponding 
+  map(., ~get_team_stats(.x))
+
+class(team_stats)
+
+# print only the first three elements of the list
+team_stats[1]
+team_stats[2]
+```
+
+The first two elements of the resulting lists are the scraped rushing and receiving statistics for the 2020 Arizona Cardinals and the 2020 Atlanta Falcons. These data sets, along with the other thirty teams' statistics, need to be cleaned in the same manner as the 2020 Denver Broncos. While we originally used the `map` function to iterate over a vector of web addresses, we can also use it to iterate over the list of each team's scraped statistics, applying the same cleaning procedure to each element. Rather than use a lambda expression, we define a function. Lambda expressions are a convenient and concise way to specify a transformation if the transformation is defined by a single function. Previously, the entire act of scraping was described by one function: `get_team_stats()`. Since the cleaning procedure consists of multiple functions such as `mutate`, `filter`, and `select`, it is more convenient to specify the transformation in a function, rather than a lambda expression.
+
+```{r}
+team_stats_clean <- team_stats %>%
+  # clean
+  map(., function(x){
+    x %>%
+      mutate(., age = as.numeric(age),
+             pos = pos %>% 
+               str_to_upper() %>% 
+               na_if(., '') %>% 
+               as_factor(),
+             receiving_ctch_percent = str_remove_all(receiving_ctch_percent, '%')) %>%
+      mutate_at(., vars(starts_with('games_'), 
+                        starts_with('rushing_'), 
+                        starts_with('receiving_'), 
+                        starts_with('yds_')), 
+                ~as.numeric(.x)) %>%
+      mutate_all(., ~na_if(.x, '')) %>%
+      filter(., !(player %in% c('Team Total', 'Opp Total')), !is.na(pos), pos != 'P') %>%
+      select_at(., vars(team, no, player, age, pos, 
+                        starts_with('games_'),
+                        starts_with('rushing_'), 
+                        starts_with('receiving_')))
+    }
+  )
+```
+
+We can always rewrite functions within a `map` as a lambda expression if we first define the desired transformation as a function before calling the function as a lambda expression in the `map`.
+
+```{r}
+# define function with desired transfomation 
+clean_team_stats <- function(x){
+  x %>%
+    mutate(., age = as.numeric(age),
+           pos = pos %>% 
+             str_to_upper() %>% 
+             na_if(., '') %>% 
+             as_factor(),
+           receiving_ctch_percent = str_remove_all(receiving_ctch_percent, '%')) %>%
+    mutate_at(., vars(starts_with('games_'), 
+                      starts_with('rushing_'), 
+                      starts_with('receiving_'), 
+                      starts_with('yds_')), 
+              ~as.numeric(.x)) %>%
+    mutate_all(., ~na_if(.x, '')) %>%
+    filter(., !(player %in% c('Team Total', 'Opp Total')), !is.na(pos), pos != 'P') %>%
+    select_at(., vars(team, no, player, age, pos, 
+                      starts_with('games_'),
+                      starts_with('rushing_'), 
+                      starts_with('receiving_')))
+}
+
+# map desired transformation to each team's scraped statistics using lambda
+# expression
+team_stats_clean_lambda <- team_stats %>%
+  map(., ~clean_team_stats(.x))
+  
+# show results using funciton in map and lambda expression in map are the same
+identical(team_stats_clean, team_stats_clean_lambda)
+```
+
+After mapping the cleaning procedure to each of the teams' scraped statistics, the result is a list where each element of the list is a tidy data frame consisting of a team's rushing and receiving statistics. As discussed in Chapter \@ref(AccessingData), we can rectangularize this list of data frames by binding the rows of each of these data frames, creating a column to indicate which team each row belongs.
+
+```{r}
+team_stats_clean %>%
+  bind_rows(.)
+```
+
+Since the `purrr` package is a member of the Tidyverse, it is created with principles of Tidy data in mind. Transforming a list to a vector, or in our case, a data frame is often a common last step after mapping a function. To accommodate this need, the `purrr` package provides specific maps such as `map_dbl` and `map_chr` which transform the resulting list into a vector of type double or character, respectively. There is also `map_dfr` and `map_dfc` which binds the list elements together row-wise or column-wise, respectively, to return a data frame. If the result cannot be transformed into the requested type, an error will be returned. The mapping illustrated in this example can be written concisely as
+
+```{r}
+rush_receive <- team_urls %>%
+  map(., ~get_team_stats(.x)) %>%
+  map_dfr(., ~clean_team_stats(.x))
+```
+
 ## Iterative Procedures with foreach
 
+At some point in our careers, we will likely need to implement some code
 
+```{r}
+team_abbrs <- str_sub(team_urls, start = 46, end = 48)
+player_urls <- team_urls %>%
+  map(., ~get_players(.x))
+```
+
+
+```{r}
+for(team in team_abbrs){
+  for(player in player_urls[[team]]){
+    
+  }
+}
+
+
+```
+
+```{r}
+library(foreach)
+rush_receive_stats.do <- foreach(x = team_urls,
+        .packages = 'dplyr') %do% {
+  x %>%
+    get_team_stats() %>%
+    clean_stats()
+} %>%
+  set_names(., str_sub(team_urls, start = 46, end = 48)) %>%
+  bind_rows(., .id = 'team')
+```
+
+
+```{r}
+ncores <- parallel::detectCores()
+doParallel::registerDoParallel(cores = ncores - 1)
+foreach(x = team_urls,
+        .packages = 'dplyr') %dopar% {
+  x %>%
+    get_team_stats() %>%
+    clean_stats()
+} %>%
+  set_names(., str_sub(team_urls, start = 46, end = 48)) %>%
+  bind_rows(., .id = 'team')
+doParallel::stopImplicitCluster()
+```
 

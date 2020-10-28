@@ -198,10 +198,10 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <div class="sourceCode" id="cb8"><pre class="sourceCode r chunk-style"><code class="sourceCode r"><a class="sourceLine" id="cb8-1" title="1">bov_req &lt;-<span class="st"> </span>httr<span class="op">::</span><span class="kw">GET</span>(<span class="dt">url =</span> bov_nfl_api)</a>
 <a class="sourceLine" id="cb8-2" title="2">bov_req</a></code></pre></div>
 <pre class="output-style"><code>Response [https://www.bovada.lv/services/sports/event/v2/events/A/description/football/nfl]
-  Date: 2020-10-14 18:52
+  Date: 2020-10-28 18:33
   Status: 200
   Content-Type: application/json;charset=utf-8
-  Size: 1.16 MB</code></pre>
+  Size: 1.15 MB</code></pre>
 <p>If the request was successful, then the status of the request will read 200. Otherwise, there was some error with your request. For a list of HTTP status codes and their respective definitions, follow this <a href="https://www.w3.org/Protocols/rfc2616/rfc2616-sec10.html">link</a>. Since the response clarifies that the content is indeed driven by JavaScript, then we will utilize the <code>jsonlite</code> package to read the JSON structured data. A handy function we will use will be <code>fromJSON()</code> which converts a character vector containing data in JSON structure to native structures in <code>R</code> like lists. So, in order, we will</p>
 <ol style="list-style-type: decimal">
 <li>Extract the content from the server’s response</li>

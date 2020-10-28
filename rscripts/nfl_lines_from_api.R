@@ -74,7 +74,7 @@ get_bets <- function(bov_json, competitors, quietly){
       res <- tmp %>%
         select(., bet_type = description, outcomes) %>%
         bind_cols(., tmp$period) %>%
-        filter(., abbreviation == 'M') %>%
+        filter(., main == TRUE) %>%
         select(., contains('bet_type'), contains('outcomes'))
       
       names(res$outcomes) <- res$bet_type
