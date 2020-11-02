@@ -11,33 +11,24 @@ base here
 ### ggplot
 
 ```{r}
-tmp <- filter(tmp, pos %in% c('QB', 'RB', 'WR', 'TE'))
-ggplot(data = tmp, aes(x = age, fill = pos)) +
+rush_receive <- filter(rush_receive, pos %in% c('QB', 'RB', 'WR', 'TE'))
+ggplot(data = rush_receive, aes(x = age)) +
   geom_histogram(binwidth = 2) +
   labs(x = 'Age', y = 'Frequency', title = 'Distribution of Age') +
   theme_bw()
 ```
 
 ```{r}
-ggplot(data = tmp, aes(x = age, fill = pos)) +
+ggplot(data = rush_receive, aes(x = age, fill = pos)) +
   geom_histogram(binwidth = 2) +
   facet_wrap(~pos) +
   labs(x = 'Age', y = 'Frequency', title = 'Distribution of Age') +
   theme_bw()
 ```
 
-```{r}
-ggplot(data = tmp, aes(x = age, fill = pos)) +
-  geom_histogram(binwidth = 2) +
-  facet_wrap(~pos) +
-  labs(x = 'Age', y = 'Frequency', title = 'Distribution of Age') +
-  scale_fill_brewer('Position', palette = 'Set1') +
-  theme_bw() +
-  theme(legend.position = 'bottom')
-```
 
 ```{r}
-ggplot(data = tmp, aes(x = rushing_att, y = rushing_yds, color = pos, size = age)) +
+ggplot(data = rush_receive, aes(x = rushing_att, y = rushing_yds, color = pos, size = age)) +
   geom_point(alpha = 0.7) +
   geom_smooth(method = 'lm', formula = y~x) +
   scale_color_brewer('Position', palette = 'Set1') +
@@ -47,17 +38,12 @@ ggplot(data = tmp, aes(x = rushing_att, y = rushing_yds, color = pos, size = age
 ```
 
 ```{r}
-
-ggplot(data = tmp %>%
+ggplot(data = rush_receive %>%
          mutate(., yds = rushing_yds + receiving_yds), 
        aes(x = pos, y = yds, fill = pos)) +
   geom_boxplot() +
   scale_fill_brewer('Position', palette = 'Set1') +
   labs(x = 'Po')
-```
-
-```{r}
-
 ```
 
 ## plotly

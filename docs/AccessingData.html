@@ -155,8 +155,10 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <li class="chapter" data-level="3.1.1" data-path="core-tidyverse.html"><a href="core-tidyverse.html#tidyr"><i class="fa fa-check"></i><b>3.1.1</b> tidyr</a></li>
 <li class="chapter" data-level="3.1.2" data-path="core-tidyverse.html"><a href="core-tidyverse.html#dplyr"><i class="fa fa-check"></i><b>3.1.2</b> dplyr</a></li>
 </ul></li>
-<li class="chapter" data-level="3.2" data-path="functional-programming-with-purrr.html"><a href="functional-programming-with-purrr.html"><i class="fa fa-check"></i><b>3.2</b> Functional Programming with purrr</a></li>
-<li class="chapter" data-level="3.3" data-path="iterative-procedures-with-foreach.html"><a href="iterative-procedures-with-foreach.html"><i class="fa fa-check"></i><b>3.3</b> Iterative Procedures with foreach</a></li>
+<li class="chapter" data-level="3.2" data-path="functional-programming-with-purrr.html"><a href="functional-programming-with-purrr.html"><i class="fa fa-check"></i><b>3.2</b> Functional Programming with <code>purrr</code></a></li>
+<li class="chapter" data-level="3.3" data-path="parallelization-with-furrr.html"><a href="parallelization-with-furrr.html"><i class="fa fa-check"></i><b>3.3</b> Parallelization with <code>furrr</code></a><ul>
+<li class="chapter" data-level="3.3.1" data-path="parallelization-with-furrr.html"><a href="parallelization-with-furrr.html#scratch-for-iterative-processes"><i class="fa fa-check"></i><b>3.3.1</b> Scratch for Iterative Processes</a></li>
+</ul></li>
 </ul></li>
 <li class="chapter" data-level="4" data-path="supplemental.html"><a href="supplemental.html"><i class="fa fa-check"></i><b>4</b> Supplemental</a><ul>
 <li class="chapter" data-level="4.1" data-path="scraping-in-the-wild.html"><a href="scraping-in-the-wild.html"><i class="fa fa-check"></i><b>4.1</b> Scraping in the Wild</a><ul>
@@ -252,6 +254,20 @@ gitbook.start({
 });
 </script>
 
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+  (function () {
+    var script = document.createElement("script");
+    script.type = "text/javascript";
+    var src = "true";
+    if (src === "" || src === "true") src = "https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-MML-AM_CHTML";
+    if (location.protocol !== "file:")
+      if (/^https?:/.test(src))
+        src = src.replace(/^https?:/, '');
+    script.src = src;
+    document.getElementsByTagName("head")[0].appendChild(script);
+  })();
+</script>
 </body>
 
 </html>

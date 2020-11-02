@@ -1,0 +1,354 @@
+<!DOCTYPE html>
+<html lang="" xml:lang="">
+<head>
+
+  <meta charset="utf-8" />
+  <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+  <title>3.3 Parallelization with furrr | R Module 2</title>
+  <meta name="description" content="This is the second installment for the book for the R Intro Course at CSU." />
+  <meta name="generator" content="bookdown 0.20 and GitBook 2.6.7" />
+
+  <meta property="og:title" content="3.3 Parallelization with furrr | R Module 2" />
+  <meta property="og:type" content="book" />
+  
+  
+  <meta property="og:description" content="This is the second installment for the book for the R Intro Course at CSU." />
+  
+
+  <meta name="twitter:card" content="summary" />
+  <meta name="twitter:title" content="3.3 Parallelization with furrr | R Module 2" />
+  
+  <meta name="twitter:description" content="This is the second installment for the book for the R Intro Course at CSU." />
+  
+
+<meta name="author" content="Connor Gibbs" />
+
+
+
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="apple-mobile-web-app-capable" content="yes" />
+  <meta name="apple-mobile-web-app-status-bar-style" content="black" />
+  
+  
+<link rel="prev" href="functional-programming-with-purrr.html"/>
+<link rel="next" href="supplemental.html"/>
+<script src="libs/jquery-2.2.3/jquery.min.js"></script>
+<link href="libs/gitbook-2.6.7/css/style.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-table.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-bookdown.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-highlight.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-search.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-fontsettings.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-clipboard.css" rel="stylesheet" />
+
+
+
+
+
+
+
+
+
+<link href="libs/pagedtable-1.1/css/pagedtable.css" rel="stylesheet" />
+<script src="libs/pagedtable-1.1/js/pagedtable.js"></script>
+
+
+<style type="text/css">
+a.sourceLine { display: inline-block; line-height: 1.25; }
+a.sourceLine { pointer-events: none; color: inherit; text-decoration: inherit; }
+a.sourceLine:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode { white-space: pre; position: relative; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+code.sourceCode { white-space: pre-wrap; }
+a.sourceLine { text-indent: -1em; padding-left: 1em; }
+}
+pre.numberSource a.sourceLine
+  { position: relative; left: -4em; }
+pre.numberSource a.sourceLine::before
+  { content: attr(title);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; pointer-events: all; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+    color: #aaaaaa;
+  }
+pre.numberSource { margin-left: 3em; border-left: 1px solid #aaaaaa;  padding-left: 4px; }
+div.sourceCode
+  {  }
+@media screen {
+a.sourceLine::before { text-decoration: underline; }
+}
+code span.al { color: #ff0000; font-weight: bold; } /* Alert */
+code span.an { color: #60a0b0; font-weight: bold; font-style: italic; } /* Annotation */
+code span.at { color: #7d9029; } /* Attribute */
+code span.bn { color: #40a070; } /* BaseN */
+code span.bu { } /* BuiltIn */
+code span.cf { color: #007020; font-weight: bold; } /* ControlFlow */
+code span.ch { color: #4070a0; } /* Char */
+code span.cn { color: #880000; } /* Constant */
+code span.co { color: #60a0b0; font-style: italic; } /* Comment */
+code span.cv { color: #60a0b0; font-weight: bold; font-style: italic; } /* CommentVar */
+code span.do { color: #ba2121; font-style: italic; } /* Documentation */
+code span.dt { color: #902000; } /* DataType */
+code span.dv { color: #40a070; } /* DecVal */
+code span.er { color: #ff0000; font-weight: bold; } /* Error */
+code span.ex { } /* Extension */
+code span.fl { color: #40a070; } /* Float */
+code span.fu { color: #06287e; } /* Function */
+code span.im { } /* Import */
+code span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Information */
+code span.kw { color: #007020; font-weight: bold; } /* Keyword */
+code span.op { color: #666666; } /* Operator */
+code span.ot { color: #007020; } /* Other */
+code span.pp { color: #bc7a00; } /* Preprocessor */
+code span.sc { color: #4070a0; } /* SpecialChar */
+code span.ss { color: #bb6688; } /* SpecialString */
+code span.st { color: #4070a0; } /* String */
+code span.va { color: #19177c; } /* Variable */
+code span.vs { color: #4070a0; } /* VerbatimString */
+code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warning */
+</style>
+
+<link rel="stylesheet" href="src\style.css" type="text/css" />
+<link rel="stylesheet" href="src\environments.css" type="text/css" />
+</head>
+
+<body>
+
+
+
+  <div class="book without-animation with-summary font-size-2 font-family-1" data-basepath=".">
+
+    <div class="book-summary">
+      <nav role="navigation">
+
+<ul class="summary">
+<li><a href="./">R Module 2</a></li>
+
+<li class="divider"></li>
+<li class="chapter" data-level="1" data-path="index.html"><a href="index.html"><i class="fa fa-check"></i><b>1</b> Welcome!</a><ul>
+<li class="chapter" data-level="1.0.1" data-path="index.html"><a href="index.html#how-to-navigate-this-book"><i class="fa fa-check"></i><b>1.0.1</b> How To Navigate This Book</a></li>
+<li class="chapter" data-level="1.1" data-path="associated-csu-course.html"><a href="associated-csu-course.html"><i class="fa fa-check"></i><b>1.1</b> Associated CSU Course</a></li>
+</ul></li>
+<li class="chapter" data-level="2" data-path="AccessingData.html"><a href="AccessingData.html"><i class="fa fa-check"></i><b>2</b> Accessing Data</a><ul>
+<li class="chapter" data-level="2.1" data-path="rectangular-vs-non-rectangular-data.html"><a href="rectangular-vs-non-rectangular-data.html"><i class="fa fa-check"></i><b>2.1</b> Rectangular vs. Non-rectangular Data</a><ul>
+<li class="chapter" data-level="2.1.1" data-path="rectangular-vs-non-rectangular-data.html"><a href="rectangular-vs-non-rectangular-data.html#reading-and-writing-rectangular-data"><i class="fa fa-check"></i><b>2.1.1</b> Reading and Writing Rectangular Data</a></li>
+<li class="chapter" data-level="2.1.2" data-path="rectangular-vs-non-rectangular-data.html"><a href="rectangular-vs-non-rectangular-data.html#reading-and-writing-non-rectangular-data"><i class="fa fa-check"></i><b>2.1.2</b> Reading and Writing Non-rectangular Data</a></li>
+</ul></li>
+<li class="chapter" data-level="2.2" data-path="APIs.html"><a href="APIs.html"><i class="fa fa-check"></i><b>2.2</b> APIs: Clean and Curated</a></li>
+<li class="chapter" data-level="2.3" data-path="scraping-messy-and-mangled.html"><a href="scraping-messy-and-mangled.html"><i class="fa fa-check"></i><b>2.3</b> Scraping: Messy and Mangled</a><ul>
+<li class="chapter" data-level="2.3.1" data-path="scraping-messy-and-mangled.html"><a href="scraping-messy-and-mangled.html#scraping-vs-apis"><i class="fa fa-check"></i><b>2.3.1</b> Scraping vs APIs</a></li>
+<li class="chapter" data-level="2.3.2" data-path="scraping-messy-and-mangled.html"><a href="scraping-messy-and-mangled.html#LessonsLearnedFromScraping"><i class="fa fa-check"></i><b>2.3.2</b> Lessons Learned from Scraping</a></li>
+<li class="chapter" data-level="2.3.3" data-path="scraping-messy-and-mangled.html"><a href="scraping-messy-and-mangled.html#tools-for-scraping"><i class="fa fa-check"></i><b>2.3.3</b> Tools for Scraping</a></li>
+<li class="chapter" data-level="2.3.4" data-path="scraping-messy-and-mangled.html"><a href="scraping-messy-and-mangled.html#scraping-nfl-data"><i class="fa fa-check"></i><b>2.3.4</b> Scraping NFL Data</a></li>
+</ul></li>
+</ul></li>
+<li class="chapter" data-level="3" data-path="Wrangling.html"><a href="Wrangling.html"><i class="fa fa-check"></i><b>3</b> Wrangling</a><ul>
+<li class="chapter" data-level="3.1" data-path="core-tidyverse.html"><a href="core-tidyverse.html"><i class="fa fa-check"></i><b>3.1</b> Core Tidyverse</a><ul>
+<li class="chapter" data-level="3.1.1" data-path="core-tidyverse.html"><a href="core-tidyverse.html#tidyr"><i class="fa fa-check"></i><b>3.1.1</b> tidyr</a></li>
+<li class="chapter" data-level="3.1.2" data-path="core-tidyverse.html"><a href="core-tidyverse.html#dplyr"><i class="fa fa-check"></i><b>3.1.2</b> dplyr</a></li>
+</ul></li>
+<li class="chapter" data-level="3.2" data-path="functional-programming-with-purrr.html"><a href="functional-programming-with-purrr.html"><i class="fa fa-check"></i><b>3.2</b> Functional Programming with <code>purrr</code></a></li>
+<li class="chapter" data-level="3.3" data-path="parallelization-with-furrr.html"><a href="parallelization-with-furrr.html"><i class="fa fa-check"></i><b>3.3</b> Parallelization with <code>furrr</code></a><ul>
+<li class="chapter" data-level="3.3.1" data-path="parallelization-with-furrr.html"><a href="parallelization-with-furrr.html#scratch-for-iterative-processes"><i class="fa fa-check"></i><b>3.3.1</b> Scratch for Iterative Processes</a></li>
+</ul></li>
+</ul></li>
+<li class="chapter" data-level="4" data-path="supplemental.html"><a href="supplemental.html"><i class="fa fa-check"></i><b>4</b> Supplemental</a><ul>
+<li class="chapter" data-level="4.1" data-path="scraping-in-the-wild.html"><a href="scraping-in-the-wild.html"><i class="fa fa-check"></i><b>4.1</b> Scraping in the Wild</a><ul>
+<li class="chapter" data-level="4.1.1" data-path="scraping-in-the-wild.html"><a href="scraping-in-the-wild.html#LessonsLearned"><i class="fa fa-check"></i><b>4.1.1</b> Lessons Learned from Scraping</a></li>
+<li class="chapter" data-level="4.1.2" data-path="scraping-in-the-wild.html"><a href="scraping-in-the-wild.html#scraping-nfl-data-1"><i class="fa fa-check"></i><b>4.1.2</b> Scraping NFL Data</a></li>
+<li class="chapter" data-level="4.1.3" data-path="scraping-in-the-wild.html"><a href="scraping-in-the-wild.html#putting-it-all-together"><i class="fa fa-check"></i><b>4.1.3</b> Putting It All Together</a></li>
+</ul></li>
+</ul></li>
+<li class="chapter" data-level="" data-path="references.html"><a href="references.html"><i class="fa fa-check"></i>References</a></li>
+<li class="divider"></li>
+<li><a href="https://github.com/rstudio/bookdown" target="blank">Published with bookdown</a></li>
+
+</ul>
+
+      </nav>
+    </div>
+
+    <div class="book-body">
+      <div class="body-inner">
+        <div class="book-header" role="navigation">
+          <h1>
+            <i class="fa fa-circle-o-notch fa-spin"></i><a href="./">R Module 2</a>
+          </h1>
+        </div>
+
+        <div class="page-wrapper" tabindex="-1" role="main">
+          <div class="page-inner">
+
+            <section class="normal" id="section-">
+<div id="parallelization-with-furrr" class="section level2">
+<h2><span class="header-section-number">3.3</span> Parallelization with <code>furrr</code></h2>
+<p>When we <code>map</code> the function to scrape team statistics over the vector of team web addresses, we are insinuating that the function within the <code>map</code> (e.g. <code>get_team_stats</code>) should be applied to each element of the vector (e.g. <code>team_urls</code>) sequentially. Computational tasks which involve many separate, independently executable jobs should be run in <strong>parallel</strong>. When jobs are run in parallel, this means they are run at the same time, rather than sequentially. If the computational burden at each step is larger than the computational burden of setting up instructions for parallelization, then running code in parallel will save time.</p>
+<p>While there are different types of parallelization, we will only focus on one: multi-core parallelization, which allows us to make use of the whole computer rather than rely on single processor architecture. <code>furrr</code>, a new Tidyverse package, attempts to make mapping in parallel easy and pain-free by combining the functionality of the <code>purrr</code> package and the <code>future</code> package. By combining <code>purrr</code>’s mapping capabilities and <code>future</code>’s parallel processing capabilities, <code>furrr</code> allows for parallelization with similar syntax.</p>
+<p>In the previous subsection, we learned how to apply mapping functions to scrape and clean the statistics for each team, sequentially. Using <code>furrr</code>, we can parallelize this process. We will juxtapose each approach for comparison.</p>
+<div class="sourceCode" id="cb47"><pre class="sourceCode r chunk-style"><code class="sourceCode r"><a class="sourceLine" id="cb47-1" title="1"><span class="co"># sequential computation using purrr</span></a>
+<a class="sourceLine" id="cb47-2" title="2">rush_receive_parallel &lt;-<span class="st"> </span>team_urls <span class="op">%&gt;%</span></a>
+<a class="sourceLine" id="cb47-3" title="3"><span class="st">  </span><span class="kw">map</span>(., <span class="op">~</span><span class="kw">get_team_stats</span>(.x)) <span class="op">%&gt;%</span></a>
+<a class="sourceLine" id="cb47-4" title="4"><span class="st">  </span><span class="kw">map_dfr</span>(., <span class="op">~</span><span class="kw">clean_team_stats</span>(.x))</a>
+<a class="sourceLine" id="cb47-5" title="5"></a>
+<a class="sourceLine" id="cb47-6" title="6"><span class="co"># parallel computation using furrr</span></a>
+<a class="sourceLine" id="cb47-7" title="7"><span class="kw">library</span>(furrr)</a>
+<a class="sourceLine" id="cb47-8" title="8">future<span class="op">::</span><span class="kw">plan</span>(multiprocess)</a>
+<a class="sourceLine" id="cb47-9" title="9"></a>
+<a class="sourceLine" id="cb47-10" title="10">rush_receive_parallel &lt;-<span class="st"> </span>team_urls <span class="op">%&gt;%</span></a>
+<a class="sourceLine" id="cb47-11" title="11"><span class="st">  </span><span class="kw">future_map</span>(., <span class="op">~</span><span class="kw">get_team_stats</span>(.x)) <span class="op">%&gt;%</span></a>
+<a class="sourceLine" id="cb47-12" title="12"><span class="st">  </span><span class="kw">future_map_dfr</span>(., <span class="op">~</span><span class="kw">clean_team_stats</span>(.x))</a>
+<a class="sourceLine" id="cb47-13" title="13"></a>
+<a class="sourceLine" id="cb47-14" title="14"><span class="co"># compare output</span></a>
+<a class="sourceLine" id="cb47-15" title="15"><span class="kw">identical</span>(rush_receive, rush_receive_parallel)</a></code></pre></div>
+<pre class="output-style"><code>[1] TRUE</code></pre>
+<p>Let’s compare the speed of the operations.</p>
+<div class="sourceCode" id="cb49"><pre class="sourceCode r chunk-style"><code class="sourceCode r"><a class="sourceLine" id="cb49-1" title="1"><span class="co"># sequentially</span></a>
+<a class="sourceLine" id="cb49-2" title="2"><span class="kw">system.time</span>(</a>
+<a class="sourceLine" id="cb49-3" title="3">  rush_receive &lt;-<span class="st"> </span>team_urls <span class="op">%&gt;%</span></a>
+<a class="sourceLine" id="cb49-4" title="4"><span class="st">    </span><span class="kw">map</span>(., <span class="op">~</span><span class="kw">get_team_stats</span>(.x)) <span class="op">%&gt;%</span></a>
+<a class="sourceLine" id="cb49-5" title="5"><span class="st">    </span><span class="kw">map_dfr</span>(., <span class="op">~</span><span class="kw">clean_team_stats</span>(.x))</a>
+<a class="sourceLine" id="cb49-6" title="6">)</a>
+<a class="sourceLine" id="cb49-7" title="7"></a>
+<a class="sourceLine" id="cb49-8" title="8"><span class="co"># parallel</span></a>
+<a class="sourceLine" id="cb49-9" title="9"><span class="kw">system.time</span>(</a>
+<a class="sourceLine" id="cb49-10" title="10">  rush_receive_parallel &lt;-<span class="st"> </span>team_urls <span class="op">%&gt;%</span></a>
+<a class="sourceLine" id="cb49-11" title="11"><span class="st">    </span><span class="kw">future_map</span>(., <span class="op">~</span><span class="kw">get_team_stats</span>(.x)) <span class="op">%&gt;%</span></a>
+<a class="sourceLine" id="cb49-12" title="12"><span class="st">    </span><span class="kw">future_map_dfr</span>(., <span class="op">~</span><span class="kw">clean_team_stats</span>(.x))</a>
+<a class="sourceLine" id="cb49-13" title="13">)</a></code></pre></div>
+<pre class="output-style"><code>   user  system elapsed 
+   5.80    0.20    8.91 
+   user  system elapsed 
+   0.31    0.03    6.56 </code></pre>
+<p>We can see that parallelizing this process is about one and a half times faster than applying these functions sequentially. This effect is only amplified when we increase the number of sources to scrape.</p>
+<div class="sourceCode" id="cb51"><pre class="sourceCode r chunk-style"><code class="sourceCode r"><a class="sourceLine" id="cb51-1" title="1">player_urls &lt;-<span class="st"> </span>team_urls <span class="op">%&gt;%</span><span class="st"> </span></a>
+<a class="sourceLine" id="cb51-2" title="2"><span class="st">  </span><span class="kw">map</span>(., <span class="op">~</span><span class="kw">get_players</span>(.x)) <span class="op">%&gt;%</span><span class="st"> </span></a>
+<a class="sourceLine" id="cb51-3" title="3"><span class="st">  </span><span class="kw">flatten_chr</span>()</a>
+<a class="sourceLine" id="cb51-4" title="4"></a>
+<a class="sourceLine" id="cb51-5" title="5"><span class="co"># sequentially</span></a>
+<a class="sourceLine" id="cb51-6" title="6"><span class="kw">system.time</span>(</a>
+<a class="sourceLine" id="cb51-7" title="7">  player_stats &lt;-<span class="st"> </span>player_urls <span class="op">%&gt;%</span></a>
+<a class="sourceLine" id="cb51-8" title="8"><span class="st">    </span><span class="kw">map</span>(., <span class="op">~</span><span class="kw">get_player_stats</span>(.x))</a>
+<a class="sourceLine" id="cb51-9" title="9">)</a>
+<a class="sourceLine" id="cb51-10" title="10"></a>
+<a class="sourceLine" id="cb51-11" title="11"><span class="co"># parallel</span></a>
+<a class="sourceLine" id="cb51-12" title="12"><span class="kw">system.time</span>(</a>
+<a class="sourceLine" id="cb51-13" title="13">  player_stats_par &lt;-<span class="st"> </span>player_urls <span class="op">%&gt;%</span><span class="st"> </span></a>
+<a class="sourceLine" id="cb51-14" title="14"><span class="st">    </span><span class="kw">future_map</span>(., <span class="op">~</span><span class="kw">get_player_stats</span>(.x))</a>
+<a class="sourceLine" id="cb51-15" title="15">)</a></code></pre></div>
+<pre class="output-style"><code>   user  system elapsed 
+  62.53    4.89  118.94 
+   user  system elapsed 
+   0.31    0.04   22.97 </code></pre>
+<p>As we can see, parallelizing the scraping of all 494 players who recorded rushing and receiving statistics in 2020 is about five times faster than scraping the same data sequentially.</p>
+<div id="scratch-for-iterative-processes" class="section level3">
+<h3><span class="header-section-number">3.3.1</span> Scratch for Iterative Processes</h3>
+<p>In this case, the <code>map</code> function is sufficient since the scraped results for the Denver Broncos does not depend on the scraped results for the Dallas Cowboys. If the results of one iteration (e.g. the scraped results for the Denver Broncos) depended on the results of prior iterations (e.g. scraped results for the Dallas Cowboys), then the algorithm to scrape team statistics is <strong>recursive</strong>. When we have a recursive algorithm, the <code>map</code> function is often insufficient or overly complex. In this case, we may reach for a for-loop using the <code>for</code> function.</p>
+<p>A for-loop allows us to repeat code multiple times making small changes with each iteration. To illustrate the concept of a for-loop, let’s consider a famous example of a recursive algorithm: the Fibonacci sequence. The Fibonacci sequence is a sequence of integers starting with 0 and 1 where each following integer is the sum of the previous two integers. Written out, the first eight values of the Fibonacci sequence are <span class="math inline">\(0, 1, 1, 2, 3, 5, 8, 13\)</span>. Let’s consider how to use a for-loop to return the first <span class="math inline">\(n\)</span> integers in the Fibonacci sequence. Let’s consider <span class="math inline">\(n=8\)</span> to start.</p>
+<div class="sourceCode" id="cb53"><pre class="sourceCode r chunk-style"><code class="sourceCode r"><a class="sourceLine" id="cb53-1" title="1">n &lt;-<span class="st"> </span><span class="dv">8</span></a>
+<a class="sourceLine" id="cb53-2" title="2">fib_seq &lt;-<span class="st"> </span><span class="kw">vector</span>(<span class="dt">mode =</span> <span class="st">&#39;integer&#39;</span>, <span class="dt">length =</span> n)</a>
+<a class="sourceLine" id="cb53-3" title="3"><span class="cf">for</span>(i <span class="cf">in</span> <span class="dv">1</span><span class="op">:</span>n){</a>
+<a class="sourceLine" id="cb53-4" title="4">  <span class="co"># if it is the first element of the Fibonacci sequence, return a 0</span></a>
+<a class="sourceLine" id="cb53-5" title="5">  <span class="cf">if</span>(i <span class="op">==</span><span class="st"> </span><span class="dv">1</span>){</a>
+<a class="sourceLine" id="cb53-6" title="6">    fib_seq[i] &lt;-<span class="st"> </span><span class="dv">0</span></a>
+<a class="sourceLine" id="cb53-7" title="7">  }</a>
+<a class="sourceLine" id="cb53-8" title="8">  <span class="co"># if it is the second element of the Fibonacci sequence, return a 1</span></a>
+<a class="sourceLine" id="cb53-9" title="9">  <span class="cf">else</span> <span class="cf">if</span>(i <span class="op">==</span><span class="st"> </span><span class="dv">2</span>){</a>
+<a class="sourceLine" id="cb53-10" title="10">    fib_seq[i] &lt;-<span class="st"> </span><span class="dv">1</span></a>
+<a class="sourceLine" id="cb53-11" title="11">  }</a>
+<a class="sourceLine" id="cb53-12" title="12">  <span class="co"># if it is any other element of the Fibonacci sequence, return the sum of the </span></a>
+<a class="sourceLine" id="cb53-13" title="13">  <span class="co"># previous two elements</span></a>
+<a class="sourceLine" id="cb53-14" title="14">  <span class="cf">else</span>{</a>
+<a class="sourceLine" id="cb53-15" title="15">    fib_seq[i] &lt;-<span class="st"> </span>fib_seq[i<span class="dv">-1</span>] <span class="op">+</span><span class="st"> </span>fib_seq[i<span class="dv">-2</span>]</a>
+<a class="sourceLine" id="cb53-16" title="16">  }</a>
+<a class="sourceLine" id="cb53-17" title="17">}</a>
+<a class="sourceLine" id="cb53-18" title="18">fib_seq</a></code></pre></div>
+<pre class="output-style"><code>[1]  0  1  1  2  3  5  8 13</code></pre>
+<p>Since each value of the Fibonacci sequence depends on the results of the prior two values of the Fibonacci sequence, a for-loop allows us to index the results of the sequence with each iteration. While intuitive, the for-loops can be very slow in <code>R</code>, especially when the recursive algorithm becomes more complex. In these situations, we need a faster alternative.</p>
+
+</div>
+</div>
+<!-- </div> -->
+            </section>
+
+          </div>
+        </div>
+      </div>
+<a href="functional-programming-with-purrr.html" class="navigation navigation-prev " aria-label="Previous page"><i class="fa fa-angle-left"></i></a>
+<a href="supplemental.html" class="navigation navigation-next " aria-label="Next page"><i class="fa fa-angle-right"></i></a>
+    </div>
+  </div>
+<script src="libs/gitbook-2.6.7/js/app.min.js"></script>
+<script src="libs/gitbook-2.6.7/js/lunr.js"></script>
+<script src="libs/gitbook-2.6.7/js/clipboard.min.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-search.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-sharing.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-fontsettings.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-bookdown.js"></script>
+<script src="libs/gitbook-2.6.7/js/jquery.highlight.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-clipboard.js"></script>
+<script>
+gitbook.require(["gitbook"], function(gitbook) {
+gitbook.start({
+"sharing": {
+"github": false,
+"facebook": true,
+"twitter": true,
+"linkedin": false,
+"weibo": false,
+"instapaper": false,
+"vk": false,
+"all": ["facebook", "twitter", "linkedin", "weibo", "instapaper"]
+},
+"fontsettings": {
+"theme": "white",
+"family": "sans",
+"size": 2
+},
+"edit": {
+"link": null,
+"text": null
+},
+"history": {
+"link": null,
+"text": null
+},
+"view": {
+"link": null,
+"text": null
+},
+"download": ["Module2.pdf", "Module2.epub"],
+"toc": {
+"collapse": "subsection"
+},
+"toolbar": {
+"position": "static"
+}
+});
+});
+</script>
+
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+  (function () {
+    var script = document.createElement("script");
+    script.type = "text/javascript";
+    var src = "true";
+    if (src === "" || src === "true") src = "https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-MML-AM_CHTML";
+    if (location.protocol !== "file:")
+      if (/^https?:/.test(src))
+        src = src.replace(/^https?:/, '');
+    script.src = src;
+    document.getElementsByTagName("head")[0].appendChild(script);
+  })();
+</script>
+</body>
+
+</html>

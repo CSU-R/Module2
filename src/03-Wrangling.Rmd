@@ -74,7 +74,6 @@ get_player_stats <- function(player_url){
   require(janitor)
   require(tidyverse)
   require(rvest)
-  team_abbr <- str_sub(team_url, start = 46, end = 48)
   player_url %>%
     read_html() %>%
     html_node(., css = '#all_stats') %>%
@@ -83,8 +82,7 @@ get_player_stats <- function(player_url){
     set_names(., str_c(names(.), .[1,], sep = '_')) %>%
     clean_names() %>%
     slice(., -1) %>%
-    mutate(., team = team_abbr) %>%
-    select(., team, everything())
+    select(., team = tm, everything())
 }
 ```
 
@@ -295,7 +293,7 @@ den_stats_wking %>%
             sd_receiving_yds = sd(receiving_yds))
 ```
 
-## Functional Programming with purrr
+## Functional Programming with `purrr`
 
 In the previous subsection, we explored how to reshape and wrangle data with the `tidyr` and `dplyr` packages. We broke the functions up into sections for easier cross reference, but in reality, they can (and should) be combined together using pipes to avoid intermediate assignments. The following outlines all steps necessary to clean the rushing and receiving statistics for the 2020 Denver Broncos.
 
@@ -417,51 +415,98 @@ rush_receive <- team_urls %>%
   map_dfr(., ~clean_team_stats(.x))
 ```
 
-## Iterative Procedures with foreach
+## Parallelization with `furrr`
 
-At some point in our careers, we will likely need to implement some code
+
+When we `map` the function to scrape team statistics over the vector of team web addresses, we are insinuating that the function within the `map` (e.g. `get_team_stats`) should be applied to each element of the vector (e.g. `team_urls`) sequentially. Computational tasks which involve many separate, independently executable jobs should be run in __parallel__. When jobs are run in parallel, this means they are run at the same time, rather than sequentially. If the computational burden at each step is larger than the computational burden of setting up instructions for parallelization, then running code in parallel will save time.
+
+While there are different types of parallelization, we will only focus on one: multi-core parallelization, which allows us to make use of the whole computer rather than rely on single processor architecture. `furrr`, a new Tidyverse package, attempts to make mapping in parallel easy and pain-free by combining the functionality of the `purrr` package and the `future` package. By combining `purrr`'s mapping capabilities and `future`'s parallel processing capabilities, `furrr` allows for parallelization with similar syntax.
+
+In the previous subsection, we learned how to apply mapping functions to scrape and clean the statistics for each team, sequentially. Using `furrr`, we can parallelize this process. We will juxtapose each approach for comparison.
 
 ```{r}
-team_abbrs <- str_sub(team_urls, start = 46, end = 48)
-player_urls <- team_urls %>%
-  map(., ~get_players(.x))
+# sequential computation using purrr
+rush_receive_parallel <- team_urls %>%
+  map(., ~get_team_stats(.x)) %>%
+  map_dfr(., ~clean_team_stats(.x))
+
+# parallel computation using furrr
+library(furrr)
+future::plan(multiprocess)
+
+rush_receive_parallel <- team_urls %>%
+  future_map(., ~get_team_stats(.x)) %>%
+  future_map_dfr(., ~clean_team_stats(.x))
+
+# compare output
+identical(rush_receive, rush_receive_parallel)
 ```
 
+Let's compare the speed of the operations.
+
+```{r, cache=TRUE}
+# sequentially
+system.time(
+  rush_receive <- team_urls %>%
+    map(., ~get_team_stats(.x)) %>%
+    map_dfr(., ~clean_team_stats(.x))
+)
+
+# parallel
+system.time(
+  rush_receive_parallel <- team_urls %>%
+    future_map(., ~get_team_stats(.x)) %>%
+    future_map_dfr(., ~clean_team_stats(.x))
+)
+```
+
+We can see that parallelizing this process is about one and a half times faster than applying these functions sequentially. This effect is only amplified when we increase the number of sources to scrape. 
+
+```{r, cache=TRUE}
+player_urls <- team_urls %>% 
+  map(., ~get_players(.x)) %>% 
+  flatten_chr()
+
+# sequentially
+system.time(
+  player_stats <- player_urls %>%
+    map(., ~get_player_stats(.x))
+)
+
+# parallel
+system.time(
+  player_stats_par <- player_urls %>% 
+    future_map(., ~get_player_stats(.x))
+)
+```
+
+As we can see, parallelizing the scraping of all `r length(player_urls)` players who recorded rushing and receiving statistics in 2020 is about five times faster than scraping the same data sequentially.
+
+### Scratch for Iterative Processes
+
+In this case, the `map` function is sufficient since the scraped results for the Denver Broncos does not depend on the scraped results for the Dallas Cowboys. If the results of one iteration (e.g. the scraped results for the Denver Broncos) depended on the results of prior iterations (e.g. scraped results for the Dallas Cowboys), then the algorithm to scrape team statistics is __recursive__. When we have a recursive algorithm, the `map` function is often insufficient or overly complex. In this case, we may reach for a for-loop using the `for` function.
+
+A for-loop allows us to repeat code multiple times making small changes with each iteration. To illustrate the concept of a for-loop, let's consider a famous example of a recursive algorithm: the Fibonacci sequence. The Fibonacci sequence is a sequence of integers starting with 0 and 1 where each following integer is the sum of the previous two integers. Written out, the first eight values of the Fibonacci sequence are $0, 1, 1, 2, 3, 5, 8, 13$. Let's consider how to use a for-loop to return the first $n$ integers in the Fibonacci sequence. Let's consider $n=8$ to start.
 
 ```{r}
-for(team in team_abbrs){
-  for(player in player_urls[[team]]){
-    
+n <- 8
+fib_seq <- vector(mode = 'integer', length = n)
+for(i in 1:n){
+  # if it is the first element of the Fibonacci sequence, return a 0
+  if(i == 1){
+    fib_seq[i] <- 0
+  }
+  # if it is the second element of the Fibonacci sequence, return a 1
+  else if(i == 2){
+    fib_seq[i] <- 1
+  }
+  # if it is any other element of the Fibonacci sequence, return the sum of the 
+  # previous two elements
+  else{
+    fib_seq[i] <- fib_seq[i-1] + fib_seq[i-2]
   }
 }
-
-
+fib_seq
 ```
 
-```{r}
-library(foreach)
-rush_receive_stats.do <- foreach(x = team_urls,
-        .packages = 'dplyr') %do% {
-  x %>%
-    get_team_stats() %>%
-    clean_stats()
-} %>%
-  set_names(., str_sub(team_urls, start = 46, end = 48)) %>%
-  bind_rows(., .id = 'team')
-```
-
-
-```{r}
-ncores <- parallel::detectCores()
-doParallel::registerDoParallel(cores = ncores - 1)
-foreach(x = team_urls,
-        .packages = 'dplyr') %dopar% {
-  x %>%
-    get_team_stats() %>%
-    clean_stats()
-} %>%
-  set_names(., str_sub(team_urls, start = 46, end = 48)) %>%
-  bind_rows(., .id = 'team')
-doParallel::stopImplicitCluster()
-```
-
+Since each value of the Fibonacci sequence depends on the results of the prior two values of the Fibonacci sequence, a for-loop allows us to index the results of the sequence with each iteration. While intuitive, the for-loops can be very slow in `R`, especially when the recursive algorithm becomes more complex. In these situations, we need a faster alternative.
