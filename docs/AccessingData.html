@@ -6,7 +6,7 @@
   <meta http-equiv="X-UA-Compatible" content="IE=edge" />
   <title>Chapter 2 Accessing Data | R Module 2</title>
   <meta name="description" content="This is the second installment for the book for the R Intro Course at CSU." />
-  <meta name="generator" content="bookdown 0.20 and GitBook 2.6.7" />
+  <meta name="generator" content="bookdown 0.21 and GitBook 2.6.7" />
 
   <meta property="og:title" content="Chapter 2 Accessing Data | R Module 2" />
   <meta property="og:type" content="book" />
@@ -51,6 +51,8 @@
 
 <link href="libs/pagedtable-1.1/css/pagedtable.css" rel="stylesheet" />
 <script src="libs/pagedtable-1.1/js/pagedtable.js"></script>
+<link href="libs/anchor-sections-1.0/anchor-sections.css" rel="stylesheet" />
+<script src="libs/anchor-sections-1.0/anchor-sections.js"></script>
 
 
 <style type="text/css">
@@ -116,8 +118,8 @@ code span.vs { color: #4070a0; } /* VerbatimString */
 code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warning */
 </style>
 
-<link rel="stylesheet" href="src\style.css" type="text/css" />
-<link rel="stylesheet" href="src\environments.css" type="text/css" />
+<link rel="stylesheet" href="src/style.css" type="text/css" />
+<link rel="stylesheet" href="src/environments.css" type="text/css" />
 </head>
 
 <body>
@@ -156,15 +158,19 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <li class="chapter" data-level="3.1.2" data-path="core-tidyverse.html"><a href="core-tidyverse.html#dplyr"><i class="fa fa-check"></i><b>3.1.2</b> dplyr</a></li>
 </ul></li>
 <li class="chapter" data-level="3.2" data-path="functional-programming-with-purrr.html"><a href="functional-programming-with-purrr.html"><i class="fa fa-check"></i><b>3.2</b> Functional Programming with <code>purrr</code></a></li>
-<li class="chapter" data-level="3.3" data-path="parallelization-with-furrr.html"><a href="parallelization-with-furrr.html"><i class="fa fa-check"></i><b>3.3</b> Parallelization with <code>furrr</code></a><ul>
-<li class="chapter" data-level="3.3.1" data-path="parallelization-with-furrr.html"><a href="parallelization-with-furrr.html#scratch-for-iterative-processes"><i class="fa fa-check"></i><b>3.3.1</b> Scratch for Iterative Processes</a></li>
+<li class="chapter" data-level="3.3" data-path="parallelization-with-furrr.html"><a href="parallelization-with-furrr.html"><i class="fa fa-check"></i><b>3.3</b> Parallelization with <code>furrr</code></a></li>
+<li class="chapter" data-level="3.4" data-path="scratch-for-iterative-processes.html"><a href="scratch-for-iterative-processes.html"><i class="fa fa-check"></i><b>3.4</b> Scratch for Iterative Processes</a></li>
 </ul></li>
+<li class="chapter" data-level="4" data-path="Visualization.html"><a href="Visualization.html"><i class="fa fa-check"></i><b>4</b> Visualization</a><ul>
+<li class="chapter" data-level="4.1" data-path="base.html"><a href="base.html"><i class="fa fa-check"></i><b>4.1</b> base</a></li>
+<li class="chapter" data-level="4.2" data-path="ggplot.html"><a href="ggplot.html"><i class="fa fa-check"></i><b>4.2</b> ggplot</a></li>
+<li class="chapter" data-level="4.3" data-path="plotly.html"><a href="plotly.html"><i class="fa fa-check"></i><b>4.3</b> plotly</a></li>
 </ul></li>
-<li class="chapter" data-level="4" data-path="supplemental.html"><a href="supplemental.html"><i class="fa fa-check"></i><b>4</b> Supplemental</a><ul>
-<li class="chapter" data-level="4.1" data-path="scraping-in-the-wild.html"><a href="scraping-in-the-wild.html"><i class="fa fa-check"></i><b>4.1</b> Scraping in the Wild</a><ul>
-<li class="chapter" data-level="4.1.1" data-path="scraping-in-the-wild.html"><a href="scraping-in-the-wild.html#LessonsLearned"><i class="fa fa-check"></i><b>4.1.1</b> Lessons Learned from Scraping</a></li>
-<li class="chapter" data-level="4.1.2" data-path="scraping-in-the-wild.html"><a href="scraping-in-the-wild.html#scraping-nfl-data-1"><i class="fa fa-check"></i><b>4.1.2</b> Scraping NFL Data</a></li>
-<li class="chapter" data-level="4.1.3" data-path="scraping-in-the-wild.html"><a href="scraping-in-the-wild.html#putting-it-all-together"><i class="fa fa-check"></i><b>4.1.3</b> Putting It All Together</a></li>
+<li class="chapter" data-level="5" data-path="supplemental.html"><a href="supplemental.html"><i class="fa fa-check"></i><b>5</b> Supplemental</a><ul>
+<li class="chapter" data-level="5.1" data-path="scraping-in-the-wild.html"><a href="scraping-in-the-wild.html"><i class="fa fa-check"></i><b>5.1</b> Scraping in the Wild</a><ul>
+<li class="chapter" data-level="5.1.1" data-path="scraping-in-the-wild.html"><a href="scraping-in-the-wild.html#LessonsLearned"><i class="fa fa-check"></i><b>5.1.1</b> Lessons Learned from Scraping</a></li>
+<li class="chapter" data-level="5.1.2" data-path="scraping-in-the-wild.html"><a href="scraping-in-the-wild.html#scraping-nfl-data-1"><i class="fa fa-check"></i><b>5.1.2</b> Scraping NFL Data</a></li>
+<li class="chapter" data-level="5.1.3" data-path="scraping-in-the-wild.html"><a href="scraping-in-the-wild.html#putting-it-all-together"><i class="fa fa-check"></i><b>5.1.3</b> Putting It All Together</a></li>
 </ul></li>
 </ul></li>
 <li class="chapter" data-level="" data-path="references.html"><a href="references.html"><i class="fa fa-check"></i>References</a></li>

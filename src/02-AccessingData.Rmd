@@ -123,7 +123,7 @@ bov_nfl_api <- "https://www.bovada.lv/services/sports/event/v2/events/A/descript
 
 To ask for data through a web-API, we will need to make a `GET` request with the `httr` package's `GET()` function. After making the request, we can read about the server's response.
 
-```{r}
+```{r, cache=TRUE}
 bov_req <- httr::GET(url = bov_nfl_api)
 bov_req
 ```
@@ -191,8 +191,7 @@ We can also find the current line of each of these games. Here, I have created a
 
 ```{r}
 bov_res %>%
-  get_bovada_lines() %>%
-  print(n = 10)
+  get_bovada_lines()
 ```
 
 While traversing these sometimes complicated lists may seem intimidating, with practice, working with data from an API will be made easier after discussing mapping functions in Chapter 3 which are useful for traversing complicated lists. Hopefully, after the scraping section, you will find working with APIs like a walk in the park compared to scraping data directly from the web.

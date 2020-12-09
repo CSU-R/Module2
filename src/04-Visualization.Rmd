@@ -1,17 +1,115 @@
 # Visualization {#Visualization}
 
-> "Data is the new oil." —Clive Humby, Chief Data Scientist, Starcount
+> "Mankind invented a system to cope with the fact that we are so intrinsically lousy at manipulating numbers. It's called the graph." —Charlie Munger, Vice Chairman, Berkshire Hathaway
 
-In this chapter, we'll cover how to access data given in various forms and provided from various sources.
+In Chapter \@ref(Wrangling), we discussed tools for cleaning data. In this chapter, we will turn our attention to visualization of data. There are several approaches to creating graphics in `R`. Here, we focus on three: `base`, `ggplot`, and `plotly`. The goal in each of these systmes will be to outline the syntax of these systems before providing some examples using the data prepared in previous chapters.
 
 ## base
 
-base here
+Before the development of `ggplot` and the grammer of graphics (discussed in the next subsection), `R` users largely relied on `base` to construct data visualization. `base` `R` provide flexible but verbose solutions to construct any type of graph.
 
-### ggplot
+At the heart of visualizations with `base` is the generic function `plot` which is used for plotting `R` objects. Most simply, `plot` is used to construct a scatter plot. It takes either a formula (e.g. `plot(y~x, data = dt)`), specifying that we wish to plot column `y` on the vertical axis and `x` on the horizontal axis, or specifications for the coordinates of `x` and `y` (e.g. `plot(x = dt$x, y = dt$y)`).
 
 ```{r}
 rush_receive <- filter(rush_receive, pos %in% c('QB', 'RB', 'WR', 'TE'))
+# formula
+plot(receiving_lng~receiving_ctch_percent, data = rush_receive)
+# coordinates
+plot(x = rush_receive$receiving_ctch_percent, y = rush_receive$receiving_lng)
+```
+
+Notice, the plots are fundamentally the same. The only differences are the axis labels. These can be adjusted with plotting parameters. Rather than outline all of the parameters, we refer you to the following figure provided by @holtz2018, software engineer for Datadog. His website, [The R Graph Gallery](https://www.r-graph-gallery.com/), is an excellent resource for those hoping to dig deeper into data visualizations.
+
+```{r, fig.cap="common plotting parameters for `base R` plots", echo=F, out.width='100%'}
+knitr::include_graphics("src/images/base_plot_params.png")
+```
+
+Let's use some of these parameters to clean up the previous scatterplot. We'll create a title, label the axes, change the character used for the points, and color the points based on the position of the player.
+
+```{r}
+plot(receiving_lng~receiving_ctch_percent, data = rush_receive,
+     main = 'Longest Catch vs Catch Percentage', # title
+     xlab = 'Catch Percentage (%)', # x-axis label
+     ylab = 'Longest Catch (yds)', # y-axis label
+     pch = 20) # point type
+```
+
+Suppose we'd like to color the points based on the players' position. We can easily do this by providing the position variable as the color attribute. However, we will need a legend specifying what this color attribute represents.
+
+```{r}
+plot(receiving_lng~receiving_ctch_percent, data = rush_receive,
+     main = 'Longest Catch vs Catch Percentage', # title
+     xlab = 'Catch Percentage (%)', # x-axis label
+     ylab = 'Longest Catch (yds)', # y-axis label
+     pch = 20, # point type
+     col = pos) # poiint color
+```
+
+```{block, type = 'bonus'}
+It is of the author's humble opinion that aesthetic attributes such as color, shape, fill, among others should never be added to a plot unless it provides further information about the data of interest. That is, do not add flare for flare's sake. Every element of a plot should portray some bit of information.
+```
+
+```{block, type = 'caution'}
+Adding legends in `base` `R` can be a real headache. There are generally two ways people add a legend to a `base` plot. Both of which are drastically more involved and cumbersome than that of `ggplot`. For this reason, among others, we prefer `ggplot` to `base` visualizations.
+```
+
+The first method is to partition the data by position and add the position's points iteratively to the scatterplot, specifying a new color for each of them. 
+
+```{r}
+plot(receiving_lng~receiving_ctch_percent, data = rush_receive,
+     main = 'Longest Catch vs Catch Percentage', # title
+     xlab = 'Catch Percentage (%)', # x-axis label
+     ylab = 'Longest Catch (yds)', # y-axis label
+     pch = 20)
+points(x = rush_receive[rush_receive$pos == 'QB', ]$receiving_ctch_percent, 
+       y = rush_receive[rush_receive$pos == 'QB', ]$receiving_lng, 
+       pch = 20, col = 'black')
+points(x = rush_receive[rush_receive$pos == 'RB', ]$receiving_ctch_percent, 
+       y = rush_receive[rush_receive$pos == 'RB', ]$receiving_lng, 
+       pch = 20, col = 'gold')
+points(x = rush_receive[rush_receive$pos == 'WR', ]$receiving_ctch_percent, 
+       y = rush_receive[rush_receive$pos == 'WR', ]$receiving_lng, 
+       pch = 20, col = 'blue')
+points(x = rush_receive[rush_receive$pos == 'TE', ]$receiving_ctch_percent, 
+       y = rush_receive[rush_receive$pos == 'TE', ]$receiving_lng, 
+       pch = 20, col = 'green')
+legend("topleft", 
+  legend = c('QB', 'RB', 'WR', 'TE'), 
+  col = c('black', 'gold', 'blue', 'green'), 
+  pch = 20, 
+  pt.cex = 1, 
+  cex = 0.6, 
+  text.col = "black", 
+  horiz = F, 
+  inset = c(0.05, 0.05))
+```
+
+The second method is to replace the vector of positions with a vector of colors. This can be done by matching the position to a respective color.
+
+```{r}
+plot(receiving_lng~receiving_ctch_percent, data = rush_receive,
+     main = 'Longest Catch vs Catch Percentage', # title
+     xlab = 'Catch Percentage (%)', # x-axis label
+     ylab = 'Longest Catch (yds)', # y-axis label
+     pch = 20, # point type
+     col = c('black', 'gold', 'blue', 'green')[match(rush_receive$pos, 
+                                                     c('QB', 'RB', 'WR', 'TE'))]) # point color
+legend("topleft", 
+  legend = c('QB', 'RB', 'WR', 'TE'), 
+  col = c('black', 'gold', 'blue', 'green'), 
+  pch = 20, 
+  pt.cex = 1, 
+  cex = 0.6, 
+  text.col = "black", 
+  horiz = F, 
+  inset = c(0.05, 0.05))
+```
+
+While we outlined the common `base` plotting parameters using a scatterplot, they also apply to a vast array of other `base` plots such as bar plots, line plots, histograms, etc. To read more about `base` plots, see this helpful [link](http://www.sthda.com/english/wiki/r-base-graphs).
+
+## ggplot
+
+```{r}
 ggplot(data = rush_receive, aes(x = age)) +
   geom_histogram(binwidth = 2) +
   labs(x = 'Age', y = 'Frequency', title = 'Distribution of Age') +

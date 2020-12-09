@@ -8,6 +8,7 @@ rmd_files:
   - "index.Rmd"
   - "src/02-AccessingData.Rmd"
   - "src/03-Wrangling.Rmd"
+  - "src/04-Visualization.Rmd"
   - "src/99-Supp.Rmd"
   - "src/99-Ref.Rmd"
 output_dir: "docs"

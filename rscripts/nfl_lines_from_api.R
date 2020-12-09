@@ -186,7 +186,8 @@ get_bovada_lines <- function(bov_json, quietly = TRUE){
       filter(., type == 'GAMEEVENT') %>%
       mutate(., name = str_replace(name, " \\(.*\\)", "")) %>%
       mutate_at(., vars(starts_with('juice_')), as.numeric) %>%
-      mutate_at(., vars(starts_with('handicap_')), as.numeric)
+      mutate_at(., vars(starts_with('handicap_')), as.numeric) %>%
+      as_tibble()
     
     return(bov_lines)
   }

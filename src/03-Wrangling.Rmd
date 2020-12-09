@@ -482,7 +482,7 @@ system.time(
 
 As we can see, parallelizing the scraping of all `r length(player_urls)` players who recorded rushing and receiving statistics in 2020 is about five times faster than scraping the same data sequentially.
 
-### Scratch for Iterative Processes
+## Scratch for Iterative Processes
 
 In this case, the `map` function is sufficient since the scraped results for the Denver Broncos does not depend on the scraped results for the Dallas Cowboys. If the results of one iteration (e.g. the scraped results for the Denver Broncos) depended on the results of prior iterations (e.g. scraped results for the Dallas Cowboys), then the algorithm to scrape team statistics is __recursive__. When we have a recursive algorithm, the `map` function is often insufficient or overly complex. In this case, we may reach for a for-loop using the `for` function.
 
