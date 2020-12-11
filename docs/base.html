@@ -53,6 +53,13 @@
 <script src="libs/pagedtable-1.1/js/pagedtable.js"></script>
 <link href="libs/anchor-sections-1.0/anchor-sections.css" rel="stylesheet" />
 <script src="libs/anchor-sections-1.0/anchor-sections.js"></script>
+<script src="libs/htmlwidgets-1.5.2/htmlwidgets.js"></script>
+<script src="libs/plotly-binding-4.9.2.1/plotly.js"></script>
+<script src="libs/typedarray-0.1/typedarray.min.js"></script>
+<link href="libs/crosstalk-1.1.0.1/css/crosstalk.css" rel="stylesheet" />
+<script src="libs/crosstalk-1.1.0.1/js/crosstalk.min.js"></script>
+<link href="libs/plotly-htmlwidgets-css-1.52.2/plotly-htmlwidgets.css" rel="stylesheet" />
+<script src="libs/plotly-main-1.52.2/plotly-latest.min.js"></script>
 
 
 <style type="text/css">
@@ -205,7 +212,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <div class="sourceCode" id="cb56"><pre class="sourceCode r chunk-style"><code class="sourceCode r"><a class="sourceLine" id="cb56-1" title="1"><span class="co"># coordinates</span></a>
 <a class="sourceLine" id="cb56-2" title="2"><span class="kw">plot</span>(<span class="dt">x =</span> rush_receive<span class="op">$</span>receiving_ctch_percent, <span class="dt">y =</span> rush_receive<span class="op">$</span>receiving_lng)</a></code></pre></div>
 <p><img src="Module2_files/figure-html/unnamed-chunk-65-2.png" width="672" style="display: block; margin: auto;" /></p>
-<p>Notice, the plots are fundamentally the same. The only differences are the axis labels. These can be adjusted with plotting parameters. Rather than outline all of the parameters, we refer you to the following figure provided by <span class="citation">Holtz (<a href="#ref-holtz2018" role="doc-biblioref">2018</a>)</span>, software engineer for Datadog. His website, <a href="https://www.r-graph-gallery.com/">The R Graph Gallery</a>, is an excellent resource for those hoping to dig deeper into data visualizations.</p>
+<p>Notice, the plots are fundamentally the same. The only differences are the axis labels. These can be adjusted with plotting parameters. Rather than outline all of the parameters, we refer you to the following figure provided by <span class="citation">Holtz (<a href="#ref-holtz2018" role="doc-biblioref">2018</a>)</span>, software engineer for Datadog. His website, <a href="https://www.r-graph-gallery.com/">The R Graph Gallery</a>, is an excellent resource for those who wish to dig deeper into data visualizations.</p>
 <div class="figure" style="text-align: center"><span id="fig:unnamed-chunk-66"></span>
 <img src="src/images/base_plot_params.png" alt="common plotting parameters for `base R` plots" width="100%" />
 <p class="caption">
@@ -217,72 +224,61 @@ Figure 4.1: common plotting parameters for <code>base R</code> plots
 <a class="sourceLine" id="cb57-2" title="2">     <span class="dt">main =</span> <span class="st">&#39;Longest Catch vs Catch Percentage&#39;</span>, <span class="co"># title</span></a>
 <a class="sourceLine" id="cb57-3" title="3">     <span class="dt">xlab =</span> <span class="st">&#39;Catch Percentage (%)&#39;</span>, <span class="co"># x-axis label</span></a>
 <a class="sourceLine" id="cb57-4" title="4">     <span class="dt">ylab =</span> <span class="st">&#39;Longest Catch (yds)&#39;</span>, <span class="co"># y-axis label</span></a>
-<a class="sourceLine" id="cb57-5" title="5">     <span class="dt">pch =</span> <span class="dv">20</span>) <span class="co"># point type</span></a></code></pre></div>
+<a class="sourceLine" id="cb57-5" title="5">     <span class="dt">pch =</span> <span class="dv">20</span>, <span class="co"># point type</span></a>
+<a class="sourceLine" id="cb57-6" title="6">     <span class="dt">col =</span> pos) <span class="co"># point color </span></a></code></pre></div>
 <p><img src="Module2_files/figure-html/unnamed-chunk-67-1.png" width="672" style="display: block; margin: auto;" /></p>
-<p>Suppose we’d like to color the points based on the players’ position. We can easily do this by providing the position variable as the color attribute. However, we will need a legend specifying what this color attribute represents.</p>
-<div class="sourceCode" id="cb58"><pre class="sourceCode r chunk-style"><code class="sourceCode r"><a class="sourceLine" id="cb58-1" title="1"><span class="kw">plot</span>(receiving_lng<span class="op">~</span>receiving_ctch_percent, <span class="dt">data =</span> rush_receive,</a>
-<a class="sourceLine" id="cb58-2" title="2">     <span class="dt">main =</span> <span class="st">&#39;Longest Catch vs Catch Percentage&#39;</span>, <span class="co"># title</span></a>
-<a class="sourceLine" id="cb58-3" title="3">     <span class="dt">xlab =</span> <span class="st">&#39;Catch Percentage (%)&#39;</span>, <span class="co"># x-axis label</span></a>
-<a class="sourceLine" id="cb58-4" title="4">     <span class="dt">ylab =</span> <span class="st">&#39;Longest Catch (yds)&#39;</span>, <span class="co"># y-axis label</span></a>
-<a class="sourceLine" id="cb58-5" title="5">     <span class="dt">pch =</span> <span class="dv">20</span>, <span class="co"># point type</span></a>
-<a class="sourceLine" id="cb58-6" title="6">     <span class="dt">col =</span> pos) <span class="co"># poiint color</span></a></code></pre></div>
-<p><img src="Module2_files/figure-html/unnamed-chunk-68-1.png" width="672" style="display: block; margin: auto;" /></p>
+<p>If we color the points by position, then we need to provide our readers with a legend illustrating what each color represents. As previously mentioned, <code>base</code> <code>R</code> is incredibly flexible, so tweaking a plot (such as adding a legend) is almost always possible. However, doing so can be a real headache. To illustrate the verbosity of <code>base</code>, we will illustrate how to add a legend to the previous plot. There are generally two ways people proceed, both of which are drastically more involved and cumbersome than that of <code>ggplot</code>. For this reason, among others, we prefer <code>ggplot</code> to <code>base</code> visualizations.</p>
 <div class="bonus">
 <p>
 It is of the author’s humble opinion that aesthetic attributes such as color, shape, fill, among others should never be added to a plot unless it provides further information about the data of interest. That is, do not add flare for flare’s sake. Every element of a plot should portray some bit of information.
 </p>
 </div>
-<div class="caution">
-<p>
-Adding legends in <code>base</code> <code>R</code> can be a real headache. There are generally two ways people add a legend to a <code>base</code> plot. Both of which are drastically more involved and cumbersome than that of <code>ggplot</code>. For this reason, among others, we prefer <code>ggplot</code> to <code>base</code> visualizations.
-</p>
-</div>
-<p>The first method is to partition the data by position and add the position’s points iteratively to the scatterplot, specifying a new color for each of them.</p>
+<p>The first method is to partition the data by position and add the position’s points iteratively to the scatterplot, specifying a new color for each of them. Essentially, we construct the full plot with black points before overwriting the points, one position at a time, with colored points. While easy to comprehend, this method is incredibly verbose and involves duplicate code.</p>
+<div class="sourceCode" id="cb58"><pre class="sourceCode r chunk-style"><code class="sourceCode r"><a class="sourceLine" id="cb58-1" title="1"><span class="kw">plot</span>(receiving_lng<span class="op">~</span>receiving_ctch_percent, <span class="dt">data =</span> rush_receive,</a>
+<a class="sourceLine" id="cb58-2" title="2">     <span class="dt">main =</span> <span class="st">&#39;Longest Catch vs Catch Percentage&#39;</span>, <span class="co"># title</span></a>
+<a class="sourceLine" id="cb58-3" title="3">     <span class="dt">xlab =</span> <span class="st">&#39;Catch Percentage (%)&#39;</span>, <span class="co"># x-axis label</span></a>
+<a class="sourceLine" id="cb58-4" title="4">     <span class="dt">ylab =</span> <span class="st">&#39;Longest Catch (yds)&#39;</span>, <span class="co"># y-axis label</span></a>
+<a class="sourceLine" id="cb58-5" title="5">     <span class="dt">pch =</span> <span class="dv">20</span>) <span class="co"># point character</span></a>
+<a class="sourceLine" id="cb58-6" title="6"><span class="kw">points</span>(<span class="dt">x =</span> rush_receive[rush_receive<span class="op">$</span>pos <span class="op">==</span><span class="st"> &#39;QB&#39;</span>, ]<span class="op">$</span>receiving_ctch_percent, </a>
+<a class="sourceLine" id="cb58-7" title="7">       <span class="dt">y =</span> rush_receive[rush_receive<span class="op">$</span>pos <span class="op">==</span><span class="st"> &#39;QB&#39;</span>, ]<span class="op">$</span>receiving_lng, </a>
+<a class="sourceLine" id="cb58-8" title="8">       <span class="dt">pch =</span> <span class="dv">20</span>, <span class="dt">col =</span> <span class="st">&#39;black&#39;</span>)</a>
+<a class="sourceLine" id="cb58-9" title="9"><span class="kw">points</span>(<span class="dt">x =</span> rush_receive[rush_receive<span class="op">$</span>pos <span class="op">==</span><span class="st"> &#39;RB&#39;</span>, ]<span class="op">$</span>receiving_ctch_percent, </a>
+<a class="sourceLine" id="cb58-10" title="10">       <span class="dt">y =</span> rush_receive[rush_receive<span class="op">$</span>pos <span class="op">==</span><span class="st"> &#39;RB&#39;</span>, ]<span class="op">$</span>receiving_lng, </a>
+<a class="sourceLine" id="cb58-11" title="11">       <span class="dt">pch =</span> <span class="dv">20</span>, <span class="dt">col =</span> <span class="st">&#39;gold&#39;</span>)</a>
+<a class="sourceLine" id="cb58-12" title="12"><span class="kw">points</span>(<span class="dt">x =</span> rush_receive[rush_receive<span class="op">$</span>pos <span class="op">==</span><span class="st"> &#39;WR&#39;</span>, ]<span class="op">$</span>receiving_ctch_percent, </a>
+<a class="sourceLine" id="cb58-13" title="13">       <span class="dt">y =</span> rush_receive[rush_receive<span class="op">$</span>pos <span class="op">==</span><span class="st"> &#39;WR&#39;</span>, ]<span class="op">$</span>receiving_lng, </a>
+<a class="sourceLine" id="cb58-14" title="14">       <span class="dt">pch =</span> <span class="dv">20</span>, <span class="dt">col =</span> <span class="st">&#39;blue&#39;</span>)</a>
+<a class="sourceLine" id="cb58-15" title="15"><span class="kw">points</span>(<span class="dt">x =</span> rush_receive[rush_receive<span class="op">$</span>pos <span class="op">==</span><span class="st"> &#39;TE&#39;</span>, ]<span class="op">$</span>receiving_ctch_percent, </a>
+<a class="sourceLine" id="cb58-16" title="16">       <span class="dt">y =</span> rush_receive[rush_receive<span class="op">$</span>pos <span class="op">==</span><span class="st"> &#39;TE&#39;</span>, ]<span class="op">$</span>receiving_lng, </a>
+<a class="sourceLine" id="cb58-17" title="17">       <span class="dt">pch =</span> <span class="dv">20</span>, <span class="dt">col =</span> <span class="st">&#39;green&#39;</span>)</a>
+<a class="sourceLine" id="cb58-18" title="18"><span class="kw">legend</span>(<span class="st">&quot;topleft&quot;</span>, </a>
+<a class="sourceLine" id="cb58-19" title="19">  <span class="dt">legend =</span> <span class="kw">c</span>(<span class="st">&#39;QB&#39;</span>, <span class="st">&#39;RB&#39;</span>, <span class="st">&#39;WR&#39;</span>, <span class="st">&#39;TE&#39;</span>), </a>
+<a class="sourceLine" id="cb58-20" title="20">  <span class="dt">col =</span> <span class="kw">c</span>(<span class="st">&#39;black&#39;</span>, <span class="st">&#39;gold&#39;</span>, <span class="st">&#39;blue&#39;</span>, <span class="st">&#39;green&#39;</span>), </a>
+<a class="sourceLine" id="cb58-21" title="21">  <span class="dt">pch =</span> <span class="dv">20</span>, </a>
+<a class="sourceLine" id="cb58-22" title="22">  <span class="dt">pt.cex =</span> <span class="dv">1</span>, </a>
+<a class="sourceLine" id="cb58-23" title="23">  <span class="dt">cex =</span> <span class="fl">0.6</span>, </a>
+<a class="sourceLine" id="cb58-24" title="24">  <span class="dt">text.col =</span> <span class="st">&quot;black&quot;</span>, </a>
+<a class="sourceLine" id="cb58-25" title="25">  <span class="dt">horiz =</span> F, </a>
+<a class="sourceLine" id="cb58-26" title="26">  <span class="dt">inset =</span> <span class="kw">c</span>(<span class="fl">0.05</span>, <span class="fl">0.05</span>))</a></code></pre></div>
+<p><img src="Module2_files/figure-html/unnamed-chunk-69-1.png" width="672" style="display: block; margin: auto;" /></p>
+<p>The second method is to replace the vector of positions with a vector of colors. This can be done by matching the position to a respective color. It is important to ensure that the order of the colors used in the <code>match</code> function is the same order specifed in the legend; otherwise, you may be misleading your reader by falsely claiming, for example, that black points represent wide receivers when in fact they represent quarterbacks. While less verbose, this method is prone to transcription mistakes in this way.</p>
 <div class="sourceCode" id="cb59"><pre class="sourceCode r chunk-style"><code class="sourceCode r"><a class="sourceLine" id="cb59-1" title="1"><span class="kw">plot</span>(receiving_lng<span class="op">~</span>receiving_ctch_percent, <span class="dt">data =</span> rush_receive,</a>
 <a class="sourceLine" id="cb59-2" title="2">     <span class="dt">main =</span> <span class="st">&#39;Longest Catch vs Catch Percentage&#39;</span>, <span class="co"># title</span></a>
 <a class="sourceLine" id="cb59-3" title="3">     <span class="dt">xlab =</span> <span class="st">&#39;Catch Percentage (%)&#39;</span>, <span class="co"># x-axis label</span></a>
 <a class="sourceLine" id="cb59-4" title="4">     <span class="dt">ylab =</span> <span class="st">&#39;Longest Catch (yds)&#39;</span>, <span class="co"># y-axis label</span></a>
-<a class="sourceLine" id="cb59-5" title="5">     <span class="dt">pch =</span> <span class="dv">20</span>)</a>
-<a class="sourceLine" id="cb59-6" title="6"><span class="kw">points</span>(<span class="dt">x =</span> rush_receive[rush_receive<span class="op">$</span>pos <span class="op">==</span><span class="st"> &#39;QB&#39;</span>, ]<span class="op">$</span>receiving_ctch_percent, </a>
-<a class="sourceLine" id="cb59-7" title="7">       <span class="dt">y =</span> rush_receive[rush_receive<span class="op">$</span>pos <span class="op">==</span><span class="st"> &#39;QB&#39;</span>, ]<span class="op">$</span>receiving_lng, </a>
-<a class="sourceLine" id="cb59-8" title="8">       <span class="dt">pch =</span> <span class="dv">20</span>, <span class="dt">col =</span> <span class="st">&#39;black&#39;</span>)</a>
-<a class="sourceLine" id="cb59-9" title="9"><span class="kw">points</span>(<span class="dt">x =</span> rush_receive[rush_receive<span class="op">$</span>pos <span class="op">==</span><span class="st"> &#39;RB&#39;</span>, ]<span class="op">$</span>receiving_ctch_percent, </a>
-<a class="sourceLine" id="cb59-10" title="10">       <span class="dt">y =</span> rush_receive[rush_receive<span class="op">$</span>pos <span class="op">==</span><span class="st"> &#39;RB&#39;</span>, ]<span class="op">$</span>receiving_lng, </a>
-<a class="sourceLine" id="cb59-11" title="11">       <span class="dt">pch =</span> <span class="dv">20</span>, <span class="dt">col =</span> <span class="st">&#39;gold&#39;</span>)</a>
-<a class="sourceLine" id="cb59-12" title="12"><span class="kw">points</span>(<span class="dt">x =</span> rush_receive[rush_receive<span class="op">$</span>pos <span class="op">==</span><span class="st"> &#39;WR&#39;</span>, ]<span class="op">$</span>receiving_ctch_percent, </a>
-<a class="sourceLine" id="cb59-13" title="13">       <span class="dt">y =</span> rush_receive[rush_receive<span class="op">$</span>pos <span class="op">==</span><span class="st"> &#39;WR&#39;</span>, ]<span class="op">$</span>receiving_lng, </a>
-<a class="sourceLine" id="cb59-14" title="14">       <span class="dt">pch =</span> <span class="dv">20</span>, <span class="dt">col =</span> <span class="st">&#39;blue&#39;</span>)</a>
-<a class="sourceLine" id="cb59-15" title="15"><span class="kw">points</span>(<span class="dt">x =</span> rush_receive[rush_receive<span class="op">$</span>pos <span class="op">==</span><span class="st"> &#39;TE&#39;</span>, ]<span class="op">$</span>receiving_ctch_percent, </a>
-<a class="sourceLine" id="cb59-16" title="16">       <span class="dt">y =</span> rush_receive[rush_receive<span class="op">$</span>pos <span class="op">==</span><span class="st"> &#39;TE&#39;</span>, ]<span class="op">$</span>receiving_lng, </a>
-<a class="sourceLine" id="cb59-17" title="17">       <span class="dt">pch =</span> <span class="dv">20</span>, <span class="dt">col =</span> <span class="st">&#39;green&#39;</span>)</a>
-<a class="sourceLine" id="cb59-18" title="18"><span class="kw">legend</span>(<span class="st">&quot;topleft&quot;</span>, </a>
-<a class="sourceLine" id="cb59-19" title="19">  <span class="dt">legend =</span> <span class="kw">c</span>(<span class="st">&#39;QB&#39;</span>, <span class="st">&#39;RB&#39;</span>, <span class="st">&#39;WR&#39;</span>, <span class="st">&#39;TE&#39;</span>), </a>
-<a class="sourceLine" id="cb59-20" title="20">  <span class="dt">col =</span> <span class="kw">c</span>(<span class="st">&#39;black&#39;</span>, <span class="st">&#39;gold&#39;</span>, <span class="st">&#39;blue&#39;</span>, <span class="st">&#39;green&#39;</span>), </a>
-<a class="sourceLine" id="cb59-21" title="21">  <span class="dt">pch =</span> <span class="dv">20</span>, </a>
-<a class="sourceLine" id="cb59-22" title="22">  <span class="dt">pt.cex =</span> <span class="dv">1</span>, </a>
-<a class="sourceLine" id="cb59-23" title="23">  <span class="dt">cex =</span> <span class="fl">0.6</span>, </a>
-<a class="sourceLine" id="cb59-24" title="24">  <span class="dt">text.col =</span> <span class="st">&quot;black&quot;</span>, </a>
-<a class="sourceLine" id="cb59-25" title="25">  <span class="dt">horiz =</span> F, </a>
-<a class="sourceLine" id="cb59-26" title="26">  <span class="dt">inset =</span> <span class="kw">c</span>(<span class="fl">0.05</span>, <span class="fl">0.05</span>))</a></code></pre></div>
-<p><img src="Module2_files/figure-html/unnamed-chunk-71-1.png" width="672" style="display: block; margin: auto;" /></p>
-<p>The second method is to replace the vector of positions with a vector of colors. This can be done by matching the position to a respective color.</p>
-<div class="sourceCode" id="cb60"><pre class="sourceCode r chunk-style"><code class="sourceCode r"><a class="sourceLine" id="cb60-1" title="1"><span class="kw">plot</span>(receiving_lng<span class="op">~</span>receiving_ctch_percent, <span class="dt">data =</span> rush_receive,</a>
-<a class="sourceLine" id="cb60-2" title="2">     <span class="dt">main =</span> <span class="st">&#39;Longest Catch vs Catch Percentage&#39;</span>, <span class="co"># title</span></a>
-<a class="sourceLine" id="cb60-3" title="3">     <span class="dt">xlab =</span> <span class="st">&#39;Catch Percentage (%)&#39;</span>, <span class="co"># x-axis label</span></a>
-<a class="sourceLine" id="cb60-4" title="4">     <span class="dt">ylab =</span> <span class="st">&#39;Longest Catch (yds)&#39;</span>, <span class="co"># y-axis label</span></a>
-<a class="sourceLine" id="cb60-5" title="5">     <span class="dt">pch =</span> <span class="dv">20</span>, <span class="co"># point type</span></a>
-<a class="sourceLine" id="cb60-6" title="6">     <span class="dt">col =</span> <span class="kw">c</span>(<span class="st">&#39;black&#39;</span>, <span class="st">&#39;gold&#39;</span>, <span class="st">&#39;blue&#39;</span>, <span class="st">&#39;green&#39;</span>)[<span class="kw">match</span>(rush_receive<span class="op">$</span>pos, </a>
-<a class="sourceLine" id="cb60-7" title="7">                                                     <span class="kw">c</span>(<span class="st">&#39;QB&#39;</span>, <span class="st">&#39;RB&#39;</span>, <span class="st">&#39;WR&#39;</span>, <span class="st">&#39;TE&#39;</span>))]) <span class="co"># point color</span></a>
-<a class="sourceLine" id="cb60-8" title="8"><span class="kw">legend</span>(<span class="st">&quot;topleft&quot;</span>, </a>
-<a class="sourceLine" id="cb60-9" title="9">  <span class="dt">legend =</span> <span class="kw">c</span>(<span class="st">&#39;QB&#39;</span>, <span class="st">&#39;RB&#39;</span>, <span class="st">&#39;WR&#39;</span>, <span class="st">&#39;TE&#39;</span>), </a>
-<a class="sourceLine" id="cb60-10" title="10">  <span class="dt">col =</span> <span class="kw">c</span>(<span class="st">&#39;black&#39;</span>, <span class="st">&#39;gold&#39;</span>, <span class="st">&#39;blue&#39;</span>, <span class="st">&#39;green&#39;</span>), </a>
-<a class="sourceLine" id="cb60-11" title="11">  <span class="dt">pch =</span> <span class="dv">20</span>, </a>
-<a class="sourceLine" id="cb60-12" title="12">  <span class="dt">pt.cex =</span> <span class="dv">1</span>, </a>
-<a class="sourceLine" id="cb60-13" title="13">  <span class="dt">cex =</span> <span class="fl">0.6</span>, </a>
-<a class="sourceLine" id="cb60-14" title="14">  <span class="dt">text.col =</span> <span class="st">&quot;black&quot;</span>, </a>
-<a class="sourceLine" id="cb60-15" title="15">  <span class="dt">horiz =</span> F, </a>
-<a class="sourceLine" id="cb60-16" title="16">  <span class="dt">inset =</span> <span class="kw">c</span>(<span class="fl">0.05</span>, <span class="fl">0.05</span>))</a></code></pre></div>
-<p><img src="Module2_files/figure-html/unnamed-chunk-72-1.png" width="672" style="display: block; margin: auto;" /></p>
+<a class="sourceLine" id="cb59-5" title="5">     <span class="dt">pch =</span> <span class="dv">20</span>, <span class="co"># point type</span></a>
+<a class="sourceLine" id="cb59-6" title="6">     <span class="dt">col =</span> <span class="kw">c</span>(<span class="st">&#39;black&#39;</span>, <span class="st">&#39;gold&#39;</span>, <span class="st">&#39;blue&#39;</span>, <span class="st">&#39;green&#39;</span>)[<span class="kw">match</span>(rush_receive<span class="op">$</span>pos, </a>
+<a class="sourceLine" id="cb59-7" title="7">                                                     <span class="kw">c</span>(<span class="st">&#39;QB&#39;</span>, <span class="st">&#39;RB&#39;</span>, <span class="st">&#39;WR&#39;</span>, <span class="st">&#39;TE&#39;</span>))]) <span class="co"># point color</span></a>
+<a class="sourceLine" id="cb59-8" title="8"><span class="kw">legend</span>(<span class="st">&quot;topleft&quot;</span>, </a>
+<a class="sourceLine" id="cb59-9" title="9">  <span class="dt">legend =</span> <span class="kw">c</span>(<span class="st">&#39;QB&#39;</span>, <span class="st">&#39;RB&#39;</span>, <span class="st">&#39;WR&#39;</span>, <span class="st">&#39;TE&#39;</span>), </a>
+<a class="sourceLine" id="cb59-10" title="10">  <span class="dt">col =</span> <span class="kw">c</span>(<span class="st">&#39;black&#39;</span>, <span class="st">&#39;gold&#39;</span>, <span class="st">&#39;blue&#39;</span>, <span class="st">&#39;green&#39;</span>), </a>
+<a class="sourceLine" id="cb59-11" title="11">  <span class="dt">pch =</span> <span class="dv">20</span>, </a>
+<a class="sourceLine" id="cb59-12" title="12">  <span class="dt">pt.cex =</span> <span class="dv">1</span>, </a>
+<a class="sourceLine" id="cb59-13" title="13">  <span class="dt">cex =</span> <span class="fl">0.6</span>, </a>
+<a class="sourceLine" id="cb59-14" title="14">  <span class="dt">text.col =</span> <span class="st">&quot;black&quot;</span>, </a>
+<a class="sourceLine" id="cb59-15" title="15">  <span class="dt">horiz =</span> F, </a>
+<a class="sourceLine" id="cb59-16" title="16">  <span class="dt">inset =</span> <span class="kw">c</span>(<span class="fl">0.05</span>, <span class="fl">0.05</span>))</a></code></pre></div>
+<p><img src="Module2_files/figure-html/unnamed-chunk-70-1.png" width="672" style="display: block; margin: auto;" /></p>
 <p>While we outlined the common <code>base</code> plotting parameters using a scatterplot, they also apply to a vast array of other <code>base</code> plots such as bar plots, line plots, histograms, etc. To read more about <code>base</code> plots, see this helpful <a href="http://www.sthda.com/english/wiki/r-base-graphs">link</a>.</p>
 </div>
 <h3>References</h3>

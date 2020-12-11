@@ -4,11 +4,11 @@
 
   <meta charset="utf-8" />
   <meta http-equiv="X-UA-Compatible" content="IE=edge" />
-  <title>Chapter 4 Visualization | R Module 2</title>
+  <title>4.3 Examples | R Module 2</title>
   <meta name="description" content="This is the second installment for the book for the R Intro Course at CSU." />
   <meta name="generator" content="bookdown 0.21 and GitBook 2.6.7" />
 
-  <meta property="og:title" content="Chapter 4 Visualization | R Module 2" />
+  <meta property="og:title" content="4.3 Examples | R Module 2" />
   <meta property="og:type" content="book" />
   
   
@@ -16,7 +16,7 @@
   
 
   <meta name="twitter:card" content="summary" />
-  <meta name="twitter:title" content="Chapter 4 Visualization | R Module 2" />
+  <meta name="twitter:title" content="4.3 Examples | R Module 2" />
   
   <meta name="twitter:description" content="This is the second installment for the book for the R Intro Course at CSU." />
   
@@ -30,8 +30,8 @@
   <meta name="apple-mobile-web-app-status-bar-style" content="black" />
   
   
-<link rel="prev" href="scratch-for-iterative-processes.html"/>
-<link rel="next" href="base.html"/>
+<link rel="prev" href="ggplot.html"/>
+<link rel="next" href="plotly.html"/>
 <script src="libs/jquery-2.2.3/jquery.min.js"></script>
 <link href="libs/gitbook-2.6.7/css/style.css" rel="stylesheet" />
 <link href="libs/gitbook-2.6.7/css/plugin-table.css" rel="stylesheet" />
@@ -53,13 +53,6 @@
 <script src="libs/pagedtable-1.1/js/pagedtable.js"></script>
 <link href="libs/anchor-sections-1.0/anchor-sections.css" rel="stylesheet" />
 <script src="libs/anchor-sections-1.0/anchor-sections.js"></script>
-<script src="libs/htmlwidgets-1.5.2/htmlwidgets.js"></script>
-<script src="libs/plotly-binding-4.9.2.1/plotly.js"></script>
-<script src="libs/typedarray-0.1/typedarray.min.js"></script>
-<link href="libs/crosstalk-1.1.0.1/css/crosstalk.css" rel="stylesheet" />
-<script src="libs/crosstalk-1.1.0.1/js/crosstalk.min.js"></script>
-<link href="libs/plotly-htmlwidgets-css-1.52.2/plotly-htmlwidgets.css" rel="stylesheet" />
-<script src="libs/plotly-main-1.52.2/plotly-latest.min.js"></script>
 
 
 <style type="text/css">
@@ -171,7 +164,8 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <li class="chapter" data-level="4" data-path="Visualization.html"><a href="Visualization.html"><i class="fa fa-check"></i><b>4</b> Visualization</a><ul>
 <li class="chapter" data-level="4.1" data-path="base.html"><a href="base.html"><i class="fa fa-check"></i><b>4.1</b> base</a></li>
 <li class="chapter" data-level="4.2" data-path="ggplot.html"><a href="ggplot.html"><i class="fa fa-check"></i><b>4.2</b> ggplot</a></li>
-<li class="chapter" data-level="4.3" data-path="plotly.html"><a href="plotly.html"><i class="fa fa-check"></i><b>4.3</b> plotly</a></li>
+<li class="chapter" data-level="4.3" data-path="examples.html"><a href="examples.html"><i class="fa fa-check"></i><b>4.3</b> Examples</a></li>
+<li class="chapter" data-level="4.4" data-path="plotly.html"><a href="plotly.html"><i class="fa fa-check"></i><b>4.4</b> plotly</a></li>
 </ul></li>
 <li class="chapter" data-level="5" data-path="supplemental.html"><a href="supplemental.html"><i class="fa fa-check"></i><b>5</b> Supplemental</a><ul>
 <li class="chapter" data-level="5.1" data-path="scraping-in-the-wild.html"><a href="scraping-in-the-wild.html"><i class="fa fa-check"></i><b>5.1</b> Scraping in the Wild</a><ul>
@@ -201,20 +195,42 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
           <div class="page-inner">
 
             <section class="normal" id="section-">
-<div id="Visualization" class="section level1">
-<h1><span class="header-section-number">Chapter 4</span> Visualization</h1>
-<blockquote>
-<p>“Mankind invented a system to cope with the fact that we are so intrinsically lousy at manipulating numbers. It’s called the graph.” —Charlie Munger, Vice Chairman, Berkshire Hathaway</p>
-</blockquote>
-<p>In Chapter <a href="Wrangling.html#Wrangling">3</a>, we discussed tools for cleaning data. In this chapter, we will turn our attention to the visualization of cleaned data. There are several approaches to creating graphics in <code>R</code>. Here, we focus on three: <code>base</code>, <code>ggplot</code>, and <code>plotly</code>. In this chapter, we hope to outline the syntax of these systems before providing some examples using the data prepared in previous chapters.</p>
+<div id="examples" class="section level2">
+<h2><span class="header-section-number">4.3</span> Examples</h2>
+<div class="sourceCode" id="cb64"><pre class="sourceCode r chunk-style"><code class="sourceCode r"><a class="sourceLine" id="cb64-1" title="1"><span class="kw">ggplot</span>(<span class="dt">data =</span> rush_receive, <span class="kw">aes</span>(<span class="dt">x =</span> age)) <span class="op">+</span></a>
+<a class="sourceLine" id="cb64-2" title="2"><span class="st">  </span><span class="kw">geom_histogram</span>(<span class="dt">binwidth =</span> <span class="dv">2</span>) <span class="op">+</span></a>
+<a class="sourceLine" id="cb64-3" title="3"><span class="st">  </span><span class="kw">labs</span>(<span class="dt">x =</span> <span class="st">&#39;Age&#39;</span>, <span class="dt">y =</span> <span class="st">&#39;Frequency&#39;</span>, <span class="dt">title =</span> <span class="st">&#39;Distribution of Age&#39;</span>) <span class="op">+</span></a>
+<a class="sourceLine" id="cb64-4" title="4"><span class="st">  </span><span class="kw">theme_bw</span>()</a></code></pre></div>
+<p><img src="Module2_files/figure-html/unnamed-chunk-76-1.png" width="672" style="display: block; margin: auto;" /></p>
+<div class="sourceCode" id="cb65"><pre class="sourceCode r chunk-style"><code class="sourceCode r"><a class="sourceLine" id="cb65-1" title="1"><span class="kw">ggplot</span>(<span class="dt">data =</span> rush_receive, <span class="kw">aes</span>(<span class="dt">x =</span> age, <span class="dt">fill =</span> pos)) <span class="op">+</span></a>
+<a class="sourceLine" id="cb65-2" title="2"><span class="st">  </span><span class="kw">geom_histogram</span>(<span class="dt">binwidth =</span> <span class="dv">2</span>) <span class="op">+</span></a>
+<a class="sourceLine" id="cb65-3" title="3"><span class="st">  </span><span class="kw">facet_wrap</span>(<span class="op">~</span>pos) <span class="op">+</span></a>
+<a class="sourceLine" id="cb65-4" title="4"><span class="st">  </span><span class="kw">labs</span>(<span class="dt">x =</span> <span class="st">&#39;Age&#39;</span>, <span class="dt">y =</span> <span class="st">&#39;Frequency&#39;</span>, <span class="dt">title =</span> <span class="st">&#39;Distribution of Age&#39;</span>) <span class="op">+</span></a>
+<a class="sourceLine" id="cb65-5" title="5"><span class="st">  </span><span class="kw">theme_bw</span>()</a></code></pre></div>
+<p><img src="Module2_files/figure-html/unnamed-chunk-77-1.png" width="672" style="display: block; margin: auto;" /></p>
+<div class="sourceCode" id="cb66"><pre class="sourceCode r chunk-style"><code class="sourceCode r"><a class="sourceLine" id="cb66-1" title="1"><span class="kw">ggplot</span>(<span class="dt">data =</span> rush_receive, <span class="kw">aes</span>(<span class="dt">x =</span> rushing_att, <span class="dt">y =</span> rushing_yds, <span class="dt">color =</span> pos, <span class="dt">size =</span> age)) <span class="op">+</span></a>
+<a class="sourceLine" id="cb66-2" title="2"><span class="st">  </span><span class="kw">geom_point</span>(<span class="dt">alpha =</span> <span class="fl">0.7</span>) <span class="op">+</span></a>
+<a class="sourceLine" id="cb66-3" title="3"><span class="st">  </span><span class="kw">geom_smooth</span>(<span class="dt">method =</span> <span class="st">&#39;lm&#39;</span>, <span class="dt">formula =</span> y<span class="op">~</span>x) <span class="op">+</span></a>
+<a class="sourceLine" id="cb66-4" title="4"><span class="st">  </span><span class="kw">scale_color_brewer</span>(<span class="st">&#39;Position&#39;</span>, <span class="dt">palette =</span> <span class="st">&#39;Set1&#39;</span>) <span class="op">+</span></a>
+<a class="sourceLine" id="cb66-5" title="5"><span class="st">  </span><span class="kw">labs</span>(<span class="dt">x =</span> <span class="st">&#39;Rush Attempts&#39;</span>, <span class="dt">y =</span> <span class="st">&#39;Rushing Yards&#39;</span>, <span class="dt">title =</span> <span class="st">&#39;Rushing Yards vs Rush Attempts&#39;</span>) <span class="op">+</span></a>
+<a class="sourceLine" id="cb66-6" title="6"><span class="st">  </span><span class="kw">theme_bw</span>() <span class="op">+</span></a>
+<a class="sourceLine" id="cb66-7" title="7"><span class="st">  </span><span class="kw">theme</span>(<span class="dt">legend.position =</span> <span class="st">&#39;bottom&#39;</span>)</a></code></pre></div>
+<p><img src="Module2_files/figure-html/unnamed-chunk-78-1.png" width="672" style="display: block; margin: auto;" /></p>
+<div class="sourceCode" id="cb67"><pre class="sourceCode r chunk-style"><code class="sourceCode r"><a class="sourceLine" id="cb67-1" title="1"><span class="kw">ggplot</span>(<span class="dt">data =</span> rush_receive <span class="op">%&gt;%</span></a>
+<a class="sourceLine" id="cb67-2" title="2"><span class="st">         </span><span class="kw">mutate</span>(., <span class="dt">yds =</span> rushing_yds <span class="op">+</span><span class="st"> </span>receiving_yds), </a>
+<a class="sourceLine" id="cb67-3" title="3">       <span class="kw">aes</span>(<span class="dt">x =</span> pos, <span class="dt">y =</span> yds, <span class="dt">fill =</span> pos)) <span class="op">+</span></a>
+<a class="sourceLine" id="cb67-4" title="4"><span class="st">  </span><span class="kw">geom_boxplot</span>() <span class="op">+</span></a>
+<a class="sourceLine" id="cb67-5" title="5"><span class="st">  </span><span class="kw">scale_fill_brewer</span>(<span class="st">&#39;Position&#39;</span>, <span class="dt">palette =</span> <span class="st">&#39;Set1&#39;</span>) <span class="op">+</span></a>
+<a class="sourceLine" id="cb67-6" title="6"><span class="st">  </span><span class="kw">labs</span>(<span class="dt">x =</span> <span class="st">&#39;Po&#39;</span>)</a></code></pre></div>
+<p><img src="Module2_files/figure-html/unnamed-chunk-79-1.png" width="672" style="display: block; margin: auto;" /></p>
 </div>
             </section>
 
           </div>
         </div>
       </div>
-<a href="scratch-for-iterative-processes.html" class="navigation navigation-prev " aria-label="Previous page"><i class="fa fa-angle-left"></i></a>
-<a href="base.html" class="navigation navigation-next " aria-label="Next page"><i class="fa fa-angle-right"></i></a>
+<a href="ggplot.html" class="navigation navigation-prev " aria-label="Previous page"><i class="fa fa-angle-left"></i></a>
+<a href="plotly.html" class="navigation navigation-next " aria-label="Next page"><i class="fa fa-angle-right"></i></a>
     </div>
   </div>
 <script src="libs/gitbook-2.6.7/js/app.min.js"></script>

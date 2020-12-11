@@ -53,6 +53,13 @@
 <script src="libs/pagedtable-1.1/js/pagedtable.js"></script>
 <link href="libs/anchor-sections-1.0/anchor-sections.css" rel="stylesheet" />
 <script src="libs/anchor-sections-1.0/anchor-sections.js"></script>
+<script src="libs/htmlwidgets-1.5.2/htmlwidgets.js"></script>
+<script src="libs/plotly-binding-4.9.2.1/plotly.js"></script>
+<script src="libs/typedarray-0.1/typedarray.min.js"></script>
+<link href="libs/crosstalk-1.1.0.1/css/crosstalk.css" rel="stylesheet" />
+<script src="libs/crosstalk-1.1.0.1/js/crosstalk.min.js"></script>
+<link href="libs/plotly-htmlwidgets-css-1.52.2/plotly-htmlwidgets.css" rel="stylesheet" />
+<script src="libs/plotly-main-1.52.2/plotly-latest.min.js"></script>
 
 
 <style type="text/css">
@@ -230,9 +237,9 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <a class="sourceLine" id="cb49-12" title="12"><span class="st">    </span><span class="kw">future_map_dfr</span>(., <span class="op">~</span><span class="kw">clean_team_stats</span>(.x))</a>
 <a class="sourceLine" id="cb49-13" title="13">)</a></code></pre></div>
 <pre class="output-style"><code>   user  system elapsed 
-   5.41    0.19    9.17 
+   5.08    0.15    8.27 
    user  system elapsed 
-   0.34    0.03    2.66 </code></pre>
+   0.26    0.02    2.32 </code></pre>
 <p>We can see that parallelizing this process is about one and a half times faster than applying these functions sequentially. This effect is only amplified when we increase the number of sources to scrape.</p>
 <div class="sourceCode" id="cb51"><pre class="sourceCode r chunk-style"><code class="sourceCode r"><a class="sourceLine" id="cb51-1" title="1">player_urls &lt;-<span class="st"> </span>team_urls <span class="op">%&gt;%</span><span class="st"> </span></a>
 <a class="sourceLine" id="cb51-2" title="2"><span class="st">  </span><span class="kw">map</span>(., <span class="op">~</span><span class="kw">get_players</span>(.x)) <span class="op">%&gt;%</span><span class="st"> </span></a>
@@ -250,10 +257,10 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <a class="sourceLine" id="cb51-14" title="14"><span class="st">    </span><span class="kw">future_map</span>(., <span class="op">~</span><span class="kw">get_player_stats</span>(.x))</a>
 <a class="sourceLine" id="cb51-15" title="15">)</a></code></pre></div>
 <pre class="output-style"><code>   user  system elapsed 
-  67.41    4.30  269.86 
+  63.92    4.33  215.85 
    user  system elapsed 
-   0.22    0.02   25.11 </code></pre>
-<p>As we can see, parallelizing the scraping of all 550 players who recorded rushing and receiving statistics in 2020 is about five times faster than scraping the same data sequentially.</p>
+   0.21    0.05   27.73 </code></pre>
+<p>As we can see, parallelizing the scraping of all 558 players who recorded rushing and receiving statistics in 2020 is about five times faster than scraping the same data sequentially.</p>
 </div>
             </section>
 

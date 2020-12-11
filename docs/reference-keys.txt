@@ -5,11 +5,12 @@ fig:unnamed-chunk-28
 fig:unnamed-chunk-35
 fig:unnamed-chunk-40
 fig:unnamed-chunk-66
-fig:unnamed-chunk-77
+fig:unnamed-chunk-71
 fig:unnamed-chunk-78
-fig:unnamed-chunk-86
-fig:unnamed-chunk-90
-fig:unnamed-chunk-92
+fig:unnamed-chunk-79
+fig:unnamed-chunk-87
+fig:unnamed-chunk-91
+fig:unnamed-chunk-93
 welcome
 how-to-navigate-this-book
 associated-csu-course

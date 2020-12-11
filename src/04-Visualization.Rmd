@@ -2,7 +2,7 @@
 
 > "Mankind invented a system to cope with the fact that we are so intrinsically lousy at manipulating numbers. It's called the graph." —Charlie Munger, Vice Chairman, Berkshire Hathaway
 
-In Chapter \@ref(Wrangling), we discussed tools for cleaning data. In this chapter, we will turn our attention to visualization of data. There are several approaches to creating graphics in `R`. Here, we focus on three: `base`, `ggplot`, and `plotly`. The goal in each of these systmes will be to outline the syntax of these systems before providing some examples using the data prepared in previous chapters.
+In Chapter \@ref(Wrangling), we discussed tools for cleaning data. In this chapter, we will turn our attention to the visualization of cleaned data. There are several approaches to creating graphics in `R`. Here, we focus on three: `base`, `ggplot`, and `plotly`. In this chapter, we hope to outline the syntax of these systems before providing some examples using the data prepared in previous chapters.
 
 ## base
 
@@ -18,7 +18,7 @@ plot(receiving_lng~receiving_ctch_percent, data = rush_receive)
 plot(x = rush_receive$receiving_ctch_percent, y = rush_receive$receiving_lng)
 ```
 
-Notice, the plots are fundamentally the same. The only differences are the axis labels. These can be adjusted with plotting parameters. Rather than outline all of the parameters, we refer you to the following figure provided by @holtz2018, software engineer for Datadog. His website, [The R Graph Gallery](https://www.r-graph-gallery.com/), is an excellent resource for those hoping to dig deeper into data visualizations.
+Notice, the plots are fundamentally the same. The only differences are the axis labels. These can be adjusted with plotting parameters. Rather than outline all of the parameters, we refer you to the following figure provided by @holtz2018, software engineer for Datadog. His website, [The R Graph Gallery](https://www.r-graph-gallery.com/), is an excellent resource for those who wish to dig deeper into data visualizations.
 
 ```{r, fig.cap="common plotting parameters for `base R` plots", echo=F, out.width='100%'}
 knitr::include_graphics("src/images/base_plot_params.png")
@@ -31,36 +31,24 @@ plot(receiving_lng~receiving_ctch_percent, data = rush_receive,
      main = 'Longest Catch vs Catch Percentage', # title
      xlab = 'Catch Percentage (%)', # x-axis label
      ylab = 'Longest Catch (yds)', # y-axis label
-     pch = 20) # point type
-```
-
-Suppose we'd like to color the points based on the players' position. We can easily do this by providing the position variable as the color attribute. However, we will need a legend specifying what this color attribute represents.
-
-```{r}
-plot(receiving_lng~receiving_ctch_percent, data = rush_receive,
-     main = 'Longest Catch vs Catch Percentage', # title
-     xlab = 'Catch Percentage (%)', # x-axis label
-     ylab = 'Longest Catch (yds)', # y-axis label
      pch = 20, # point type
-     col = pos) # poiint color
+     col = pos) # point color 
 ```
+
+If we color the points by position, then we need to provide our readers with a legend illustrating what each color represents. As previously mentioned, `base` `R` is incredibly flexible, so tweaking a plot (such as adding a legend) is almost always possible. However, doing so can be a real headache. To illustrate the verbosity of `base`, we will illustrate how to add a legend to the previous plot. There are generally two ways people proceed, both of which are drastically more involved and cumbersome than that of `ggplot`. For this reason, among others, we prefer `ggplot` to `base` visualizations.
 
 ```{block, type = 'bonus'}
 It is of the author's humble opinion that aesthetic attributes such as color, shape, fill, among others should never be added to a plot unless it provides further information about the data of interest. That is, do not add flare for flare's sake. Every element of a plot should portray some bit of information.
 ```
 
-```{block, type = 'caution'}
-Adding legends in `base` `R` can be a real headache. There are generally two ways people add a legend to a `base` plot. Both of which are drastically more involved and cumbersome than that of `ggplot`. For this reason, among others, we prefer `ggplot` to `base` visualizations.
-```
-
-The first method is to partition the data by position and add the position's points iteratively to the scatterplot, specifying a new color for each of them. 
+The first method is to partition the data by position and add the position's points iteratively to the scatterplot, specifying a new color for each of them. Essentially, we construct the full plot with black points before overwriting the points, one position at a time, with colored points. While easy to comprehend, this method is incredibly verbose and involves duplicate code. 
 
 ```{r}
 plot(receiving_lng~receiving_ctch_percent, data = rush_receive,
      main = 'Longest Catch vs Catch Percentage', # title
      xlab = 'Catch Percentage (%)', # x-axis label
      ylab = 'Longest Catch (yds)', # y-axis label
-     pch = 20)
+     pch = 20) # point character
 points(x = rush_receive[rush_receive$pos == 'QB', ]$receiving_ctch_percent, 
        y = rush_receive[rush_receive$pos == 'QB', ]$receiving_lng, 
        pch = 20, col = 'black')
@@ -84,7 +72,7 @@ legend("topleft",
   inset = c(0.05, 0.05))
 ```
 
-The second method is to replace the vector of positions with a vector of colors. This can be done by matching the position to a respective color.
+The second method is to replace the vector of positions with a vector of colors. This can be done by matching the position to a respective color. It is important to ensure that the order of the colors used in the `match` function is the same order specifed in the legend; otherwise, you may be misleading your reader by falsely claiming, for example, that black points represent wide receivers when in fact they represent quarterbacks. While less verbose, this method is prone to transcription mistakes in this way.
 
 ```{r}
 plot(receiving_lng~receiving_ctch_percent, data = rush_receive,
@@ -109,41 +97,96 @@ While we outlined the common `base` plotting parameters using a scatterplot, the
 
 ## ggplot
 
-```{r}
-ggplot(data = rush_receive, aes(x = age)) +
-  geom_histogram(binwidth = 2) +
-  labs(x = 'Age', y = 'Frequency', title = 'Distribution of Age') +
-  theme_bw()
+In the previous subsection, we outlined how to construct plots in `base` `R`. While flexible, `base` plots are essentially a series of `R` commands, lacking a universal graphical language which makes it difficult to translate from one plot to another. To fill this void, `ggplot` was created, built from concepts introduced in Grammar of Graphics in @wilkinson2012grammar. In essence, the grammer of graphics asserts that every graph is composed of data in a coordinate system where the data are represented by geometric objects (such as points, lines, and bars) with aesthetic attributes (such as color, shape, and size). Furthermore, a graph may contain statistical transformations of the data. These are the ingredients of `ggplot`, outlined in the following Figure taken from the [ggplot cheat sheeet](https://rstudio.com/wp-content/uploads/2015/03/ggplot2-cheatsheet.pdf).
+
+```{r, fig.cap="visualization of the grammer of graphics", echo=F, out.width='100%'}
+knitr::include_graphics("src/images/grammer_of_graphics.png")
 ```
 
+To exemplify the process, let's create the same scatterplot from the previous subsection. The `ggplot` function is used to specify the desired map. As arguments, it requires the data set (`rush_receive`) and the aesthetics. Here, three aesthetics are specified: the variable used for the x-coordinates (`receiving_ctch_percent`), the variable used for the y-coordinates (`receiving_lng`), and the color (`pos`). The color aesthetic assigns a color for each unique value of position. Since there are four positions in consideration, there will be four colors used. Once the data set and aesthetics are specified, we need to specify how to visually represent the data with geometries. Here, we wish to create a scatterplot, so we will use points to represent the data (i.e. `geom_point()`). Without specifying the coordinate system, the Cartesian coordinate system generated by the x- and y-axis variables is used by default.
+
 ```{r}
-ggplot(data = rush_receive, aes(x = age, fill = pos)) +
-  geom_histogram(binwidth = 2) +
-  facet_wrap(~pos) +
-  labs(x = 'Age', y = 'Frequency', title = 'Distribution of Age') +
-  theme_bw()
+p <- ggplot(data = rush_receive, 
+       aes(x = receiving_ctch_percent, 
+           y = receiving_lng,
+           color = pos)) +
+  geom_point()
+p
 ```
 
+Once the basics of the plot are created, we can then fine tune the scales, labels, and theme. One quick and color-blind friendly option for setting the colors used is with `scale_color_brewer` which uses color palettes from the `RColorBrewer` package. Furthermore, the name and breaks of the x- and y-axis can be changed with their respective scales. Since both axes represent continuous quantities we use `scale_x_continuous` and `scale_y_continuous`. Titles, subtitles, and captions can be changed with `labs`. The overall appearance of the graph can be changed with premade themes such as `theme_bw` or you can create your own using `theme`. Here, we use theme to move the legend to the bottom of the graph.
 
 ```{r}
-ggplot(data = rush_receive, aes(x = rushing_att, y = rushing_yds, color = pos, size = age)) +
-  geom_point(alpha = 0.7) +
-  geom_smooth(method = 'lm', formula = y~x) +
+p <- p +
   scale_color_brewer('Position', palette = 'Set1') +
-  labs(x = 'Rush Attempts', y = 'Rushing Yards', title = 'Rushing Yards vs Rush Attempts') +
+  scale_x_continuous(name = 'Catch Percentage (%)') +
+  scale_y_continuous(name = 'Longest Catch (yds)') +
+  labs(title = 'Longest Catch vs Catch Percentage') +
   theme_bw() +
   theme(legend.position = 'bottom')
+p
 ```
 
+After a graph is created, you can add elements to the graph through layers. Layers can use the same aesthetics as the orignal graph, such as adding a scatterplot smoother for each position:
+
 ```{r}
-ggplot(data = rush_receive %>%
-         mutate(., yds = rushing_yds + receiving_yds), 
-       aes(x = pos, y = yds, fill = pos)) +
-  geom_boxplot() +
-  scale_fill_brewer('Position', palette = 'Set1') +
-  labs(x = 'Po')
+p <- p + 
+  geom_smooth(se = FALSE)
+```
+
+Or, layers can be defined from different data sets and aesthetics, such as labeling running backs in the NFL who attended the University of Georgia:
+
+```{r}
+uga_rbs <- filter(rush_receive, player %in% c("Todd Gurley", 
+                                              "Nick Chubb", 
+                                              "Sony Michel", 
+                                              "D'Andre Swift"))
+p <- p + 
+  geom_label(data = uga_rbs, 
+             aes(x = receiving_ctch_percent,
+                 y = receiving_lng,
+                 label = player),
+             size = 2,
+             inherit.aes = FALSE)
+p + labs(caption = 'Go Dawgs!')
+```
+
+A popular and incredibly useful layer in `ggplot` is a facet. Facets allow the user to create the same plots for every value of a variable. For example, in the previous scatterplot, we colored the points by the player's position. Instead, if we wanted a seperate scatterplot for each position, we could apply a facet.
+
+```{r}
+p +
+  facet_wrap(~pos) +
+  theme(legend.position = 'none')
 ```
 
 ## plotly
 
-plotly here
+Previously, we created labels for a handful of players' names. If we wanted to create labels for every player's name, then our plot would quickly become overwhelming and all information contained in the graph would be lost. Furthermore, static labels can only provide information for one variable, such as the players' name. Imagine a general manager are presented these data and wishes to use them to make a trade. They may wish to procure a running back which has demonstrated his ability to catch the ball. There may be several data points of interest, but for each of them, the manager would need further information regarding each of the players such as his name, team, and perhaps age. We might not want to overwhelm the manager with all this information but allow them to easily retrieve it at will. In this case, we would like to make an interactive graph where information is embedded in the points.
+
+To create such a graph, we can utilize the `plotly` package. We will create a ggplot with a sequence of labels for information we'd like to be accessed interactively. In this case, we will create the same faceted scatterplot as before with labels for the player's team, name, and age. After we create the plot of interest, we can use the function `ggplotly` to create an interactive widget. This allows the user to pan the graph, zoom in on areas of interest, and hover over data points to retrieve more information about the observation. While this simply scratches the surface of `plotly`, it covers the most widely needed functionality. For more information regarding plotly, follow this [link](https://plotly.com/r/).
+
+```{r}
+# create ggplot with labels
+p <- ggplot(data = rush_receive, 
+       aes(x = receiving_ctch_percent, 
+           y = receiving_lng,
+           color = pos,
+           label = team,
+           label2 = player,
+           label3 = age)) +
+  geom_point() +
+  scale_color_brewer('Position', palette = 'Set1') +
+  scale_x_continuous(name = 'Catch Percentage (%)') +
+  scale_y_continuous(name = 'Longest Catch (yds)') +
+  labs(title = 'Longest Catch vs Catch Percentage') +
+  theme_bw() +
+  theme(legend.position = 'none') +
+  facet_wrap(~pos)
+
+# create interactive plot, indicating which labels should be accessed interactively
+# install.packages('plotly')
+library(plotly)
+ggplotly(p, tooltip = c('team', 'player', 'age'))
+```
+
+

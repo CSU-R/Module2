@@ -53,6 +53,13 @@
 <script src="libs/pagedtable-1.1/js/pagedtable.js"></script>
 <link href="libs/anchor-sections-1.0/anchor-sections.css" rel="stylesheet" />
 <script src="libs/anchor-sections-1.0/anchor-sections.js"></script>
+<script src="libs/htmlwidgets-1.5.2/htmlwidgets.js"></script>
+<script src="libs/plotly-binding-4.9.2.1/plotly.js"></script>
+<script src="libs/typedarray-0.1/typedarray.min.js"></script>
+<link href="libs/crosstalk-1.1.0.1/css/crosstalk.css" rel="stylesheet" />
+<script src="libs/crosstalk-1.1.0.1/js/crosstalk.min.js"></script>
+<link href="libs/plotly-htmlwidgets-css-1.52.2/plotly-htmlwidgets.css" rel="stylesheet" />
+<script src="libs/plotly-main-1.52.2/plotly-latest.min.js"></script>
 
 
 <style type="text/css">
@@ -206,10 +213,10 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <div class="sourceCode" id="cb9"><pre class="sourceCode r chunk-style"><code class="sourceCode r"><a class="sourceLine" id="cb9-1" title="1">bov_req &lt;-<span class="st"> </span>httr<span class="op">::</span><span class="kw">GET</span>(<span class="dt">url =</span> bov_nfl_api)</a>
 <a class="sourceLine" id="cb9-2" title="2">bov_req</a></code></pre></div>
 <pre class="output-style"><code>Response [https://www.bovada.lv/services/sports/event/v2/events/A/description/football/nfl]
-  Date: 2020-11-30 21:21
+  Date: 2020-12-11 21:55
   Status: 200
   Content-Type: application/json;charset=utf-8
-  Size: 656 kB</code></pre>
+  Size: 1.38 MB</code></pre>
 <p>If the request was successful, then the status of the request will read 200. Otherwise, there was some error with your request. For a list of HTTP status codes and their respective definitions, follow this <a href="https://www.w3.org/Protocols/rfc2616/rfc2616-sec10.html">link</a>. Since the response clarifies that the content is indeed driven by JavaScript, then we will utilize the <code>jsonlite</code> package to read the JSON structured data. A handy function we will use will be <code>fromJSON()</code> which converts a character vector containing data in JSON structure to native structures in <code>R</code> like lists. So, in order, we will</p>
 <ol style="list-style-type: decimal">
 <li>Extract the content from the server’s response</li>
