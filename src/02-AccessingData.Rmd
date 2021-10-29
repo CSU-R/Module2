@@ -6,7 +6,7 @@ In this chapter, we'll cover how to access data given in various forms and provi
 
 ## Rectangular vs. Non-rectangular Data
 
-Data present themselves in many forms, but at a basic level, all data can be categorized into two structures: __rectangular data__ and __non-rectangular data__. Intuitively, rectangular data are shaped like a rectangle where every value corresponds to some row and column. Non-rectangular data, on the other hand, are not no neatly arranged in rows and columns. Instead, they are often a culmination of separate data structures where there is some similarity among members of the same data structure. 
+Data present themselves in many forms, but at a basic level, all data can be categorized into two structures: __rectangular data__ and __non-rectangular data__. Intuitively, rectangular data are shaped like a rectangle where every value corresponds to some row and column. Most data frames store rectangular data. Non-rectangular data, on the other hand, are not neatly arranged in rows and columns. Instead, they are often a culmination of separate data structures where there is some similarity among members of the same data structure. Usually non-rectangular data are stored in lists.
 
 To motivate this idea, let's consider a basic grocery list which consists of ten items: black beans, milk, pasta, cheese, bananas, peanut butter, bread, apples, tomato sauce, and mayonnaise. Notice, there is little organization to this list, and more involved shoppers may find this list inadequate or unhelpful. We may wish to group these items by sections in which we're likely to find them. We may also want to include prices, so we know in-store whether the items are on sale. Let's consider two distinct (but legitimate) ways to organize these data. 
 
@@ -14,7 +14,7 @@ To motivate this idea, let's consider a basic grocery list which consists of ten
 To illustrate the idea of rectangular vs. non-rectangular data, we will consider how these data can be structured in both ways using `R`. You may not have seen some of these functions yet. No worries! The objective is not to understand __how__ to utilize these functions but to comprehend the difference between rectangular and non-rectangular data.
 ```
 
-One may first consider grouping these items by section. For example, apples and bananas can be found in the produce section, whereas black beans and tomato sauce can be found in the canned goods. If we were to continue to group these items by section, we may arrive at a data set which looks something like this:
+One may first consider grouping these items by section. For example, apples and bananas can be found in the produce section, whereas black beans and tomato sauce can be found in the canned goods section. If we were to continue to group these items by section, we may arrive at a data set which looks something like this:
 
 ```{r}
 groc <- list(produce = data.frame(item = c('apples', 'bananas'),
@@ -30,19 +30,23 @@ groc <- list(produce = data.frame(item = c('apples', 'bananas'),
 groc
 ```
 
-Here, we use lists and data frames to create a data set of our grocery list. This list can be traversed depending on what section of the store we find ourselves. For example, suppose we are in the produce section, and we need to recall what items to buy. We could utilize the following code to remind ourselves.
+Here, we use lists and data frames to create a data set of our grocery list. This list can be traversed depending on what section of the store we find ourselves in. For example, suppose we are in the produce section, and we need to recall what items to buy. We could utilize the following code to remind ourselves.
 
 ```{r}
 groc$produce
 ```
 
 ```{block, type = 'reflect'}
-Is this grocery list an example of rectangular or non-rectangular data? Are there examples of rectangular data contained within the grocery list? How could we restructure the data to __rectangularize__ the grocery list?
+Is this grocery list an example of rectangular or non-rectangular data (try to use the definition of rectangular data given above)? Are there examples of rectangular data contained within the grocery list? How could we restructure the data to __rectangularize__ the grocery list?
 ```
 
 As constructed, this grocery list is an example of non-rectangular data. As a whole, the grocery list is not shaped like a rectangle, but rather, consists of sets of rectangular data, where the sets are defined by the section of the store. Within a section of the store, the items and prices are given in rectangular form since every value is defined by a row and column.
 
-While non-rectangular data is often a useful return object for user-defined functions, they are often troublesome to work with. If a data set can be restructured or created in rectangular form, it should be. Rectangular data is especially important within the Tidyverse, a self-described 'opinionated collection of R packages designed for data science'. All packages within the Tidyverse rely on the principle of _tidy data_, data structures where observations are given by rows and variables are given by columns. As defined, tidy data are rectangular, so as we embark on wrangling, visualizing, and modeling data in future chapters, it is important to ponder the nature of our data and whether it can be rectangularized.  
+While lists are often a useful return object for user-defined functions, they are often troublesome to work with because they may be non-rectangular. If a data set can be restructured or created in rectangular form, it should be. Rectangular data is especially important within the Tidyverse, a self-described 'opinionated collection of R packages designed for data science'. All packages within the Tidyverse rely on the principle of _tidy data_, data structures where observations are given by rows and variables are given by columns. As defined, tidy data are rectangular, so as we embark on wrangling, visualizing, and modeling data in future chapters, it is important to ponder the nature of our data and whether it can be rectangularized.  
+
+```{block, type='progress'}
+Create your own example of non-rectangular data. Make sure your example is assigned to a variable with an appropriate name.
+```
 
 Let's consider how we can rectangularize the grocery list. Instead of creating a list of named data frames, where the name represents the section of the store, let's create a grocery list where each row represents an item and columns specify the section and price. Because the Tidyverse requires rectangular data, there are several functions which are handy for converting data structures to rectangular form. We could utilize one of these functions to rectangularize the data set. 
 
@@ -52,7 +56,19 @@ groc_rec <- groc %>%
   bind_rows(., .id = 'section')
 groc_rec
 ```
+
+```{block, type='bonus'}
+The code chuck above is an example of "piping", a concept used heavily in the `tidyverse` which allows the easy chaining of actions, where the output of one function is "piped" to the input argument of the next function. Here the `groc` list is being piped into the first argument (denoted with a `.`) of the `bind_rows` function. Though it may look confusing at first, piping is a nice way to increase code readability, since the order that functions will be applied matches the order they appear in the code (from top to bottom). For more information, see [here](https://r4ds.had.co.nz/pipes.html).
+```
+
+
 Or, we can simply create the grocery list in rectangular form to begin with.
+
+
+```{block, type='progress'}
+Create a data frame called `groc_df` which contains the above grocery list in rectangular form.
+```
+
 
 ```{block, type='feedback'}
 Any feedback for this section? Click [here](https://docs.google.com/forms/d/e/1FAIpQLSePQZ3lIaCIPo9J2owXImHZ_9wBEgTo21A0s-A1ty28u4yfvw/viewform?entry.1684471501=The%20R%20Community)
@@ -60,32 +76,40 @@ Any feedback for this section? Click [here](https://docs.google.com/forms/d/e/1F
 
 ### Reading and Writing Rectangular Data
 
-Rectangular data are often stored locally using text files (.txt), comma separated value files (.csv), and Excel files (.xlsx). When data are written to these file types, they are easy to view across devices, without the need for `R`. Since most grocery store trips obviate the need for `R`, let's consider how to write our grocery list to each of these file types. To write and read data to and from text files or comma separated value files, the `readr` package will come in handy, whereas the `xlsx` package will allow us to write and read to and from Excel files. To write data from `R` to a file, we will leverage commands beginning with `write`.
+Rectangular data are often stored locally using text files (.txt), comma separated value files (.csv), and Excel files (.xlsx). When data are written to these file types, they are easy to view across devices, without the need for `R`. Since most grocery store trips obviate the need for `R`, let's consider how to write our grocery list to each of these file types. To write to and read from data text files or comma separated value files, the `readr` package will come in handy, whereas the `xlsx` package will allow us to write to and read from Excel files. To write data from `R` to a file, we will leverage commands beginning with `write`.
 
-```{r}
+```{r, eval=FALSE}
 # text file
-readr::write_delim(groc_rec, path = './data_raw/groceries-rectangular.txt')
+readr::write_delim(groc_rec, path = 'data_raw/groceries-rectangular.txt')
 # csv file
-readr::write_csv(groc_rec, path = './data_raw/groceries-rectangular.csv')
+readr::write_csv(groc_rec, path = 'data_raw/groceries-rectangular.csv')
 # Excel file
-xlsx::write.xlsx(groc_rec, file = './data_raw/groceries-rectangular.xlsx', row.names = FALSE)
+xlsx::write.xlsx(groc_rec, file = 'data_raw/groceries-rectangular.xlsx', row.names = FALSE)  # don't include the row names
 ```
+
 
 To read data from a file to `R`, we will leverage commands beginning with `read`. Before reading data into `R`, you will need to look at the file and file extension to better understand which function to use.
 
-```{r}
+```{r, eval=FALSE}
 # text file
-readr::read_delim('./data_raw/groceries-rectangular.txt', delim = ' ')
+readr::read_delim('data_raw/groceries-rectangular.txt', delim = ' ', lazy = FALSE)  # the file delimits columns using a space
 # csv file
-readr::read_csv('./data_raw/groceries-rectangular.csv')
+readr::read_csv('data_raw/groceries-rectangular.csv', lazy = FALSE)
 # Excel file
-xlsx::read.xlsx('./data_raw/groceries-rectangular.xlsx', sheetName = 'Sheet1')
+xlsx::read.xlsx('data_raw/groceries-rectangular.xlsx', sheetName = 'Sheet1')  # load the sheet called 'Sheet1'
 ```
 
 ```{block, type = 'caution'}
-Reading files into `R` can sometimes be frustrating. Always look at the data to see if there are column headers and row names. Text files can have different __delimiters__, characters which separate values in a data set. The default delimiter for `readr::write_delim()` is a space, but other common text delimiters are tabs, colons, semi-colons, or vertical bars. Commas are so commonly used as a delimiter, it gets a function of its own. Always ensure that data from an Excel spreadsheet are rectangular. Lastly, the `readr` package will guess the data type of each column. Check these data types are correct using `str()`.
+Reading files into `R` can sometimes be frustrating. Always look at the data to see if there are column headers and row names. Text files can have different __delimiters__, characters which separate values in a data set. The default delimiter for `readr::write_delim()` is a space, but other common text delimiters are tabs, colons, semi-colons, or vertical bars. Commas are so commonly used as a delimiter, it gets a function of its own (.csv). Always ensure that data from an Excel spreadsheet are rectangular. Lastly, the `readr` package will guess the data type of each column. Check these data types are correct using `str()`.
 ```
 
+```{block, type='bonus'}
+Reading and writing csv and text files can also be done with the `read.csv`, `write.csv`, `read.table` and `write.table` functions included in base R. However, the `readr` package belongs to the tidyverse and has additional capabilities (see [here]{https://readr.tidyverse.org} for more info).
+```
+
+```{block, type='progress'}
+Write the `groc_df` data frame that you created above to your computer using the `write_delim` function and using the `write_csv` function, using different file names. Open the files using a text editor (not R) and comment on the differences in formatting between the between them.
+```
 
 ```{block, type='feedback'}
 Any feedback for this section? Click [here](https://docs.google.com/forms/d/e/1FAIpQLSePQZ3lIaCIPo9J2owXImHZ_9wBEgTo21A0s-A1ty28u4yfvw/viewform?entry.1684471501=The%20R%20Community)
@@ -101,7 +125,11 @@ The sister function entitled `read_rds()` allows you to read any RDS file direct
 Similar to RDS files, there are also RData files which can store multiple `R` objects. These files can be written from `R` to your local machine using `save()` and read from your local machine to R using `load()`. We recommend avoiding RData files, and instead, storing multiple `R` objects in one named list which is then saved as an RDS file.
 ```
 
-When there is inevitably non-rectangular data that exist which you would like to load into `R`, you are in for a treat. The rest of this module can loosely be viewed as a guide to managing and curating data. We will leverage many tools to tackle this problem, but in the next two sections, we will address two specif, common instances of non-rectangular data: data from APIs and from scraped sources.
+When there is inevitably non-rectangular data that exist which you would like to load into `R`, you are in for a treat. The rest of this module can loosely be viewed as a guide to managing and curating data. We will leverage many tools to tackle this problem, but in the next two sections, we will address two specific, common instances of non-rectangular data: data from APIs and from scraped sources.
+
+```{block, type='progress'}
+Write the non-rectangular data that you created above to your computer using the `write_rds()` function. Remember that you can use `?write_rds()` to learn more about the function.
+```
 
 ```{block, type='feedback'}
 Any feedback for this section? Click [here](https://docs.google.com/forms/d/e/1FAIpQLSePQZ3lIaCIPo9J2owXImHZ_9wBEgTo21A0s-A1ty28u4yfvw/viewform?entry.1684471501=The%20R%20Community)
