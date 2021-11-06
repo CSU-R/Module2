@@ -71,7 +71,7 @@ Create a data frame called `groc_df` which contains the above grocery list in re
 
 
 ```{block, type='feedback'}
-Any feedback for this section? Click [here](https://docs.google.com/forms/d/e/1FAIpQLSePQZ3lIaCIPo9J2owXImHZ_9wBEgTo21A0s-A1ty28u4yfvw/viewform?entry.1684471501=The%20R%20Community)
+Any feedback for this section? Click [here](https://docs.google.com/forms/d/e/1FAIpQLSePQZ3lIaCIPo9J2owXImHZ_9wBEgTo21A0s-A1ty28u4yfvw/viewform?entry.1684471501=Rectangular vs.%20Nonrectangular%20Data)
 ```
 
 ### Reading and Writing Rectangular Data
@@ -137,15 +137,16 @@ Any feedback for this section? Click [here](https://docs.google.com/forms/d/e/1F
 
 ## APIs: Clean and Curated {#APIs}
 
-An application programming interface (API) is a set of functions and procedures which allows one computer program to interact with another. To simplify the concept remarkably, we will consider web-APIs where there is a server (computer waiting to provide data) and a client (computer making a request for data).
+An application programming interface (API) is a set of functions and procedures which allows one computer program to interact with another. To simplify the concept remarkably, we will consider web-APIs where there is a server called a host (computer waiting to provide data) and a client (computer making a request for data).
 
-The benefit of APIs is the result: clean and curated data from the host. The pre-processing needed to get the data in a workable form is entirely done on the server side. We, however, are responsible for making the request. Web-APIs often utilize JavaScript Object Notation (JSON), another example of non-rectangular data. We will utilize the `httr` and the `jsonlite` packages to retrieve the latest sports lines from Bovada, an online sportsbook.
+The benefit of APIs is the result: clean and curated data from the host. The pre-processing needed to get the data in a workable form is usually already done on the server side. We, however, are responsible for making the request. Web-APIs often utilize JavaScript Object Notation (JSON), another example of non-rectangular data. We will utilize the `httr` and the `jsonlite` packages to retrieve the latest sports lines from Bovada, an online sportsbook.
 
 Before we start, we'll need to download the `httr` and `jsonlite` packages and load them into our current environment. Furthermore, we will need to find the address of the server to which we will send the request.
 
 ```{r}
-library(httr, quietly = TRUE)
+library(httr, quietly = TRUE)  # quietly means don't print any output when loading the library
 library(jsonlite, quietly = TRUE)
+# URL for api requests:
 bov_nfl_api <- "https://www.bovada.lv/services/sports/event/v2/events/A/description/football/nfl"
 ```
 
@@ -169,6 +170,11 @@ content_char <- rawToChar(content)
 bov_res <- jsonlite::fromJSON(content_char)
 ```
 
+```{block, type="progress"}
+The website icanhazdadjoke.com provides an API so you can fetch a random "dad joke". Following the Bovada example above, use `httr::GET` to retrieve a joke, where the url is "icanhazdadjoke.com". Unlike the example above, you will need to add another argument to the `GET` function: `add_headers(Accept="application/json")`, which tells the website to send its response in JSON format.
+Next, extract the content from the server's response, convert it to a character string, and use `jsonlite::fromJSON` to parse the JSON structure.
+```
+
 Of course, we could also create a function which takes the server's response and converts the content to native `R` structures. We will want to code in a force stop if the response status is not 200. We will also want to require the `httr` and `jsonlite` packages which will automatically install the packages if a user calls the function without having the packages installed.
 
 ```{r}
@@ -189,8 +195,14 @@ Finally, we can get the same output by simply calling the function.
 identical(convert_JSON(bov_req), bov_res)
 ```
 
+```{block, type="progress"}
+Write code to retrieve 100 random dad jokes from icanhazdadjoke.com, and store the result in a list called `jokes`. Recall from Module 1 that you can do this with a for-loop, or with the `lapply` function.
+Next, count how many of the random dad jokes you retrieved contain the word "Why" (with a capital "W"). Here's a hint to get you started: use `grepl("Why", jokes)` to produce a binary vector, which elements are `TRUE` if "Why" occurs in the joke, and `FALSE` otherwise. Then count the `TRUE` elements using `sum`.
+```
+
+
 ```{block, type = 'bonus'}
-Some web-APIs require additional information from the us as outlined in the documentation for the API. In this case, the user would need to provide additional query parameters in their GET request. Thankfully, this functionality is ingrained in the `httr` package's `GET()` function. For more information on how to include query parameters, type `??GET` into your `R` console.
+Some web-APIs require additional information from us as outlined in the documentation for the API. In this case, the user would need to provide additional query parameters in their GET request. Thankfully, this functionality is ingrained in the `httr` package's `GET()` function. For more information on how to include query parameters, type `??GET` into your `R` console.
 ```
 
 ```{block, type='feedback'}
@@ -335,6 +347,9 @@ Take this time to scrape the 'Team Conversions' table on your own.
 ```{block, type = 'caution'}
 While it is exciting to scrape your first nuggets of data, we have just scratched the surface of web scraping. To be honest, it took some time to find data this easy to scrape. More often than not, difficulties arise. The HTML table you want may be commented out or hidden. Your data may not be in the form of a table, at all. For a more in-depth exposition of web scraping, see the supplemental materials.
 ```
+
+
+
 
 ```{block, type='feedback'}
 Any feedback for this section? Click [here](https://docs.google.com/forms/d/e/1FAIpQLSePQZ3lIaCIPo9J2owXImHZ_9wBEgTo21A0s-A1ty28u4yfvw/viewform?entry.1684471501=The%20R%20Community)
