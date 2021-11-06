@@ -21,7 +21,7 @@ knitr::opts_chunk$set(echo = TRUE)
 
 # Assignment
 
-This problem will give you some experience working with rectangular and non-rectangular data, as well as retrieving data using APIs.
+This assignment will give you some experience working with rectangular and non-rectangular data, as well as retrieving data using APIs.
 
 ## Problem 1. 
 
@@ -46,19 +46,43 @@ Note: The textbook showed an example of how to combine a list of data frames usi
 ```
 
 ## Problem 2. 
- 
+
+The website boredapi.com provides an API which suggests something to do if you are bored.
+Use the `httr::GET` function to retrieve a random activity using "https://www.boredapi.com/api/activity" as the url.
+Be sure to convert the response into a character vector and parse the JSON structure.
+Performing the suggested action is optional for this assignment.
+
+```{r}
+# your code here
+```
 
 ## Problem 3. 
 
 
+Use the Coindesk API to retrieve the latest value of Bitcoin in US Dollars, Great British Pounds, and Euros.
+The URL for the `GET` request is: https://api.coindesk.com/v1/bpi/currentprice.json
+After you parse the JSON data, extract the `$bpi$USD$rate` element to get the value in US dollars, and do likewise for Pounds and Euros.
+Finally, convert the value to a numeric data type. You will have to use the `sub` function to remove the commas from the character strings before you convert them to numeric types using `as.numeric`. The command `?sub` may be helpful, you should replace all commas with an empty string.
+
+```{r}
+# your code here
+
+```
+
+
 ## Problem 4.
 
+The above problems were good practice accessing API's, but you weren't really extracting large volumes of data. This problem will hopefully show that API's can actually be a source for useful, up-to-date data.
+The website datausa.io provides an API which provides data from several government and non-government sources. 
+Go to the datausa.io/about/api to see some examples of how to use the API, notice how changing the last part of the URL allows you to retrieve different information. 
+Now send a GET request which retrieves the latest year of population data for all US counties.
+Be sure to properly extract the response and assign the result to a data frame called `counties`
 
-## Problem 5.
 
+```{r}
+# your code here
 
-## Problem 6.
-
+```
 
 ## End
 
