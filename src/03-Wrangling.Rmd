@@ -74,15 +74,21 @@ get_player_stats <- function(player_url){
   require(janitor)
   require(tidyverse)
   require(rvest)
-  player_url %>%
+  #player_url %>%
+  all_stats_table <- player_url %>%
     read_html() %>%
-    html_node(., css = '#all_stats') %>%
+    html_node(., css = '#all_stats')
+  if(is.na(all_stats_table)){
+    return(NULL)
+  }else{
+    all_stats_table %>%
     html_node(., 'table') %>%
     html_table(., fill = TRUE) %>%
     set_names(., str_c(names(.), .[1,], sep = '_')) %>%
     clean_names() %>%
     slice(., -1) %>%
-    select(., team = tm, everything())
+    select(., team = tm, everything()) %>% return()
+  }
 }
 ```
 
@@ -426,7 +432,7 @@ In the previous subsection, we learned how to apply mapping functions to scrape 
 
 ```{r}
 # sequential computation using purrr
-rush_receive_parallel <- team_urls %>%
+rush_receive <- team_urls %>%
   map(., ~get_team_stats(.x)) %>%
   map_dfr(., ~clean_team_stats(.x))
 

@@ -6,7 +6,7 @@
   <meta http-equiv="X-UA-Compatible" content="IE=edge" />
   <title>2.2 APIs: Clean and Curated | R Module 2</title>
   <meta name="description" content="This is the second installment for the book for the R Intro Course at CSU." />
-  <meta name="generator" content="bookdown 0.21 and GitBook 2.6.7" />
+  <meta name="generator" content="bookdown 0.24 and GitBook 2.6.7" />
 
   <meta property="og:title" content="2.2 APIs: Clean and Curated | R Module 2" />
   <meta property="og:type" content="book" />
@@ -30,9 +30,10 @@
   <meta name="apple-mobile-web-app-status-bar-style" content="black" />
   
   
-<link rel="prev" href="rectangular-vs-non-rectangular-data.html"/>
+<link rel="prev" href="rectangular-vs.-non-rectangular-data.html"/>
 <link rel="next" href="scraping-messy-and-mangled.html"/>
-<script src="libs/jquery-2.2.3/jquery.min.js"></script>
+<script src="libs/jquery-3.6.0/jquery-3.6.0.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/fuse.js@6.4.6/dist/fuse.min.js"></script>
 <link href="libs/gitbook-2.6.7/css/style.css" rel="stylesheet" />
 <link href="libs/gitbook-2.6.7/css/plugin-table.css" rel="stylesheet" />
 <link href="libs/gitbook-2.6.7/css/plugin-bookdown.css" rel="stylesheet" />
@@ -48,24 +49,24 @@
 
 
 
-
+<script src="libs/accessible-code-block-0.0.1/empty-anchor.js"></script>
 <link href="libs/pagedtable-1.1/css/pagedtable.css" rel="stylesheet" />
 <script src="libs/pagedtable-1.1/js/pagedtable.js"></script>
-<link href="libs/anchor-sections-1.0/anchor-sections.css" rel="stylesheet" />
-<script src="libs/anchor-sections-1.0/anchor-sections.js"></script>
-<script src="libs/htmlwidgets-1.5.2/htmlwidgets.js"></script>
-<script src="libs/plotly-binding-4.9.2.1/plotly.js"></script>
+<link href="libs/anchor-sections-1.0.1/anchor-sections.css" rel="stylesheet" />
+<script src="libs/anchor-sections-1.0.1/anchor-sections.js"></script>
+<script src="libs/htmlwidgets-1.5.4/htmlwidgets.js"></script>
+<script src="libs/plotly-binding-4.10.0/plotly.js"></script>
 <script src="libs/typedarray-0.1/typedarray.min.js"></script>
-<link href="libs/crosstalk-1.1.0.1/css/crosstalk.css" rel="stylesheet" />
-<script src="libs/crosstalk-1.1.0.1/js/crosstalk.min.js"></script>
-<link href="libs/plotly-htmlwidgets-css-1.52.2/plotly-htmlwidgets.css" rel="stylesheet" />
-<script src="libs/plotly-main-1.52.2/plotly-latest.min.js"></script>
+<link href="libs/crosstalk-1.2.0/css/crosstalk.min.css" rel="stylesheet" />
+<script src="libs/crosstalk-1.2.0/js/crosstalk.min.js"></script>
+<link href="libs/plotly-htmlwidgets-css-2.5.1/plotly-htmlwidgets.css" rel="stylesheet" />
+<script src="libs/plotly-main-2.5.1/plotly-latest.min.js"></script>
 
 
 <style type="text/css">
-a.sourceLine { display: inline-block; line-height: 1.25; }
-a.sourceLine { pointer-events: none; color: inherit; text-decoration: inherit; }
-a.sourceLine:empty { height: 1.2em; }
+code.sourceCode > span { display: inline-block; line-height: 1.25; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+code.sourceCode > span:empty { height: 1.2em; }
 .sourceCode { overflow: visible; }
 code.sourceCode { white-space: pre; position: relative; }
 pre.sourceCode { margin: 0; }
@@ -74,14 +75,16 @@ div.sourceCode { overflow: auto; }
 }
 @media print {
 code.sourceCode { white-space: pre-wrap; }
-a.sourceLine { text-indent: -1em; padding-left: 1em; }
+code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
 }
-pre.numberSource a.sourceLine
-  { position: relative; left: -4em; }
-pre.numberSource a.sourceLine::before
-  { content: attr(title);
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
     position: relative; left: -1em; text-align: right; vertical-align: baseline;
-    border: none; pointer-events: all; display: inline-block;
+    border: none; display: inline-block;
     -webkit-touch-callout: none; -webkit-user-select: none;
     -khtml-user-select: none; -moz-user-select: none;
     -ms-user-select: none; user-select: none;
@@ -90,9 +93,9 @@ pre.numberSource a.sourceLine::before
   }
 pre.numberSource { margin-left: 3em; border-left: 1px solid #aaaaaa;  padding-left: 4px; }
 div.sourceCode
-  {  }
+  {   }
 @media screen {
-a.sourceLine::before { text-decoration: underline; }
+code.sourceCode > span > a:first-child::before { text-decoration: underline; }
 }
 code span.al { color: #ff0000; font-weight: bold; } /* Alert */
 code span.an { color: #60a0b0; font-weight: bold; font-style: italic; } /* Annotation */
@@ -125,6 +128,7 @@ code span.vs { color: #4070a0; } /* VerbatimString */
 code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warning */
 </style>
 
+
 <link rel="stylesheet" href="src/style.css" type="text/css" />
 <link rel="stylesheet" href="src/environments.css" type="text/css" />
 </head>
@@ -147,9 +151,9 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <li class="chapter" data-level="1.1" data-path="associated-csu-course.html"><a href="associated-csu-course.html"><i class="fa fa-check"></i><b>1.1</b> Associated CSU Course</a></li>
 </ul></li>
 <li class="chapter" data-level="2" data-path="AccessingData.html"><a href="AccessingData.html"><i class="fa fa-check"></i><b>2</b> Accessing Data</a><ul>
-<li class="chapter" data-level="2.1" data-path="rectangular-vs-non-rectangular-data.html"><a href="rectangular-vs-non-rectangular-data.html"><i class="fa fa-check"></i><b>2.1</b> Rectangular vs. Non-rectangular Data</a><ul>
-<li class="chapter" data-level="2.1.1" data-path="rectangular-vs-non-rectangular-data.html"><a href="rectangular-vs-non-rectangular-data.html#reading-and-writing-rectangular-data"><i class="fa fa-check"></i><b>2.1.1</b> Reading and Writing Rectangular Data</a></li>
-<li class="chapter" data-level="2.1.2" data-path="rectangular-vs-non-rectangular-data.html"><a href="rectangular-vs-non-rectangular-data.html#reading-and-writing-non-rectangular-data"><i class="fa fa-check"></i><b>2.1.2</b> Reading and Writing Non-rectangular Data</a></li>
+<li class="chapter" data-level="2.1" data-path="rectangular-vs.-non-rectangular-data.html"><a href="rectangular-vs.-non-rectangular-data.html"><i class="fa fa-check"></i><b>2.1</b> Rectangular vs. Non-rectangular Data</a><ul>
+<li class="chapter" data-level="2.1.1" data-path="rectangular-vs.-non-rectangular-data.html"><a href="rectangular-vs.-non-rectangular-data.html#reading-and-writing-rectangular-data"><i class="fa fa-check"></i><b>2.1.1</b> Reading and Writing Rectangular Data</a></li>
+<li class="chapter" data-level="2.1.2" data-path="rectangular-vs.-non-rectangular-data.html"><a href="rectangular-vs.-non-rectangular-data.html#reading-and-writing-non-rectangular-data"><i class="fa fa-check"></i><b>2.1.2</b> Reading and Writing Non-rectangular Data</a></li>
 </ul></li>
 <li class="chapter" data-level="2.2" data-path="APIs.html"><a href="APIs.html"><i class="fa fa-check"></i><b>2.2</b> APIs: Clean and Curated</a></li>
 <li class="chapter" data-level="2.3" data-path="scraping-messy-and-mangled.html"><a href="scraping-messy-and-mangled.html"><i class="fa fa-check"></i><b>2.3</b> Scraping: Messy and Mangled</a><ul>
@@ -203,45 +207,56 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
             <section class="normal" id="section-">
 <div id="APIs" class="section level2">
 <h2><span class="header-section-number">2.2</span> APIs: Clean and Curated</h2>
-<p>An application programming interface (API) is a set of functions and procedures which allows one computer program to interact with another. To simplify the concept remarkably, we will consider web-APIs where there is a server (computer waiting to provide data) and a client (computer making a request for data).</p>
-<p>The benefit of APIs is the result: clean and curated data from the host. The pre-processing needed to get the data in a workable form is entirely done on the server side. We, however, are responsible for making the request. Web-APIs often utilize JavaScript Object Notation (JSON), another example of non-rectangular data. We will utilize the <code>httr</code> and the <code>jsonlite</code> packages to retrieve the latest sports lines from Bovada, an online sportsbook.</p>
+<p>An application programming interface (API) is a set of functions and procedures which allows one computer program to interact with another. To simplify the concept remarkably, we will consider web-APIs where there is a server called a host (computer waiting to provide data) and a client (computer making a request for data).</p>
+<p>The benefit of APIs is the result: clean and curated data from the host. The pre-processing needed to get the data in a workable form is usually already done on the server side. We, however, are responsible for making the request. Web-APIs often utilize JavaScript Object Notation (JSON), another example of non-rectangular data. We will utilize the <code>httr</code> and the <code>jsonlite</code> packages to retrieve the latest sports lines from Bovada, an online sportsbook.</p>
 <p>Before we start, we’ll need to download the <code>httr</code> and <code>jsonlite</code> packages and load them into our current environment. Furthermore, we will need to find the address of the server to which we will send the request.</p>
-<div class="sourceCode" id="cb8"><pre class="sourceCode r chunk-style"><code class="sourceCode r"><a class="sourceLine" id="cb8-1" title="1"><span class="kw">library</span>(httr, <span class="dt">quietly =</span> <span class="ot">TRUE</span>)</a>
-<a class="sourceLine" id="cb8-2" title="2"><span class="kw">library</span>(jsonlite, <span class="dt">quietly =</span> <span class="ot">TRUE</span>)</a>
-<a class="sourceLine" id="cb8-3" title="3">bov_nfl_api &lt;-<span class="st"> &quot;https://www.bovada.lv/services/sports/event/v2/events/A/description/football/nfl&quot;</span></a></code></pre></div>
+<div class="sourceCode" id="cb7"><pre class="sourceCode r chunk-style"><code class="sourceCode r"><span id="cb7-1"><a href="APIs.html#cb7-1"></a><span class="kw">library</span>(httr, <span class="dt">quietly =</span> <span class="ot">TRUE</span>)  <span class="co"># quietly means don&#39;t print any output when loading the library</span></span>
+<span id="cb7-2"><a href="APIs.html#cb7-2"></a><span class="kw">library</span>(jsonlite, <span class="dt">quietly =</span> <span class="ot">TRUE</span>)</span>
+<span id="cb7-3"><a href="APIs.html#cb7-3"></a><span class="co"># URL for api requests:</span></span>
+<span id="cb7-4"><a href="APIs.html#cb7-4"></a>bov_nfl_api &lt;-<span class="st"> &quot;https://www.bovada.lv/services/sports/event/v2/events/A/description/football/nfl&quot;</span></span></code></pre></div>
 <p>To ask for data through a web-API, we will need to make a <code>GET</code> request with the <code>httr</code> package’s <code>GET()</code> function. After making the request, we can read about the server’s response.</p>
-<div class="sourceCode" id="cb9"><pre class="sourceCode r chunk-style"><code class="sourceCode r"><a class="sourceLine" id="cb9-1" title="1">bov_req &lt;-<span class="st"> </span>httr<span class="op">::</span><span class="kw">GET</span>(<span class="dt">url =</span> bov_nfl_api)</a>
-<a class="sourceLine" id="cb9-2" title="2">bov_req</a></code></pre></div>
+<div class="sourceCode" id="cb8"><pre class="sourceCode r chunk-style"><code class="sourceCode r"><span id="cb8-1"><a href="APIs.html#cb8-1"></a>bov_req &lt;-<span class="st"> </span>httr<span class="op">::</span><span class="kw">GET</span>(<span class="dt">url =</span> bov_nfl_api)</span>
+<span id="cb8-2"><a href="APIs.html#cb8-2"></a>bov_req</span></code></pre></div>
 <pre class="output-style"><code>Response [https://www.bovada.lv/services/sports/event/v2/events/A/description/football/nfl]
-  Date: 2020-12-11 21:55
+  Date: 2021-11-12 22:15
   Status: 200
   Content-Type: application/json;charset=utf-8
-  Size: 1.38 MB</code></pre>
+  Size: 2.21 MB</code></pre>
 <p>If the request was successful, then the status of the request will read 200. Otherwise, there was some error with your request. For a list of HTTP status codes and their respective definitions, follow this <a href="https://www.w3.org/Protocols/rfc2616/rfc2616-sec10.html">link</a>. Since the response clarifies that the content is indeed driven by JavaScript, then we will utilize the <code>jsonlite</code> package to read the JSON structured data. A handy function we will use will be <code>fromJSON()</code> which converts a character vector containing data in JSON structure to native structures in <code>R</code> like lists. So, in order, we will</p>
 <ol style="list-style-type: decimal">
 <li>Extract the content from the server’s response</li>
 <li>Convert the content to a character vector, maintaining the JSON structure</li>
 <li>Restructure the data into native <code>R</code> structures, using <code>fromJSON()</code>.</li>
 </ol>
-<div class="sourceCode" id="cb11"><pre class="sourceCode r chunk-style"><code class="sourceCode r"><a class="sourceLine" id="cb11-1" title="1">content &lt;-<span class="st"> </span>bov_req<span class="op">$</span>content</a>
-<a class="sourceLine" id="cb11-2" title="2">content_char &lt;-<span class="st"> </span><span class="kw">rawToChar</span>(content)</a>
-<a class="sourceLine" id="cb11-3" title="3">bov_res &lt;-<span class="st"> </span>jsonlite<span class="op">::</span><span class="kw">fromJSON</span>(content_char)</a></code></pre></div>
+<div class="sourceCode" id="cb10"><pre class="sourceCode r chunk-style"><code class="sourceCode r"><span id="cb10-1"><a href="APIs.html#cb10-1"></a>content &lt;-<span class="st"> </span>bov_req<span class="op">$</span>content</span>
+<span id="cb10-2"><a href="APIs.html#cb10-2"></a>content_char &lt;-<span class="st"> </span><span class="kw">rawToChar</span>(content)</span>
+<span id="cb10-3"><a href="APIs.html#cb10-3"></a>bov_res &lt;-<span class="st"> </span>jsonlite<span class="op">::</span><span class="kw">fromJSON</span>(content_char)</span></code></pre></div>
+<div class="progress">
+<p>
+The website icanhazdadjoke.com provides an API so you can fetch a random “dad joke”. Following the Bovada example above, use <code>httr::GET</code> to retrieve a joke, where the url is “icanhazdadjoke.com”. Unlike the example above, you will need to add another argument to the <code>GET</code> function: <code>add_headers(Accept=“application/json”)</code>, which tells the website to send its response in JSON format. Next, extract the content from the server’s response, convert it to a character string, and use <code>jsonlite::fromJSON</code> to parse the JSON structure.
+</p>
+</div>
 <p>Of course, we could also create a function which takes the server’s response and converts the content to native <code>R</code> structures. We will want to code in a force stop if the response status is not 200. We will also want to require the <code>httr</code> and <code>jsonlite</code> packages which will automatically install the packages if a user calls the function without having the packages installed.</p>
-<div class="sourceCode" id="cb12"><pre class="sourceCode r chunk-style"><code class="sourceCode r"><a class="sourceLine" id="cb12-1" title="1">convert_JSON &lt;-<span class="st"> </span><span class="cf">function</span>(resp){</a>
-<a class="sourceLine" id="cb12-2" title="2">  <span class="co"># call needed packages</span></a>
-<a class="sourceLine" id="cb12-3" title="3">  <span class="kw">require</span>(httr)</a>
-<a class="sourceLine" id="cb12-4" title="4">  <span class="kw">require</span>(jsonlite)</a>
-<a class="sourceLine" id="cb12-5" title="5">  <span class="co"># stop if the server returned an error</span></a>
-<a class="sourceLine" id="cb12-6" title="6">  httr<span class="op">::</span><span class="kw">stop_for_status</span>(resp)</a>
-<a class="sourceLine" id="cb12-7" title="7">  <span class="co"># return JSON content in native R structures</span></a>
-<a class="sourceLine" id="cb12-8" title="8">  <span class="kw">return</span>(jsonlite<span class="op">::</span><span class="kw">fromJSON</span>(<span class="kw">rawToChar</span>(resp<span class="op">$</span>content)))</a>
-<a class="sourceLine" id="cb12-9" title="9">}</a></code></pre></div>
+<div class="sourceCode" id="cb11"><pre class="sourceCode r chunk-style"><code class="sourceCode r"><span id="cb11-1"><a href="APIs.html#cb11-1"></a>convert_JSON &lt;-<span class="st"> </span><span class="cf">function</span>(resp){</span>
+<span id="cb11-2"><a href="APIs.html#cb11-2"></a>  <span class="co"># call needed packages</span></span>
+<span id="cb11-3"><a href="APIs.html#cb11-3"></a>  <span class="kw">require</span>(httr)</span>
+<span id="cb11-4"><a href="APIs.html#cb11-4"></a>  <span class="kw">require</span>(jsonlite)</span>
+<span id="cb11-5"><a href="APIs.html#cb11-5"></a>  <span class="co"># stop if the server returned an error</span></span>
+<span id="cb11-6"><a href="APIs.html#cb11-6"></a>  httr<span class="op">::</span><span class="kw">stop_for_status</span>(resp)</span>
+<span id="cb11-7"><a href="APIs.html#cb11-7"></a>  <span class="co"># return JSON content in native R structures</span></span>
+<span id="cb11-8"><a href="APIs.html#cb11-8"></a>  <span class="kw">return</span>(jsonlite<span class="op">::</span><span class="kw">fromJSON</span>(<span class="kw">rawToChar</span>(resp<span class="op">$</span>content)))</span>
+<span id="cb11-9"><a href="APIs.html#cb11-9"></a>}</span></code></pre></div>
 <p>Finally, we can get the same output by simply calling the function.</p>
-<div class="sourceCode" id="cb13"><pre class="sourceCode r chunk-style"><code class="sourceCode r"><a class="sourceLine" id="cb13-1" title="1"><span class="kw">identical</span>(<span class="kw">convert_JSON</span>(bov_req), bov_res)</a></code></pre></div>
+<div class="sourceCode" id="cb12"><pre class="sourceCode r chunk-style"><code class="sourceCode r"><span id="cb12-1"><a href="APIs.html#cb12-1"></a><span class="kw">identical</span>(<span class="kw">convert_JSON</span>(bov_req), bov_res)</span></code></pre></div>
 <pre class="output-style"><code>[1] TRUE</code></pre>
+<div class="progress">
+<p>
+Write code to retrieve 100 random dad jokes from icanhazdadjoke.com, and store the result in a list called <code>jokes</code>. Recall from Module 1 that you can do this with a for-loop, or with the <code>lapply</code> function. Next, count how many of the random dad jokes you retrieved contain the word “Why” (with a capital “W”). Here’s a hint to get you started: use <code>grepl(“Why”, jokes)</code> to produce a binary vector, which elements are <code>TRUE</code> if “Why” occurs in the joke, and <code>FALSE</code> otherwise. Then count the <code>TRUE</code> elements using <code>sum</code>.
+</p>
+</div>
 <div class="bonus">
 <p>
-Some web-APIs require additional information from the us as outlined in the documentation for the API. In this case, the user would need to provide additional query parameters in their GET request. Thankfully, this functionality is ingrained in the <code>httr</code> package’s <code>GET()</code> function. For more information on how to include query parameters, type <code>??GET</code> into your <code>R</code> console.
+Some web-APIs require additional information from us as outlined in the documentation for the API. In this case, the user would need to provide additional query parameters in their GET request. Thankfully, this functionality is ingrained in the <code>httr</code> package’s <code>GET()</code> function. For more information on how to include query parameters, type <code>??GET</code> into your <code>R</code> console.
 </p>
 </div>
 <div class="feedback">
@@ -255,12 +270,11 @@ Any feedback for this section? Click <a href="https://docs.google.com/forms/d/e/
           </div>
         </div>
       </div>
-<a href="rectangular-vs-non-rectangular-data.html" class="navigation navigation-prev " aria-label="Previous page"><i class="fa fa-angle-left"></i></a>
+<a href="rectangular-vs.-non-rectangular-data.html" class="navigation navigation-prev " aria-label="Previous page"><i class="fa fa-angle-left"></i></a>
 <a href="scraping-messy-and-mangled.html" class="navigation navigation-next " aria-label="Next page"><i class="fa fa-angle-right"></i></a>
     </div>
   </div>
 <script src="libs/gitbook-2.6.7/js/app.min.js"></script>
-<script src="libs/gitbook-2.6.7/js/lunr.js"></script>
 <script src="libs/gitbook-2.6.7/js/clipboard.min.js"></script>
 <script src="libs/gitbook-2.6.7/js/plugin-search.js"></script>
 <script src="libs/gitbook-2.6.7/js/plugin-sharing.js"></script>
@@ -279,6 +293,7 @@ gitbook.start({
 "weibo": false,
 "instapaper": false,
 "vk": false,
+"whatsapp": false,
 "all": ["facebook", "twitter", "linkedin", "weibo", "instapaper"]
 },
 "fontsettings": {
@@ -299,6 +314,10 @@ gitbook.start({
 "text": null
 },
 "download": ["Module2.pdf", "Module2.epub"],
+"search": {
+"engine": "fuse",
+"options": null
+},
 "toc": {
 "collapse": "subsection"
 },

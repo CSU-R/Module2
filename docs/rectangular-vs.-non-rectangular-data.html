@@ -1,0 +1,436 @@
+<!DOCTYPE html>
+<html lang="" xml:lang="">
+<head>
+
+  <meta charset="utf-8" />
+  <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+  <title>2.1 Rectangular vs. Non-rectangular Data | R Module 2</title>
+  <meta name="description" content="This is the second installment for the book for the R Intro Course at CSU." />
+  <meta name="generator" content="bookdown 0.24 and GitBook 2.6.7" />
+
+  <meta property="og:title" content="2.1 Rectangular vs. Non-rectangular Data | R Module 2" />
+  <meta property="og:type" content="book" />
+  
+  
+  <meta property="og:description" content="This is the second installment for the book for the R Intro Course at CSU." />
+  
+
+  <meta name="twitter:card" content="summary" />
+  <meta name="twitter:title" content="2.1 Rectangular vs. Non-rectangular Data | R Module 2" />
+  
+  <meta name="twitter:description" content="This is the second installment for the book for the R Intro Course at CSU." />
+  
+
+<meta name="author" content="Connor Gibbs" />
+
+
+
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="apple-mobile-web-app-capable" content="yes" />
+  <meta name="apple-mobile-web-app-status-bar-style" content="black" />
+  
+  
+<link rel="prev" href="AccessingData.html"/>
+<link rel="next" href="APIs.html"/>
+<script src="libs/jquery-3.6.0/jquery-3.6.0.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/fuse.js@6.4.6/dist/fuse.min.js"></script>
+<link href="libs/gitbook-2.6.7/css/style.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-table.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-bookdown.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-highlight.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-search.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-fontsettings.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-clipboard.css" rel="stylesheet" />
+
+
+
+
+
+
+
+
+<script src="libs/accessible-code-block-0.0.1/empty-anchor.js"></script>
+<link href="libs/pagedtable-1.1/css/pagedtable.css" rel="stylesheet" />
+<script src="libs/pagedtable-1.1/js/pagedtable.js"></script>
+<link href="libs/anchor-sections-1.0.1/anchor-sections.css" rel="stylesheet" />
+<script src="libs/anchor-sections-1.0.1/anchor-sections.js"></script>
+<script src="libs/htmlwidgets-1.5.4/htmlwidgets.js"></script>
+<script src="libs/plotly-binding-4.10.0/plotly.js"></script>
+<script src="libs/typedarray-0.1/typedarray.min.js"></script>
+<link href="libs/crosstalk-1.2.0/css/crosstalk.min.css" rel="stylesheet" />
+<script src="libs/crosstalk-1.2.0/js/crosstalk.min.js"></script>
+<link href="libs/plotly-htmlwidgets-css-2.5.1/plotly-htmlwidgets.css" rel="stylesheet" />
+<script src="libs/plotly-main-2.5.1/plotly-latest.min.js"></script>
+
+
+<style type="text/css">
+code.sourceCode > span { display: inline-block; line-height: 1.25; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode { white-space: pre; position: relative; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+code.sourceCode { white-space: pre-wrap; }
+code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+    color: #aaaaaa;
+  }
+pre.numberSource { margin-left: 3em; border-left: 1px solid #aaaaaa;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+code span.al { color: #ff0000; font-weight: bold; } /* Alert */
+code span.an { color: #60a0b0; font-weight: bold; font-style: italic; } /* Annotation */
+code span.at { color: #7d9029; } /* Attribute */
+code span.bn { color: #40a070; } /* BaseN */
+code span.bu { } /* BuiltIn */
+code span.cf { color: #007020; font-weight: bold; } /* ControlFlow */
+code span.ch { color: #4070a0; } /* Char */
+code span.cn { color: #880000; } /* Constant */
+code span.co { color: #60a0b0; font-style: italic; } /* Comment */
+code span.cv { color: #60a0b0; font-weight: bold; font-style: italic; } /* CommentVar */
+code span.do { color: #ba2121; font-style: italic; } /* Documentation */
+code span.dt { color: #902000; } /* DataType */
+code span.dv { color: #40a070; } /* DecVal */
+code span.er { color: #ff0000; font-weight: bold; } /* Error */
+code span.ex { } /* Extension */
+code span.fl { color: #40a070; } /* Float */
+code span.fu { color: #06287e; } /* Function */
+code span.im { } /* Import */
+code span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Information */
+code span.kw { color: #007020; font-weight: bold; } /* Keyword */
+code span.op { color: #666666; } /* Operator */
+code span.ot { color: #007020; } /* Other */
+code span.pp { color: #bc7a00; } /* Preprocessor */
+code span.sc { color: #4070a0; } /* SpecialChar */
+code span.ss { color: #bb6688; } /* SpecialString */
+code span.st { color: #4070a0; } /* String */
+code span.va { color: #19177c; } /* Variable */
+code span.vs { color: #4070a0; } /* VerbatimString */
+code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warning */
+</style>
+
+
+<link rel="stylesheet" href="src/style.css" type="text/css" />
+<link rel="stylesheet" href="src/environments.css" type="text/css" />
+</head>
+
+<body>
+
+
+
+  <div class="book without-animation with-summary font-size-2 font-family-1" data-basepath=".">
+
+    <div class="book-summary">
+      <nav role="navigation">
+
+<ul class="summary">
+<li><a href="./">R Module 2</a></li>
+
+<li class="divider"></li>
+<li class="chapter" data-level="1" data-path="index.html"><a href="index.html"><i class="fa fa-check"></i><b>1</b> Welcome!</a><ul>
+<li class="chapter" data-level="1.0.1" data-path="index.html"><a href="index.html#how-to-navigate-this-book"><i class="fa fa-check"></i><b>1.0.1</b> How To Navigate This Book</a></li>
+<li class="chapter" data-level="1.1" data-path="associated-csu-course.html"><a href="associated-csu-course.html"><i class="fa fa-check"></i><b>1.1</b> Associated CSU Course</a></li>
+</ul></li>
+<li class="chapter" data-level="2" data-path="AccessingData.html"><a href="AccessingData.html"><i class="fa fa-check"></i><b>2</b> Accessing Data</a><ul>
+<li class="chapter" data-level="2.1" data-path="rectangular-vs.-non-rectangular-data.html"><a href="rectangular-vs.-non-rectangular-data.html"><i class="fa fa-check"></i><b>2.1</b> Rectangular vs. Non-rectangular Data</a><ul>
+<li class="chapter" data-level="2.1.1" data-path="rectangular-vs.-non-rectangular-data.html"><a href="rectangular-vs.-non-rectangular-data.html#reading-and-writing-rectangular-data"><i class="fa fa-check"></i><b>2.1.1</b> Reading and Writing Rectangular Data</a></li>
+<li class="chapter" data-level="2.1.2" data-path="rectangular-vs.-non-rectangular-data.html"><a href="rectangular-vs.-non-rectangular-data.html#reading-and-writing-non-rectangular-data"><i class="fa fa-check"></i><b>2.1.2</b> Reading and Writing Non-rectangular Data</a></li>
+</ul></li>
+<li class="chapter" data-level="2.2" data-path="APIs.html"><a href="APIs.html"><i class="fa fa-check"></i><b>2.2</b> APIs: Clean and Curated</a></li>
+<li class="chapter" data-level="2.3" data-path="scraping-messy-and-mangled.html"><a href="scraping-messy-and-mangled.html"><i class="fa fa-check"></i><b>2.3</b> Scraping: Messy and Mangled</a><ul>
+<li class="chapter" data-level="2.3.1" data-path="scraping-messy-and-mangled.html"><a href="scraping-messy-and-mangled.html#scraping-vs-apis"><i class="fa fa-check"></i><b>2.3.1</b> Scraping vs APIs</a></li>
+<li class="chapter" data-level="2.3.2" data-path="scraping-messy-and-mangled.html"><a href="scraping-messy-and-mangled.html#LessonsLearnedFromScraping"><i class="fa fa-check"></i><b>2.3.2</b> Lessons Learned from Scraping</a></li>
+<li class="chapter" data-level="2.3.3" data-path="scraping-messy-and-mangled.html"><a href="scraping-messy-and-mangled.html#tools-for-scraping"><i class="fa fa-check"></i><b>2.3.3</b> Tools for Scraping</a></li>
+<li class="chapter" data-level="2.3.4" data-path="scraping-messy-and-mangled.html"><a href="scraping-messy-and-mangled.html#scraping-nfl-data"><i class="fa fa-check"></i><b>2.3.4</b> Scraping NFL Data</a></li>
+</ul></li>
+</ul></li>
+<li class="chapter" data-level="3" data-path="Wrangling.html"><a href="Wrangling.html"><i class="fa fa-check"></i><b>3</b> Wrangling</a><ul>
+<li class="chapter" data-level="3.1" data-path="core-tidyverse.html"><a href="core-tidyverse.html"><i class="fa fa-check"></i><b>3.1</b> Core Tidyverse</a><ul>
+<li class="chapter" data-level="3.1.1" data-path="core-tidyverse.html"><a href="core-tidyverse.html#tidyr"><i class="fa fa-check"></i><b>3.1.1</b> tidyr</a></li>
+<li class="chapter" data-level="3.1.2" data-path="core-tidyverse.html"><a href="core-tidyverse.html#dplyr"><i class="fa fa-check"></i><b>3.1.2</b> dplyr</a></li>
+</ul></li>
+<li class="chapter" data-level="3.2" data-path="functional-programming-with-purrr.html"><a href="functional-programming-with-purrr.html"><i class="fa fa-check"></i><b>3.2</b> Functional Programming with <code>purrr</code></a></li>
+<li class="chapter" data-level="3.3" data-path="parallelization-with-furrr.html"><a href="parallelization-with-furrr.html"><i class="fa fa-check"></i><b>3.3</b> Parallelization with <code>furrr</code></a></li>
+<li class="chapter" data-level="3.4" data-path="scratch-for-iterative-processes.html"><a href="scratch-for-iterative-processes.html"><i class="fa fa-check"></i><b>3.4</b> Scratch for Iterative Processes</a></li>
+</ul></li>
+<li class="chapter" data-level="4" data-path="Visualization.html"><a href="Visualization.html"><i class="fa fa-check"></i><b>4</b> Visualization</a><ul>
+<li class="chapter" data-level="4.1" data-path="base.html"><a href="base.html"><i class="fa fa-check"></i><b>4.1</b> base</a></li>
+<li class="chapter" data-level="4.2" data-path="ggplot.html"><a href="ggplot.html"><i class="fa fa-check"></i><b>4.2</b> ggplot</a></li>
+<li class="chapter" data-level="4.3" data-path="plotly.html"><a href="plotly.html"><i class="fa fa-check"></i><b>4.3</b> plotly</a></li>
+</ul></li>
+<li class="chapter" data-level="5" data-path="supplemental.html"><a href="supplemental.html"><i class="fa fa-check"></i><b>5</b> Supplemental</a><ul>
+<li class="chapter" data-level="5.1" data-path="scraping-in-the-wild.html"><a href="scraping-in-the-wild.html"><i class="fa fa-check"></i><b>5.1</b> Scraping in the Wild</a><ul>
+<li class="chapter" data-level="5.1.1" data-path="scraping-in-the-wild.html"><a href="scraping-in-the-wild.html#LessonsLearned"><i class="fa fa-check"></i><b>5.1.1</b> Lessons Learned from Scraping</a></li>
+<li class="chapter" data-level="5.1.2" data-path="scraping-in-the-wild.html"><a href="scraping-in-the-wild.html#scraping-nfl-data-1"><i class="fa fa-check"></i><b>5.1.2</b> Scraping NFL Data</a></li>
+<li class="chapter" data-level="5.1.3" data-path="scraping-in-the-wild.html"><a href="scraping-in-the-wild.html#putting-it-all-together"><i class="fa fa-check"></i><b>5.1.3</b> Putting It All Together</a></li>
+</ul></li>
+</ul></li>
+<li class="chapter" data-level="" data-path="references.html"><a href="references.html"><i class="fa fa-check"></i>References</a></li>
+<li class="divider"></li>
+<li><a href="https://github.com/rstudio/bookdown" target="blank">Published with bookdown</a></li>
+
+</ul>
+
+      </nav>
+    </div>
+
+    <div class="book-body">
+      <div class="body-inner">
+        <div class="book-header" role="navigation">
+          <h1>
+            <i class="fa fa-circle-o-notch fa-spin"></i><a href="./">R Module 2</a>
+          </h1>
+        </div>
+
+        <div class="page-wrapper" tabindex="-1" role="main">
+          <div class="page-inner">
+
+            <section class="normal" id="section-">
+<div id="rectangular-vs.-non-rectangular-data" class="section level2">
+<h2><span class="header-section-number">2.1</span> Rectangular vs. Non-rectangular Data</h2>
+<p>Data present themselves in many forms, but at a basic level, all data can be categorized into two structures: <strong>rectangular data</strong> and <strong>non-rectangular data</strong>. Intuitively, rectangular data are shaped like a rectangle where every value corresponds to some row and column. Most data frames store rectangular data. Non-rectangular data, on the other hand, are not neatly arranged in rows and columns. Instead, they are often a culmination of separate data structures where there is some similarity among members of the same data structure. Usually non-rectangular data are stored in lists.</p>
+<p>To motivate this idea, let’s consider a basic grocery list which consists of ten items: black beans, milk, pasta, cheese, bananas, peanut butter, bread, apples, tomato sauce, and mayonnaise. Notice, there is little organization to this list, and more involved shoppers may find this list inadequate or unhelpful. We may wish to group these items by sections in which we’re likely to find them. We may also want to include prices, so we know in-store whether the items are on sale. Let’s consider two distinct (but legitimate) ways to organize these data.</p>
+<div class="caution">
+<p>
+To illustrate the idea of rectangular vs. non-rectangular data, we will consider how these data can be structured in both ways using <code>R</code>. You may not have seen some of these functions yet. No worries! The objective is not to understand <strong>how</strong> to utilize these functions but to comprehend the difference between rectangular and non-rectangular data.
+</p>
+</div>
+<p>One may first consider grouping these items by section. For example, apples and bananas can be found in the produce section, whereas black beans and tomato sauce can be found in the canned goods section. If we were to continue to group these items by section, we may arrive at a data set which looks something like this:</p>
+<div class="sourceCode" id="cb1"><pre class="sourceCode r chunk-style"><code class="sourceCode r"><span id="cb1-1"><a href="rectangular-vs.-non-rectangular-data.html#cb1-1"></a>groc &lt;-<span class="st"> </span><span class="kw">list</span>(<span class="dt">produce =</span> <span class="kw">data.frame</span>(<span class="dt">item =</span> <span class="kw">c</span>(<span class="st">&#39;apples&#39;</span>, <span class="st">&#39;bananas&#39;</span>),</span>
+<span id="cb1-2"><a href="rectangular-vs.-non-rectangular-data.html#cb1-2"></a>                                  <span class="dt">price =</span> <span class="kw">c</span>(<span class="fl">3.99</span>, <span class="fl">0.49</span>)),</span>
+<span id="cb1-3"><a href="rectangular-vs.-non-rectangular-data.html#cb1-3"></a>             <span class="dt">condiments =</span> <span class="kw">data.frame</span>(<span class="dt">item =</span> <span class="kw">c</span>(<span class="st">&#39;peanut_butter&#39;</span>, <span class="st">&#39;mayonnaise&#39;</span>),</span>
+<span id="cb1-4"><a href="rectangular-vs.-non-rectangular-data.html#cb1-4"></a>                                     <span class="dt">price =</span> <span class="kw">c</span>(<span class="fl">2.18</span>, <span class="fl">3.89</span>)),</span>
+<span id="cb1-5"><a href="rectangular-vs.-non-rectangular-data.html#cb1-5"></a>             <span class="dt">canned_goods =</span> <span class="kw">data.frame</span>(<span class="dt">item =</span> <span class="kw">c</span>(<span class="st">&#39;black_beans&#39;</span>, <span class="st">&#39;tomato_sauce&#39;</span>),</span>
+<span id="cb1-6"><a href="rectangular-vs.-non-rectangular-data.html#cb1-6"></a>                                       <span class="dt">price =</span> <span class="kw">c</span>(<span class="fl">0.99</span>, <span class="fl">0.69</span>)),</span>
+<span id="cb1-7"><a href="rectangular-vs.-non-rectangular-data.html#cb1-7"></a>             <span class="dt">grains =</span> <span class="kw">data.frame</span>(<span class="dt">item =</span> <span class="kw">c</span>(<span class="st">&#39;bread&#39;</span>, <span class="st">&#39;pasta&#39;</span>),</span>
+<span id="cb1-8"><a href="rectangular-vs.-non-rectangular-data.html#cb1-8"></a>                                 <span class="dt">price =</span> <span class="kw">c</span>(<span class="fl">2.99</span>, <span class="fl">1.99</span>)),</span>
+<span id="cb1-9"><a href="rectangular-vs.-non-rectangular-data.html#cb1-9"></a>             <span class="dt">dairy =</span> <span class="kw">data.frame</span>(<span class="dt">item =</span> <span class="kw">c</span>(<span class="st">&#39;milk&#39;</span>, <span class="st">&#39;butter&#39;</span>),</span>
+<span id="cb1-10"><a href="rectangular-vs.-non-rectangular-data.html#cb1-10"></a>                                <span class="dt">price =</span> <span class="kw">c</span>(<span class="fl">2.73</span>, <span class="fl">2.57</span>)))</span>
+<span id="cb1-11"><a href="rectangular-vs.-non-rectangular-data.html#cb1-11"></a>groc</span></code></pre></div>
+<pre class="output-style"><code>$produce
+     item price
+1  apples  3.99
+2 bananas  0.49
+
+$condiments
+           item price
+1 peanut_butter  2.18
+2    mayonnaise  3.89
+
+$canned_goods
+          item price
+1  black_beans  0.99
+2 tomato_sauce  0.69
+
+$grains
+   item price
+1 bread  2.99
+2 pasta  1.99
+
+$dairy
+    item price
+1   milk  2.73
+2 butter  2.57</code></pre>
+<p>Here, we use lists and data frames to create a data set of our grocery list. This list can be traversed depending on what section of the store we find ourselves in. For example, suppose we are in the produce section, and we need to recall what items to buy. We could utilize the following code to remind ourselves.</p>
+<div class="sourceCode" id="cb3"><pre class="sourceCode r chunk-style"><code class="sourceCode r"><span id="cb3-1"><a href="rectangular-vs.-non-rectangular-data.html#cb3-1"></a>groc<span class="op">$</span>produce</span></code></pre></div>
+<div data-pagedtable="false">
+<script data-pagedtable-source type="application/json">
+{"columns":[{"label":["item"],"name":[1],"type":["chr"],"align":["left"]},{"label":["price"],"name":[2],"type":["dbl"],"align":["right"]}],"data":[{"1":"apples","2":"3.99"},{"1":"bananas","2":"0.49"}],"options":{"columns":{"min":{},"max":[10]},"rows":{"min":[10],"max":[10]},"pages":{}}}
+  </script>
+</div>
+<div class="reflect">
+<p>
+Is this grocery list an example of rectangular or non-rectangular data (try to use the definition of rectangular data given above)? Are there examples of rectangular data contained within the grocery list? How could we restructure the data to <strong>rectangularize</strong> the grocery list?
+</p>
+</div>
+<p>As constructed, this grocery list is an example of non-rectangular data. As a whole, the grocery list is not shaped like a rectangle, but rather, consists of sets of rectangular data, where the sets are defined by the section of the store. Within a section of the store, the items and prices are given in rectangular form since every value is defined by a row and column.</p>
+<p>While lists are often a useful return object for user-defined functions, they are often troublesome to work with because they may be non-rectangular. If a data set can be restructured or created in rectangular form, it should be. Rectangular data is especially important within the Tidyverse, a self-described ‘opinionated collection of R packages designed for data science’. All packages within the Tidyverse rely on the principle of <em>tidy data</em>, data structures where observations are given by rows and variables are given by columns. As defined, tidy data are rectangular, so as we embark on wrangling, visualizing, and modeling data in future chapters, it is important to ponder the nature of our data and whether it can be rectangularized.</p>
+<div class="progress">
+<p>
+Create your own example of non-rectangular data. Make sure your example is assigned to a variable with an appropriate name.
+</p>
+</div>
+<p>Let’s consider how we can rectangularize the grocery list. Instead of creating a list of named data frames, where the name represents the section of the store, let’s create a grocery list where each row represents an item and columns specify the section and price. Because the Tidyverse requires rectangular data, there are several functions which are handy for converting data structures to rectangular form. We could utilize one of these functions to rectangularize the data set.</p>
+<div class="sourceCode" id="cb4"><pre class="sourceCode r chunk-style"><code class="sourceCode r"><span id="cb4-1"><a href="rectangular-vs.-non-rectangular-data.html#cb4-1"></a><span class="kw">library</span>(tidyverse, <span class="dt">quietly =</span> <span class="ot">TRUE</span>)</span>
+<span id="cb4-2"><a href="rectangular-vs.-non-rectangular-data.html#cb4-2"></a>groc_rec &lt;-<span class="st"> </span>groc <span class="op">%&gt;%</span></span>
+<span id="cb4-3"><a href="rectangular-vs.-non-rectangular-data.html#cb4-3"></a><span class="st">  </span><span class="kw">bind_rows</span>(., <span class="dt">.id =</span> <span class="st">&#39;section&#39;</span>)</span>
+<span id="cb4-4"><a href="rectangular-vs.-non-rectangular-data.html#cb4-4"></a>groc_rec</span></code></pre></div>
+<div data-pagedtable="false">
+<script data-pagedtable-source type="application/json">
+{"columns":[{"label":["section"],"name":[1],"type":["chr"],"align":["left"]},{"label":["item"],"name":[2],"type":["chr"],"align":["left"]},{"label":["price"],"name":[3],"type":["dbl"],"align":["right"]}],"data":[{"1":"produce","2":"apples","3":"3.99"},{"1":"produce","2":"bananas","3":"0.49"},{"1":"condiments","2":"peanut_butter","3":"2.18"},{"1":"condiments","2":"mayonnaise","3":"3.89"},{"1":"canned_goods","2":"black_beans","3":"0.99"},{"1":"canned_goods","2":"tomato_sauce","3":"0.69"},{"1":"grains","2":"bread","3":"2.99"},{"1":"grains","2":"pasta","3":"1.99"},{"1":"dairy","2":"milk","3":"2.73"},{"1":"dairy","2":"butter","3":"2.57"}],"options":{"columns":{"min":{},"max":[10]},"rows":{"min":[10],"max":[10]},"pages":{}}}
+  </script>
+</div>
+<div class="bonus">
+<p>
+The code chuck above is an example of “piping”, a concept used heavily in the <code>tidyverse</code> which allows the easy chaining of actions, where the output of one function is “piped” to the input argument of the next function. Here the <code>groc</code> list is being piped into the first argument (denoted with a <code>.</code>) of the <code>bind_rows</code> function. Though it may look confusing at first, piping is a nice way to increase code readability, since the order that functions will be applied matches the order they appear in the code (from top to bottom). For more information, see <a href="https://r4ds.had.co.nz/pipes.html">here</a>.
+</p>
+</div>
+<p>Or, we can simply create the grocery list in rectangular form to begin with.</p>
+<div class="progress">
+<p>
+Create a data frame called <code>groc_df</code> which contains the above grocery list in rectangular form.
+</p>
+</div>
+<div class="feedback">
+<p>
+Any feedback for this section? Click <a href="https://docs.google.com/forms/d/e/1FAIpQLSePQZ3lIaCIPo9J2owXImHZ_9wBEgTo21A0s-A1ty28u4yfvw/viewform?entry.1684471501=Rectangular%20vs.%20Nonrectangular%20Data">here</a>
+</p>
+</div>
+<div id="reading-and-writing-rectangular-data" class="section level3">
+<h3><span class="header-section-number">2.1.1</span> Reading and Writing Rectangular Data</h3>
+<p>Rectangular data are often stored locally using text files (.txt), comma separated value files (.csv), and Excel files (.xlsx). When data are written to these file types, they are easy to view across devices, without the need for <code>R</code>. Since most grocery store trips obviate the need for <code>R</code>, let’s consider how to write our grocery list to each of these file types. To write to and read from data text files or comma separated value files, the <code>readr</code> package will come in handy, whereas the <code>xlsx</code> package will allow us to write to and read from Excel files. To write data from <code>R</code> to a file, we will leverage commands beginning with <code>write</code>.</p>
+<div class="sourceCode" id="cb5"><pre class="sourceCode r chunk-style"><code class="sourceCode r"><span id="cb5-1"><a href="rectangular-vs.-non-rectangular-data.html#cb5-1"></a><span class="co"># text file</span></span>
+<span id="cb5-2"><a href="rectangular-vs.-non-rectangular-data.html#cb5-2"></a>readr<span class="op">::</span><span class="kw">write_delim</span>(groc_rec, <span class="dt">path =</span> <span class="st">&#39;data_raw/groceries-rectangular.txt&#39;</span>)</span>
+<span id="cb5-3"><a href="rectangular-vs.-non-rectangular-data.html#cb5-3"></a><span class="co"># csv file</span></span>
+<span id="cb5-4"><a href="rectangular-vs.-non-rectangular-data.html#cb5-4"></a>readr<span class="op">::</span><span class="kw">write_csv</span>(groc_rec, <span class="dt">path =</span> <span class="st">&#39;data_raw/groceries-rectangular.csv&#39;</span>)</span>
+<span id="cb5-5"><a href="rectangular-vs.-non-rectangular-data.html#cb5-5"></a><span class="co"># Excel file</span></span>
+<span id="cb5-6"><a href="rectangular-vs.-non-rectangular-data.html#cb5-6"></a>xlsx<span class="op">::</span><span class="kw">write.xlsx</span>(groc_rec, <span class="dt">file =</span> <span class="st">&#39;data_raw/groceries-rectangular.xlsx&#39;</span>, <span class="dt">row.names =</span> <span class="ot">FALSE</span>)  <span class="co"># don&#39;t include the row names</span></span></code></pre></div>
+<p>To read data from a file to <code>R</code>, we will leverage commands beginning with <code>read</code>. Before reading data into <code>R</code>, you will need to look at the file and file extension to better understand which function to use.</p>
+<div class="sourceCode" id="cb6"><pre class="sourceCode r chunk-style"><code class="sourceCode r"><span id="cb6-1"><a href="rectangular-vs.-non-rectangular-data.html#cb6-1"></a><span class="co"># text file</span></span>
+<span id="cb6-2"><a href="rectangular-vs.-non-rectangular-data.html#cb6-2"></a>readr<span class="op">::</span><span class="kw">read_delim</span>(<span class="st">&#39;data_raw/groceries-rectangular.txt&#39;</span>, <span class="dt">delim =</span> <span class="st">&#39; &#39;</span>, <span class="dt">lazy =</span> <span class="ot">FALSE</span>)  <span class="co"># the file delimits columns using a space</span></span>
+<span id="cb6-3"><a href="rectangular-vs.-non-rectangular-data.html#cb6-3"></a><span class="co"># csv file</span></span>
+<span id="cb6-4"><a href="rectangular-vs.-non-rectangular-data.html#cb6-4"></a>readr<span class="op">::</span><span class="kw">read_csv</span>(<span class="st">&#39;data_raw/groceries-rectangular.csv&#39;</span>, <span class="dt">lazy =</span> <span class="ot">FALSE</span>)</span>
+<span id="cb6-5"><a href="rectangular-vs.-non-rectangular-data.html#cb6-5"></a><span class="co"># Excel file</span></span>
+<span id="cb6-6"><a href="rectangular-vs.-non-rectangular-data.html#cb6-6"></a>xlsx<span class="op">::</span><span class="kw">read.xlsx</span>(<span class="st">&#39;data_raw/groceries-rectangular.xlsx&#39;</span>, <span class="dt">sheetName =</span> <span class="st">&#39;Sheet1&#39;</span>)  <span class="co"># load the sheet called &#39;Sheet1&#39;</span></span></code></pre></div>
+<div class="caution">
+<p>
+Reading files into <code>R</code> can sometimes be frustrating. Always look at the data to see if there are column headers and row names. Text files can have different <strong>delimiters</strong>, characters which separate values in a data set. The default delimiter for <code>readr::write_delim()</code> is a space, but other common text delimiters are tabs, colons, semi-colons, or vertical bars. Commas are so commonly used as a delimiter, it gets a function of its own (.csv). Always ensure that data from an Excel spreadsheet are rectangular. Lastly, the <code>readr</code> package will guess the data type of each column. Check these data types are correct using <code>str()</code>.
+</p>
+</div>
+<div class="bonus">
+<p>
+Reading and writing csv and text files can also be done with the <code>read.csv</code>, <code>write.csv</code>, <code>read.table</code> and <code>write.table</code> functions included in base R. However, the <code>readr</code> package belongs to the tidyverse and has additional capabilities (see [here]{<a href="https://readr.tidyverse.org" class="uri">https://readr.tidyverse.org</a>} for more info).
+</p>
+</div>
+<div class="progress">
+<p>
+Write the <code>groc_df</code> data frame that you created above to your computer using the <code>write_delim</code> function and using the <code>write_csv</code> function, using different file names. Open the files using a text editor (not R) and comment on the differences in formatting between the between them.
+</p>
+</div>
+<div class="feedback">
+<p>
+Any feedback for this section? Click <a href="https://docs.google.com/forms/d/e/1FAIpQLSePQZ3lIaCIPo9J2owXImHZ_9wBEgTo21A0s-A1ty28u4yfvw/viewform?entry.1684471501=The%20R%20Community">here</a>
+</p>
+</div>
+</div>
+<div id="reading-and-writing-non-rectangular-data" class="section level3">
+<h3><span class="header-section-number">2.1.2</span> Reading and Writing Non-rectangular Data</h3>
+<p>Writing non-rectangular data from R to your local machine is easy with the help of <code>write_rds()</code> from the <code>readr</code> package. While the origin of ‘RDS’ is unclear, some believe it stands for R data serialization. Nonetheless, RDS files store single R objects, regardless of the structure. This means that RDS files are a great choice for data which cannot be written to rectangular file formats such as text, csv, and Excel files.</p>
+<p>The sister function entitled <code>read_rds()</code> allows you to read any RDS file directly into your current <code>R</code> environment, assuming the file already exists.</p>
+<div class="bonus">
+<p>
+Similar to RDS files, there are also RData files which can store multiple <code>R</code> objects. These files can be written from <code>R</code> to your local machine using <code>save()</code> and read from your local machine to R using <code>load()</code>. We recommend avoiding RData files, and instead, storing multiple <code>R</code> objects in one named list which is then saved as an RDS file.
+</p>
+</div>
+<p>When there is inevitably non-rectangular data that exist which you would like to load into <code>R</code>, you are in for a treat. The rest of this module can loosely be viewed as a guide to managing and curating data. We will leverage many tools to tackle this problem, but in the next two sections, we will address two specific, common instances of non-rectangular data: data from APIs and from scraped sources.</p>
+<div class="progress">
+<p>
+Write the non-rectangular data that you created above to your computer using the <code>write_rds()</code> function. Remember that you can use <code>?write_rds()</code> to learn more about the function.
+</p>
+</div>
+<div class="feedback">
+<p>
+Any feedback for this section? Click <a href="https://docs.google.com/forms/d/e/1FAIpQLSePQZ3lIaCIPo9J2owXImHZ_9wBEgTo21A0s-A1ty28u4yfvw/viewform?entry.1684471501=The%20R%20Community">here</a>
+</p>
+</div>
+</div>
+</div>
+            </section>
+
+          </div>
+        </div>
+      </div>
+<a href="AccessingData.html" class="navigation navigation-prev " aria-label="Previous page"><i class="fa fa-angle-left"></i></a>
+<a href="APIs.html" class="navigation navigation-next " aria-label="Next page"><i class="fa fa-angle-right"></i></a>
+    </div>
+  </div>
+<script src="libs/gitbook-2.6.7/js/app.min.js"></script>
+<script src="libs/gitbook-2.6.7/js/clipboard.min.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-search.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-sharing.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-fontsettings.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-bookdown.js"></script>
+<script src="libs/gitbook-2.6.7/js/jquery.highlight.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-clipboard.js"></script>
+<script>
+gitbook.require(["gitbook"], function(gitbook) {
+gitbook.start({
+"sharing": {
+"github": false,
+"facebook": true,
+"twitter": true,
+"linkedin": false,
+"weibo": false,
+"instapaper": false,
+"vk": false,
+"whatsapp": false,
+"all": ["facebook", "twitter", "linkedin", "weibo", "instapaper"]
+},
+"fontsettings": {
+"theme": "white",
+"family": "sans",
+"size": 2
+},
+"edit": {
+"link": null,
+"text": null
+},
+"history": {
+"link": null,
+"text": null
+},
+"view": {
+"link": null,
+"text": null
+},
+"download": ["Module2.pdf", "Module2.epub"],
+"search": {
+"engine": "fuse",
+"options": null
+},
+"toc": {
+"collapse": "subsection"
+},
+"toolbar": {
+"position": "static"
+}
+});
+});
+</script>
+
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+  (function () {
+    var script = document.createElement("script");
+    script.type = "text/javascript";
+    var src = "true";
+    if (src === "" || src === "true") src = "https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-MML-AM_CHTML";
+    if (location.protocol !== "file:")
+      if (/^https?:/.test(src))
+        src = src.replace(/^https?:/, '');
+    script.src = src;
+    document.getElementsByTagName("head")[0].appendChild(script);
+  })();
+</script>
+</body>
+
+</html>

@@ -6,7 +6,7 @@
   <meta http-equiv="X-UA-Compatible" content="IE=edge" />
   <title>3.3 Parallelization with furrr | R Module 2</title>
   <meta name="description" content="This is the second installment for the book for the R Intro Course at CSU." />
-  <meta name="generator" content="bookdown 0.21 and GitBook 2.6.7" />
+  <meta name="generator" content="bookdown 0.24 and GitBook 2.6.7" />
 
   <meta property="og:title" content="3.3 Parallelization with furrr | R Module 2" />
   <meta property="og:type" content="book" />
@@ -32,7 +32,8 @@
   
 <link rel="prev" href="functional-programming-with-purrr.html"/>
 <link rel="next" href="scratch-for-iterative-processes.html"/>
-<script src="libs/jquery-2.2.3/jquery.min.js"></script>
+<script src="libs/jquery-3.6.0/jquery-3.6.0.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/fuse.js@6.4.6/dist/fuse.min.js"></script>
 <link href="libs/gitbook-2.6.7/css/style.css" rel="stylesheet" />
 <link href="libs/gitbook-2.6.7/css/plugin-table.css" rel="stylesheet" />
 <link href="libs/gitbook-2.6.7/css/plugin-bookdown.css" rel="stylesheet" />
@@ -48,24 +49,24 @@
 
 
 
-
+<script src="libs/accessible-code-block-0.0.1/empty-anchor.js"></script>
 <link href="libs/pagedtable-1.1/css/pagedtable.css" rel="stylesheet" />
 <script src="libs/pagedtable-1.1/js/pagedtable.js"></script>
-<link href="libs/anchor-sections-1.0/anchor-sections.css" rel="stylesheet" />
-<script src="libs/anchor-sections-1.0/anchor-sections.js"></script>
-<script src="libs/htmlwidgets-1.5.2/htmlwidgets.js"></script>
-<script src="libs/plotly-binding-4.9.2.1/plotly.js"></script>
+<link href="libs/anchor-sections-1.0.1/anchor-sections.css" rel="stylesheet" />
+<script src="libs/anchor-sections-1.0.1/anchor-sections.js"></script>
+<script src="libs/htmlwidgets-1.5.4/htmlwidgets.js"></script>
+<script src="libs/plotly-binding-4.10.0/plotly.js"></script>
 <script src="libs/typedarray-0.1/typedarray.min.js"></script>
-<link href="libs/crosstalk-1.1.0.1/css/crosstalk.css" rel="stylesheet" />
-<script src="libs/crosstalk-1.1.0.1/js/crosstalk.min.js"></script>
-<link href="libs/plotly-htmlwidgets-css-1.52.2/plotly-htmlwidgets.css" rel="stylesheet" />
-<script src="libs/plotly-main-1.52.2/plotly-latest.min.js"></script>
+<link href="libs/crosstalk-1.2.0/css/crosstalk.min.css" rel="stylesheet" />
+<script src="libs/crosstalk-1.2.0/js/crosstalk.min.js"></script>
+<link href="libs/plotly-htmlwidgets-css-2.5.1/plotly-htmlwidgets.css" rel="stylesheet" />
+<script src="libs/plotly-main-2.5.1/plotly-latest.min.js"></script>
 
 
 <style type="text/css">
-a.sourceLine { display: inline-block; line-height: 1.25; }
-a.sourceLine { pointer-events: none; color: inherit; text-decoration: inherit; }
-a.sourceLine:empty { height: 1.2em; }
+code.sourceCode > span { display: inline-block; line-height: 1.25; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+code.sourceCode > span:empty { height: 1.2em; }
 .sourceCode { overflow: visible; }
 code.sourceCode { white-space: pre; position: relative; }
 pre.sourceCode { margin: 0; }
@@ -74,14 +75,16 @@ div.sourceCode { overflow: auto; }
 }
 @media print {
 code.sourceCode { white-space: pre-wrap; }
-a.sourceLine { text-indent: -1em; padding-left: 1em; }
+code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
 }
-pre.numberSource a.sourceLine
-  { position: relative; left: -4em; }
-pre.numberSource a.sourceLine::before
-  { content: attr(title);
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
     position: relative; left: -1em; text-align: right; vertical-align: baseline;
-    border: none; pointer-events: all; display: inline-block;
+    border: none; display: inline-block;
     -webkit-touch-callout: none; -webkit-user-select: none;
     -khtml-user-select: none; -moz-user-select: none;
     -ms-user-select: none; user-select: none;
@@ -90,9 +93,9 @@ pre.numberSource a.sourceLine::before
   }
 pre.numberSource { margin-left: 3em; border-left: 1px solid #aaaaaa;  padding-left: 4px; }
 div.sourceCode
-  {  }
+  {   }
 @media screen {
-a.sourceLine::before { text-decoration: underline; }
+code.sourceCode > span > a:first-child::before { text-decoration: underline; }
 }
 code span.al { color: #ff0000; font-weight: bold; } /* Alert */
 code span.an { color: #60a0b0; font-weight: bold; font-style: italic; } /* Annotation */
@@ -125,6 +128,7 @@ code span.vs { color: #4070a0; } /* VerbatimString */
 code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warning */
 </style>
 
+
 <link rel="stylesheet" href="src/style.css" type="text/css" />
 <link rel="stylesheet" href="src/environments.css" type="text/css" />
 </head>
@@ -147,9 +151,9 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <li class="chapter" data-level="1.1" data-path="associated-csu-course.html"><a href="associated-csu-course.html"><i class="fa fa-check"></i><b>1.1</b> Associated CSU Course</a></li>
 </ul></li>
 <li class="chapter" data-level="2" data-path="AccessingData.html"><a href="AccessingData.html"><i class="fa fa-check"></i><b>2</b> Accessing Data</a><ul>
-<li class="chapter" data-level="2.1" data-path="rectangular-vs-non-rectangular-data.html"><a href="rectangular-vs-non-rectangular-data.html"><i class="fa fa-check"></i><b>2.1</b> Rectangular vs. Non-rectangular Data</a><ul>
-<li class="chapter" data-level="2.1.1" data-path="rectangular-vs-non-rectangular-data.html"><a href="rectangular-vs-non-rectangular-data.html#reading-and-writing-rectangular-data"><i class="fa fa-check"></i><b>2.1.1</b> Reading and Writing Rectangular Data</a></li>
-<li class="chapter" data-level="2.1.2" data-path="rectangular-vs-non-rectangular-data.html"><a href="rectangular-vs-non-rectangular-data.html#reading-and-writing-non-rectangular-data"><i class="fa fa-check"></i><b>2.1.2</b> Reading and Writing Non-rectangular Data</a></li>
+<li class="chapter" data-level="2.1" data-path="rectangular-vs.-non-rectangular-data.html"><a href="rectangular-vs.-non-rectangular-data.html"><i class="fa fa-check"></i><b>2.1</b> Rectangular vs. Non-rectangular Data</a><ul>
+<li class="chapter" data-level="2.1.1" data-path="rectangular-vs.-non-rectangular-data.html"><a href="rectangular-vs.-non-rectangular-data.html#reading-and-writing-rectangular-data"><i class="fa fa-check"></i><b>2.1.1</b> Reading and Writing Rectangular Data</a></li>
+<li class="chapter" data-level="2.1.2" data-path="rectangular-vs.-non-rectangular-data.html"><a href="rectangular-vs.-non-rectangular-data.html#reading-and-writing-non-rectangular-data"><i class="fa fa-check"></i><b>2.1.2</b> Reading and Writing Non-rectangular Data</a></li>
 </ul></li>
 <li class="chapter" data-level="2.2" data-path="APIs.html"><a href="APIs.html"><i class="fa fa-check"></i><b>2.2</b> APIs: Clean and Curated</a></li>
 <li class="chapter" data-level="2.3" data-path="scraping-messy-and-mangled.html"><a href="scraping-messy-and-mangled.html"><i class="fa fa-check"></i><b>2.3</b> Scraping: Messy and Mangled</a><ul>
@@ -206,61 +210,61 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <p>When we <code>map</code> the function to scrape team statistics over the vector of team web addresses, we are insinuating that the function within the <code>map</code> (e.g. <code>get_team_stats</code>) should be applied to each element of the vector (e.g. <code>team_urls</code>) sequentially. Computational tasks which involve many separate, independently executable jobs should be run in <strong>parallel</strong>. When jobs are run in parallel, this means they are run at the same time, rather than sequentially. If the computational burden at each step is larger than the computational burden of setting up instructions for parallelization, then running code in parallel will save time.</p>
 <p>While there are different types of parallelization, we will only focus on one: multi-core parallelization, which allows us to make use of the whole computer rather than rely on single processor architecture. <code>furrr</code>, a new Tidyverse package, attempts to make mapping in parallel easy and pain-free by combining the functionality of the <code>purrr</code> package and the <code>future</code> package. By combining <code>purrr</code>’s mapping capabilities and <code>future</code>’s parallel processing capabilities, <code>furrr</code> allows for parallelization with similar syntax.</p>
 <p>In the previous subsection, we learned how to apply mapping functions to scrape and clean the statistics for each team, sequentially. Using <code>furrr</code>, we can parallelize this process. We will juxtapose each approach for comparison.</p>
-<div class="sourceCode" id="cb47"><pre class="sourceCode r chunk-style"><code class="sourceCode r"><a class="sourceLine" id="cb47-1" title="1"><span class="co"># sequential computation using purrr</span></a>
-<a class="sourceLine" id="cb47-2" title="2">rush_receive_parallel &lt;-<span class="st"> </span>team_urls <span class="op">%&gt;%</span></a>
-<a class="sourceLine" id="cb47-3" title="3"><span class="st">  </span><span class="kw">map</span>(., <span class="op">~</span><span class="kw">get_team_stats</span>(.x)) <span class="op">%&gt;%</span></a>
-<a class="sourceLine" id="cb47-4" title="4"><span class="st">  </span><span class="kw">map_dfr</span>(., <span class="op">~</span><span class="kw">clean_team_stats</span>(.x))</a>
-<a class="sourceLine" id="cb47-5" title="5"></a>
-<a class="sourceLine" id="cb47-6" title="6"><span class="co"># parallel computation using furrr</span></a>
-<a class="sourceLine" id="cb47-7" title="7"><span class="kw">library</span>(furrr)</a>
-<a class="sourceLine" id="cb47-8" title="8">future<span class="op">::</span><span class="kw">plan</span>(multiprocess)</a>
-<a class="sourceLine" id="cb47-9" title="9"></a>
-<a class="sourceLine" id="cb47-10" title="10">rush_receive_parallel &lt;-<span class="st"> </span>team_urls <span class="op">%&gt;%</span></a>
-<a class="sourceLine" id="cb47-11" title="11"><span class="st">  </span><span class="kw">future_map</span>(., <span class="op">~</span><span class="kw">get_team_stats</span>(.x)) <span class="op">%&gt;%</span></a>
-<a class="sourceLine" id="cb47-12" title="12"><span class="st">  </span><span class="kw">future_map_dfr</span>(., <span class="op">~</span><span class="kw">clean_team_stats</span>(.x))</a>
-<a class="sourceLine" id="cb47-13" title="13"></a>
-<a class="sourceLine" id="cb47-14" title="14"><span class="co"># compare output</span></a>
-<a class="sourceLine" id="cb47-15" title="15"><span class="kw">identical</span>(rush_receive, rush_receive_parallel)</a></code></pre></div>
+<div class="sourceCode" id="cb46"><pre class="sourceCode r chunk-style"><code class="sourceCode r"><span id="cb46-1"><a href="parallelization-with-furrr.html#cb46-1"></a><span class="co"># sequential computation using purrr</span></span>
+<span id="cb46-2"><a href="parallelization-with-furrr.html#cb46-2"></a>rush_receive &lt;-<span class="st"> </span>team_urls <span class="op">%&gt;%</span></span>
+<span id="cb46-3"><a href="parallelization-with-furrr.html#cb46-3"></a><span class="st">  </span><span class="kw">map</span>(., <span class="op">~</span><span class="kw">get_team_stats</span>(.x)) <span class="op">%&gt;%</span></span>
+<span id="cb46-4"><a href="parallelization-with-furrr.html#cb46-4"></a><span class="st">  </span><span class="kw">map_dfr</span>(., <span class="op">~</span><span class="kw">clean_team_stats</span>(.x))</span>
+<span id="cb46-5"><a href="parallelization-with-furrr.html#cb46-5"></a></span>
+<span id="cb46-6"><a href="parallelization-with-furrr.html#cb46-6"></a><span class="co"># parallel computation using furrr</span></span>
+<span id="cb46-7"><a href="parallelization-with-furrr.html#cb46-7"></a><span class="kw">library</span>(furrr)</span>
+<span id="cb46-8"><a href="parallelization-with-furrr.html#cb46-8"></a>future<span class="op">::</span><span class="kw">plan</span>(multiprocess)</span>
+<span id="cb46-9"><a href="parallelization-with-furrr.html#cb46-9"></a></span>
+<span id="cb46-10"><a href="parallelization-with-furrr.html#cb46-10"></a>rush_receive_parallel &lt;-<span class="st"> </span>team_urls <span class="op">%&gt;%</span></span>
+<span id="cb46-11"><a href="parallelization-with-furrr.html#cb46-11"></a><span class="st">  </span><span class="kw">future_map</span>(., <span class="op">~</span><span class="kw">get_team_stats</span>(.x)) <span class="op">%&gt;%</span></span>
+<span id="cb46-12"><a href="parallelization-with-furrr.html#cb46-12"></a><span class="st">  </span><span class="kw">future_map_dfr</span>(., <span class="op">~</span><span class="kw">clean_team_stats</span>(.x))</span>
+<span id="cb46-13"><a href="parallelization-with-furrr.html#cb46-13"></a></span>
+<span id="cb46-14"><a href="parallelization-with-furrr.html#cb46-14"></a><span class="co"># compare output</span></span>
+<span id="cb46-15"><a href="parallelization-with-furrr.html#cb46-15"></a><span class="kw">identical</span>(rush_receive, rush_receive_parallel)</span></code></pre></div>
 <pre class="output-style"><code>[1] TRUE</code></pre>
 <p>Let’s compare the speed of the operations.</p>
-<div class="sourceCode" id="cb49"><pre class="sourceCode r chunk-style"><code class="sourceCode r"><a class="sourceLine" id="cb49-1" title="1"><span class="co"># sequentially</span></a>
-<a class="sourceLine" id="cb49-2" title="2"><span class="kw">system.time</span>(</a>
-<a class="sourceLine" id="cb49-3" title="3">  rush_receive &lt;-<span class="st"> </span>team_urls <span class="op">%&gt;%</span></a>
-<a class="sourceLine" id="cb49-4" title="4"><span class="st">    </span><span class="kw">map</span>(., <span class="op">~</span><span class="kw">get_team_stats</span>(.x)) <span class="op">%&gt;%</span></a>
-<a class="sourceLine" id="cb49-5" title="5"><span class="st">    </span><span class="kw">map_dfr</span>(., <span class="op">~</span><span class="kw">clean_team_stats</span>(.x))</a>
-<a class="sourceLine" id="cb49-6" title="6">)</a>
-<a class="sourceLine" id="cb49-7" title="7"></a>
-<a class="sourceLine" id="cb49-8" title="8"><span class="co"># parallel</span></a>
-<a class="sourceLine" id="cb49-9" title="9"><span class="kw">system.time</span>(</a>
-<a class="sourceLine" id="cb49-10" title="10">  rush_receive_parallel &lt;-<span class="st"> </span>team_urls <span class="op">%&gt;%</span></a>
-<a class="sourceLine" id="cb49-11" title="11"><span class="st">    </span><span class="kw">future_map</span>(., <span class="op">~</span><span class="kw">get_team_stats</span>(.x)) <span class="op">%&gt;%</span></a>
-<a class="sourceLine" id="cb49-12" title="12"><span class="st">    </span><span class="kw">future_map_dfr</span>(., <span class="op">~</span><span class="kw">clean_team_stats</span>(.x))</a>
-<a class="sourceLine" id="cb49-13" title="13">)</a></code></pre></div>
+<div class="sourceCode" id="cb48"><pre class="sourceCode r chunk-style"><code class="sourceCode r"><span id="cb48-1"><a href="parallelization-with-furrr.html#cb48-1"></a><span class="co"># sequentially</span></span>
+<span id="cb48-2"><a href="parallelization-with-furrr.html#cb48-2"></a><span class="kw">system.time</span>(</span>
+<span id="cb48-3"><a href="parallelization-with-furrr.html#cb48-3"></a>  rush_receive &lt;-<span class="st"> </span>team_urls <span class="op">%&gt;%</span></span>
+<span id="cb48-4"><a href="parallelization-with-furrr.html#cb48-4"></a><span class="st">    </span><span class="kw">map</span>(., <span class="op">~</span><span class="kw">get_team_stats</span>(.x)) <span class="op">%&gt;%</span></span>
+<span id="cb48-5"><a href="parallelization-with-furrr.html#cb48-5"></a><span class="st">    </span><span class="kw">map_dfr</span>(., <span class="op">~</span><span class="kw">clean_team_stats</span>(.x))</span>
+<span id="cb48-6"><a href="parallelization-with-furrr.html#cb48-6"></a>)</span>
+<span id="cb48-7"><a href="parallelization-with-furrr.html#cb48-7"></a></span>
+<span id="cb48-8"><a href="parallelization-with-furrr.html#cb48-8"></a><span class="co"># parallel</span></span>
+<span id="cb48-9"><a href="parallelization-with-furrr.html#cb48-9"></a><span class="kw">system.time</span>(</span>
+<span id="cb48-10"><a href="parallelization-with-furrr.html#cb48-10"></a>  rush_receive_parallel &lt;-<span class="st"> </span>team_urls <span class="op">%&gt;%</span></span>
+<span id="cb48-11"><a href="parallelization-with-furrr.html#cb48-11"></a><span class="st">    </span><span class="kw">future_map</span>(., <span class="op">~</span><span class="kw">get_team_stats</span>(.x)) <span class="op">%&gt;%</span></span>
+<span id="cb48-12"><a href="parallelization-with-furrr.html#cb48-12"></a><span class="st">    </span><span class="kw">future_map_dfr</span>(., <span class="op">~</span><span class="kw">clean_team_stats</span>(.x))</span>
+<span id="cb48-13"><a href="parallelization-with-furrr.html#cb48-13"></a>)</span></code></pre></div>
 <pre class="output-style"><code>   user  system elapsed 
-   5.08    0.15    8.27 
+   2.65    0.09    3.65 
    user  system elapsed 
-   0.26    0.02    2.32 </code></pre>
+   0.28    0.03    1.09 </code></pre>
 <p>We can see that parallelizing this process is about one and a half times faster than applying these functions sequentially. This effect is only amplified when we increase the number of sources to scrape.</p>
-<div class="sourceCode" id="cb51"><pre class="sourceCode r chunk-style"><code class="sourceCode r"><a class="sourceLine" id="cb51-1" title="1">player_urls &lt;-<span class="st"> </span>team_urls <span class="op">%&gt;%</span><span class="st"> </span></a>
-<a class="sourceLine" id="cb51-2" title="2"><span class="st">  </span><span class="kw">map</span>(., <span class="op">~</span><span class="kw">get_players</span>(.x)) <span class="op">%&gt;%</span><span class="st"> </span></a>
-<a class="sourceLine" id="cb51-3" title="3"><span class="st">  </span><span class="kw">flatten_chr</span>()</a>
-<a class="sourceLine" id="cb51-4" title="4"></a>
-<a class="sourceLine" id="cb51-5" title="5"><span class="co"># sequentially</span></a>
-<a class="sourceLine" id="cb51-6" title="6"><span class="kw">system.time</span>(</a>
-<a class="sourceLine" id="cb51-7" title="7">  player_stats &lt;-<span class="st"> </span>player_urls <span class="op">%&gt;%</span></a>
-<a class="sourceLine" id="cb51-8" title="8"><span class="st">    </span><span class="kw">map</span>(., <span class="op">~</span><span class="kw">get_player_stats</span>(.x))</a>
-<a class="sourceLine" id="cb51-9" title="9">)</a>
-<a class="sourceLine" id="cb51-10" title="10"></a>
-<a class="sourceLine" id="cb51-11" title="11"><span class="co"># parallel</span></a>
-<a class="sourceLine" id="cb51-12" title="12"><span class="kw">system.time</span>(</a>
-<a class="sourceLine" id="cb51-13" title="13">  player_stats_par &lt;-<span class="st"> </span>player_urls <span class="op">%&gt;%</span><span class="st"> </span></a>
-<a class="sourceLine" id="cb51-14" title="14"><span class="st">    </span><span class="kw">future_map</span>(., <span class="op">~</span><span class="kw">get_player_stats</span>(.x))</a>
-<a class="sourceLine" id="cb51-15" title="15">)</a></code></pre></div>
+<div class="sourceCode" id="cb50"><pre class="sourceCode r chunk-style"><code class="sourceCode r"><span id="cb50-1"><a href="parallelization-with-furrr.html#cb50-1"></a>player_urls &lt;-<span class="st"> </span>team_urls <span class="op">%&gt;%</span><span class="st"> </span></span>
+<span id="cb50-2"><a href="parallelization-with-furrr.html#cb50-2"></a><span class="st">  </span><span class="kw">map</span>(., <span class="op">~</span><span class="kw">get_players</span>(.x)) <span class="op">%&gt;%</span><span class="st"> </span></span>
+<span id="cb50-3"><a href="parallelization-with-furrr.html#cb50-3"></a><span class="st">  </span><span class="kw">flatten_chr</span>()</span>
+<span id="cb50-4"><a href="parallelization-with-furrr.html#cb50-4"></a></span>
+<span id="cb50-5"><a href="parallelization-with-furrr.html#cb50-5"></a><span class="co"># sequentially</span></span>
+<span id="cb50-6"><a href="parallelization-with-furrr.html#cb50-6"></a><span class="kw">system.time</span>(</span>
+<span id="cb50-7"><a href="parallelization-with-furrr.html#cb50-7"></a>  player_stats &lt;-<span class="st"> </span>player_urls <span class="op">%&gt;%</span></span>
+<span id="cb50-8"><a href="parallelization-with-furrr.html#cb50-8"></a><span class="st">    </span><span class="kw">map</span>(., <span class="op">~</span><span class="kw">get_player_stats</span>(.x))</span>
+<span id="cb50-9"><a href="parallelization-with-furrr.html#cb50-9"></a>)</span>
+<span id="cb50-10"><a href="parallelization-with-furrr.html#cb50-10"></a></span>
+<span id="cb50-11"><a href="parallelization-with-furrr.html#cb50-11"></a><span class="co"># parallel</span></span>
+<span id="cb50-12"><a href="parallelization-with-furrr.html#cb50-12"></a><span class="kw">system.time</span>(</span>
+<span id="cb50-13"><a href="parallelization-with-furrr.html#cb50-13"></a>  player_stats_par &lt;-<span class="st"> </span>player_urls <span class="op">%&gt;%</span><span class="st"> </span></span>
+<span id="cb50-14"><a href="parallelization-with-furrr.html#cb50-14"></a><span class="st">    </span><span class="kw">future_map</span>(., <span class="op">~</span><span class="kw">get_player_stats</span>(.x))</span>
+<span id="cb50-15"><a href="parallelization-with-furrr.html#cb50-15"></a>)</span></code></pre></div>
 <pre class="output-style"><code>   user  system elapsed 
-  63.92    4.33  215.85 
+  35.20    1.63  153.31 
    user  system elapsed 
-   0.21    0.05   27.73 </code></pre>
-<p>As we can see, parallelizing the scraping of all 558 players who recorded rushing and receiving statistics in 2020 is about five times faster than scraping the same data sequentially.</p>
+   0.16    0.01    9.42 </code></pre>
+<p>As we can see, parallelizing the scraping of all 627 players who recorded rushing and receiving statistics in 2020 is about five times faster than scraping the same data sequentially.</p>
 </div>
             </section>
 
@@ -272,7 +276,6 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
     </div>
   </div>
 <script src="libs/gitbook-2.6.7/js/app.min.js"></script>
-<script src="libs/gitbook-2.6.7/js/lunr.js"></script>
 <script src="libs/gitbook-2.6.7/js/clipboard.min.js"></script>
 <script src="libs/gitbook-2.6.7/js/plugin-search.js"></script>
 <script src="libs/gitbook-2.6.7/js/plugin-sharing.js"></script>
@@ -291,6 +294,7 @@ gitbook.start({
 "weibo": false,
 "instapaper": false,
 "vk": false,
+"whatsapp": false,
 "all": ["facebook", "twitter", "linkedin", "weibo", "instapaper"]
 },
 "fontsettings": {
@@ -311,6 +315,10 @@ gitbook.start({
 "text": null
 },
 "download": ["Module2.pdf", "Module2.epub"],
+"search": {
+"engine": "fuse",
+"options": null
+},
 "toc": {
 "collapse": "subsection"
 },

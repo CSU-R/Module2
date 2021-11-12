@@ -1,0 +1,91 @@
+---
+title: "Assignment 1"
+author: "Your Name Here"
+date: "`r format(Sys.time(), '%d %h, %Y, %I:%M %p')`"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+# Instructions:
+
+1. Update your name in the header block, example: `author: "Alex Fout" `
+1. Select `File > Save as` and save the file by adding your last name at the beginning with an underscore, example: `fout_assignment_1.rmd`
+1. Follow the instructions below to fill in the assignment.
+1. Be sure to _run your code chunks when you make them_, to make sure everything works!
+1. When you've completed the assignment, __knit__ the document and make sure the resulting HTML or PDF file looks alright.
+1. Upload the PDF or HTML file to Canvas (Don't upload the Rmd document).
+
+
+# Assignment
+
+This assignment will give you some experience working with rectangular and non-rectangular data, as well as retrieving data using APIs.
+
+## Problem 1. 
+
+Below is an example of non-rectangular data:
+
+```{r}
+amounts <- c(400, 800, 1000, 1200, 1600, 2000)
+jeopardy_board <- list(pp = data.frame(`Potent Potables` = amounts),
+                       ba = data.frame(`Before and After` = amounts),
+                       pt = data.frame(Potpourri = amounts),
+                       rt = data.frame(`Rhyme Time` = amounts),
+                       an = data.frame(Anagrams = amounts),
+                       li = data.frame(Literature = amounts))
+```
+
+
+Convert the `jeopardy_board` list into rectangular data.
+Note: The textbook showed an example of how to combine a list of data frames using `bind_rows`, because each data frame in the list had the same columns. In this case, each element of the list is a different column with the same number of rows, so you should use the bind_cols function instead. You will have to load the `tidyverse` package (and install it if necessary).
+
+```{r}
+# your code here
+```
+
+## Problem 2. 
+
+The website boredapi.com provides an API which suggests something to do if you are bored.
+Use the `httr::GET` function to retrieve a random activity using "https://www.boredapi.com/api/activity" as the url.
+Be sure to convert the response into a character vector and parse the JSON structure.
+Performing the suggested action is optional for this assignment.
+
+```{r}
+# your code here
+```
+
+## Problem 3. 
+
+
+Use the Coindesk API to retrieve the latest value of Bitcoin in US Dollars, Great British Pounds, and Euros.
+The URL for the `GET` request is: https://api.coindesk.com/v1/bpi/currentprice.json
+After you parse the JSON data, extract the `$bpi$USD$rate` element to get the value in US dollars, and do likewise for Pounds and Euros.
+Finally, convert the value to a numeric data type. You will have to use the `sub` function to remove the commas from the character strings before you convert them to numeric types using `as.numeric`. The command `?sub` may be helpful, you should replace all commas with an empty string.
+
+```{r}
+# your code here
+
+```
+
+
+## Problem 4.
+
+The above problems were good practice accessing API's, but you weren't really extracting large volumes of data. This problem will hopefully show that API's can actually be a source for useful, up-to-date data.
+The website datausa.io provides an API which provides data from several government and non-government sources. 
+Go to the datausa.io/about/api to see some examples of how to use the API, notice how changing the last part of the URL allows you to retrieve different information. 
+Now send a GET request which retrieves the latest year of population data for all US counties.
+Be sure to properly extract the response and assign the result to a data frame called `counties`
+
+
+```{r}
+# your code here
+
+```
+
+## End
+
+This is the end of the assignment!
+You can knit the document and upload it to Canvas
+
