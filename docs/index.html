@@ -6,7 +6,7 @@
   <meta http-equiv="X-UA-Compatible" content="IE=edge" />
   <title>R Module 2</title>
   <meta name="description" content="This is the second installment for the book for the R Intro Course at CSU." />
-  <meta name="generator" content="bookdown 0.21 and GitBook 2.6.7" />
+  <meta name="generator" content="bookdown 0.24 and GitBook 2.6.7" />
 
   <meta property="og:title" content="R Module 2" />
   <meta property="og:type" content="book" />
@@ -32,7 +32,8 @@
   
 
 <link rel="next" href="associated-csu-course.html"/>
-<script src="libs/jquery-2.2.3/jquery.min.js"></script>
+<script src="libs/jquery-3.6.0/jquery-3.6.0.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/fuse.js@6.4.6/dist/fuse.min.js"></script>
 <link href="libs/gitbook-2.6.7/css/style.css" rel="stylesheet" />
 <link href="libs/gitbook-2.6.7/css/plugin-table.css" rel="stylesheet" />
 <link href="libs/gitbook-2.6.7/css/plugin-bookdown.css" rel="stylesheet" />
@@ -48,24 +49,24 @@
 
 
 
-
+<script src="libs/accessible-code-block-0.0.1/empty-anchor.js"></script>
 <link href="libs/pagedtable-1.1/css/pagedtable.css" rel="stylesheet" />
 <script src="libs/pagedtable-1.1/js/pagedtable.js"></script>
-<link href="libs/anchor-sections-1.0/anchor-sections.css" rel="stylesheet" />
-<script src="libs/anchor-sections-1.0/anchor-sections.js"></script>
-<script src="libs/htmlwidgets-1.5.2/htmlwidgets.js"></script>
-<script src="libs/plotly-binding-4.9.2.1/plotly.js"></script>
+<link href="libs/anchor-sections-1.0.1/anchor-sections.css" rel="stylesheet" />
+<script src="libs/anchor-sections-1.0.1/anchor-sections.js"></script>
+<script src="libs/htmlwidgets-1.5.4/htmlwidgets.js"></script>
+<script src="libs/plotly-binding-4.10.0/plotly.js"></script>
 <script src="libs/typedarray-0.1/typedarray.min.js"></script>
-<link href="libs/crosstalk-1.1.0.1/css/crosstalk.css" rel="stylesheet" />
-<script src="libs/crosstalk-1.1.0.1/js/crosstalk.min.js"></script>
-<link href="libs/plotly-htmlwidgets-css-1.52.2/plotly-htmlwidgets.css" rel="stylesheet" />
-<script src="libs/plotly-main-1.52.2/plotly-latest.min.js"></script>
+<link href="libs/crosstalk-1.2.0/css/crosstalk.min.css" rel="stylesheet" />
+<script src="libs/crosstalk-1.2.0/js/crosstalk.min.js"></script>
+<link href="libs/plotly-htmlwidgets-css-2.5.1/plotly-htmlwidgets.css" rel="stylesheet" />
+<script src="libs/plotly-main-2.5.1/plotly-latest.min.js"></script>
 
 
 <style type="text/css">
-a.sourceLine { display: inline-block; line-height: 1.25; }
-a.sourceLine { pointer-events: none; color: inherit; text-decoration: inherit; }
-a.sourceLine:empty { height: 1.2em; }
+code.sourceCode > span { display: inline-block; line-height: 1.25; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+code.sourceCode > span:empty { height: 1.2em; }
 .sourceCode { overflow: visible; }
 code.sourceCode { white-space: pre; position: relative; }
 pre.sourceCode { margin: 0; }
@@ -74,14 +75,16 @@ div.sourceCode { overflow: auto; }
 }
 @media print {
 code.sourceCode { white-space: pre-wrap; }
-a.sourceLine { text-indent: -1em; padding-left: 1em; }
+code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
 }
-pre.numberSource a.sourceLine
-  { position: relative; left: -4em; }
-pre.numberSource a.sourceLine::before
-  { content: attr(title);
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
     position: relative; left: -1em; text-align: right; vertical-align: baseline;
-    border: none; pointer-events: all; display: inline-block;
+    border: none; display: inline-block;
     -webkit-touch-callout: none; -webkit-user-select: none;
     -khtml-user-select: none; -moz-user-select: none;
     -ms-user-select: none; user-select: none;
@@ -90,9 +93,9 @@ pre.numberSource a.sourceLine::before
   }
 pre.numberSource { margin-left: 3em; border-left: 1px solid #aaaaaa;  padding-left: 4px; }
 div.sourceCode
-  {  }
+  {   }
 @media screen {
-a.sourceLine::before { text-decoration: underline; }
+code.sourceCode > span > a:first-child::before { text-decoration: underline; }
 }
 code span.al { color: #ff0000; font-weight: bold; } /* Alert */
 code span.an { color: #60a0b0; font-weight: bold; font-style: italic; } /* Annotation */
@@ -125,6 +128,7 @@ code span.vs { color: #4070a0; } /* VerbatimString */
 code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warning */
 </style>
 
+
 <link rel="stylesheet" href="src/style.css" type="text/css" />
 <link rel="stylesheet" href="src/environments.css" type="text/css" />
 </head>
@@ -147,9 +151,9 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <li class="chapter" data-level="1.1" data-path="associated-csu-course.html"><a href="associated-csu-course.html"><i class="fa fa-check"></i><b>1.1</b> Associated CSU Course</a></li>
 </ul></li>
 <li class="chapter" data-level="2" data-path="AccessingData.html"><a href="AccessingData.html"><i class="fa fa-check"></i><b>2</b> Accessing Data</a><ul>
-<li class="chapter" data-level="2.1" data-path="rectangular-vs-non-rectangular-data.html"><a href="rectangular-vs-non-rectangular-data.html"><i class="fa fa-check"></i><b>2.1</b> Rectangular vs. Non-rectangular Data</a><ul>
-<li class="chapter" data-level="2.1.1" data-path="rectangular-vs-non-rectangular-data.html"><a href="rectangular-vs-non-rectangular-data.html#reading-and-writing-rectangular-data"><i class="fa fa-check"></i><b>2.1.1</b> Reading and Writing Rectangular Data</a></li>
-<li class="chapter" data-level="2.1.2" data-path="rectangular-vs-non-rectangular-data.html"><a href="rectangular-vs-non-rectangular-data.html#reading-and-writing-non-rectangular-data"><i class="fa fa-check"></i><b>2.1.2</b> Reading and Writing Non-rectangular Data</a></li>
+<li class="chapter" data-level="2.1" data-path="rectangular-vs.-non-rectangular-data.html"><a href="rectangular-vs.-non-rectangular-data.html"><i class="fa fa-check"></i><b>2.1</b> Rectangular vs. Non-rectangular Data</a><ul>
+<li class="chapter" data-level="2.1.1" data-path="rectangular-vs.-non-rectangular-data.html"><a href="rectangular-vs.-non-rectangular-data.html#reading-and-writing-rectangular-data"><i class="fa fa-check"></i><b>2.1.1</b> Reading and Writing Rectangular Data</a></li>
+<li class="chapter" data-level="2.1.2" data-path="rectangular-vs.-non-rectangular-data.html"><a href="rectangular-vs.-non-rectangular-data.html#reading-and-writing-non-rectangular-data"><i class="fa fa-check"></i><b>2.1.2</b> Reading and Writing Non-rectangular Data</a></li>
 </ul></li>
 <li class="chapter" data-level="2.2" data-path="APIs.html"><a href="APIs.html"><i class="fa fa-check"></i><b>2.2</b> APIs: Clean and Curated</a></li>
 <li class="chapter" data-level="2.3" data-path="scraping-messy-and-mangled.html"><a href="scraping-messy-and-mangled.html"><i class="fa fa-check"></i><b>2.3</b> Scraping: Messy and Mangled</a><ul>
@@ -204,11 +208,10 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <div id="header">
 <h1 class="title">R Module 2</h1>
 <p class="author"><em>Connor Gibbs<a href="#fn1" class="footnote-ref" id="fnref1"><sup>1</sup></a></em></p>
-<p class="date"><em>11 Dec, 2020, 04:53 PM</em></p>
+<p class="date"><em>12 Nov, 2021, 03:20 PM</em></p>
 </div>
 <div id="welcome" class="section level1">
 <h1><span class="header-section-number">Chapter 1</span> Welcome!</h1>
-<pre><code>## Warning: package &#39;kableExtra&#39; was built under R version 4.0.3</code></pre>
 <p>Hi, and welcome to the R Module 2 (AKA STAT 158) course at Colorado State University!</p>
 <p>This course is the second of three 1 credit courses intended to introduce the R programming language, specifically the Tidyverse.</p>
 <p>Through these Modules (courses), we’ll explore how R can be used to do the following:</p>
@@ -232,7 +235,7 @@ To move quickly to different portions of the book, click on the appropriate chap
 The buttons at the top of the page allow you to show/hide the table of contents, search the book, change font settings, download a pdf or ebook copy of this book, or get hints on various sections of the book.
 The faint left and right arrows at the sides of each page (or bottom of the page if it’s narrow enough) allow you to step to the next/previous section.
 Here’s what they look like:
-<div class="figure" style="text-align: center"><span id="fig:unnamed-chunk-1"></span>
+<div class="figure" style="text-align: center"><span style="display:block;" id="fig:unnamed-chunk-1"></span>
 <img src="src/images/left_arrow.png" alt="Left and right navigation arrows" width="34" /><img src="src/images/right_arrow.png" alt="Left and right navigation arrows" width="26" />
 <p class="caption">
 Figure 1.1: Left and right navigation arrows
@@ -243,7 +246,7 @@ Figure 1.1: Left and right navigation arrows
 <div class="footnotes">
 <hr />
 <ol start="1">
-<li id="fn1"><p>Department of Statistics, Colorado State University, <a href="mailto:connor.gibbs@colostate.edu" class="email">connor.gibbs@colostate.edu</a><a href="#fnref1" class="footnote-back">↩</a></p></li>
+<li id="fn1"><p>Department of Statistics, Colorado State University, <a href="mailto:connor.gibbs@colostate.edu" class="email">connor.gibbs@colostate.edu</a><a href="#fnref1" class="footnote-back">↩︎</a></p></li>
 </ol>
 </div>
             </section>
@@ -256,7 +259,6 @@ Figure 1.1: Left and right navigation arrows
     </div>
   </div>
 <script src="libs/gitbook-2.6.7/js/app.min.js"></script>
-<script src="libs/gitbook-2.6.7/js/lunr.js"></script>
 <script src="libs/gitbook-2.6.7/js/clipboard.min.js"></script>
 <script src="libs/gitbook-2.6.7/js/plugin-search.js"></script>
 <script src="libs/gitbook-2.6.7/js/plugin-sharing.js"></script>
@@ -275,6 +277,7 @@ gitbook.start({
 "weibo": false,
 "instapaper": false,
 "vk": false,
+"whatsapp": false,
 "all": ["facebook", "twitter", "linkedin", "weibo", "instapaper"]
 },
 "fontsettings": {
@@ -295,6 +298,10 @@ gitbook.start({
 "text": null
 },
 "download": ["Module2.pdf", "Module2.epub"],
+"search": {
+"engine": "fuse",
+"options": null
+},
 "toc": {
 "collapse": "subsection"
 },

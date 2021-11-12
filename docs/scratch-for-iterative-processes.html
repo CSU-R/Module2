@@ -6,7 +6,7 @@
   <meta http-equiv="X-UA-Compatible" content="IE=edge" />
   <title>3.4 Scratch for Iterative Processes | R Module 2</title>
   <meta name="description" content="This is the second installment for the book for the R Intro Course at CSU." />
-  <meta name="generator" content="bookdown 0.21 and GitBook 2.6.7" />
+  <meta name="generator" content="bookdown 0.24 and GitBook 2.6.7" />
 
   <meta property="og:title" content="3.4 Scratch for Iterative Processes | R Module 2" />
   <meta property="og:type" content="book" />
@@ -32,7 +32,8 @@
   
 <link rel="prev" href="parallelization-with-furrr.html"/>
 <link rel="next" href="Visualization.html"/>
-<script src="libs/jquery-2.2.3/jquery.min.js"></script>
+<script src="libs/jquery-3.6.0/jquery-3.6.0.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/fuse.js@6.4.6/dist/fuse.min.js"></script>
 <link href="libs/gitbook-2.6.7/css/style.css" rel="stylesheet" />
 <link href="libs/gitbook-2.6.7/css/plugin-table.css" rel="stylesheet" />
 <link href="libs/gitbook-2.6.7/css/plugin-bookdown.css" rel="stylesheet" />
@@ -48,24 +49,24 @@
 
 
 
-
+<script src="libs/accessible-code-block-0.0.1/empty-anchor.js"></script>
 <link href="libs/pagedtable-1.1/css/pagedtable.css" rel="stylesheet" />
 <script src="libs/pagedtable-1.1/js/pagedtable.js"></script>
-<link href="libs/anchor-sections-1.0/anchor-sections.css" rel="stylesheet" />
-<script src="libs/anchor-sections-1.0/anchor-sections.js"></script>
-<script src="libs/htmlwidgets-1.5.2/htmlwidgets.js"></script>
-<script src="libs/plotly-binding-4.9.2.1/plotly.js"></script>
+<link href="libs/anchor-sections-1.0.1/anchor-sections.css" rel="stylesheet" />
+<script src="libs/anchor-sections-1.0.1/anchor-sections.js"></script>
+<script src="libs/htmlwidgets-1.5.4/htmlwidgets.js"></script>
+<script src="libs/plotly-binding-4.10.0/plotly.js"></script>
 <script src="libs/typedarray-0.1/typedarray.min.js"></script>
-<link href="libs/crosstalk-1.1.0.1/css/crosstalk.css" rel="stylesheet" />
-<script src="libs/crosstalk-1.1.0.1/js/crosstalk.min.js"></script>
-<link href="libs/plotly-htmlwidgets-css-1.52.2/plotly-htmlwidgets.css" rel="stylesheet" />
-<script src="libs/plotly-main-1.52.2/plotly-latest.min.js"></script>
+<link href="libs/crosstalk-1.2.0/css/crosstalk.min.css" rel="stylesheet" />
+<script src="libs/crosstalk-1.2.0/js/crosstalk.min.js"></script>
+<link href="libs/plotly-htmlwidgets-css-2.5.1/plotly-htmlwidgets.css" rel="stylesheet" />
+<script src="libs/plotly-main-2.5.1/plotly-latest.min.js"></script>
 
 
 <style type="text/css">
-a.sourceLine { display: inline-block; line-height: 1.25; }
-a.sourceLine { pointer-events: none; color: inherit; text-decoration: inherit; }
-a.sourceLine:empty { height: 1.2em; }
+code.sourceCode > span { display: inline-block; line-height: 1.25; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+code.sourceCode > span:empty { height: 1.2em; }
 .sourceCode { overflow: visible; }
 code.sourceCode { white-space: pre; position: relative; }
 pre.sourceCode { margin: 0; }
@@ -74,14 +75,16 @@ div.sourceCode { overflow: auto; }
 }
 @media print {
 code.sourceCode { white-space: pre-wrap; }
-a.sourceLine { text-indent: -1em; padding-left: 1em; }
+code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
 }
-pre.numberSource a.sourceLine
-  { position: relative; left: -4em; }
-pre.numberSource a.sourceLine::before
-  { content: attr(title);
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
     position: relative; left: -1em; text-align: right; vertical-align: baseline;
-    border: none; pointer-events: all; display: inline-block;
+    border: none; display: inline-block;
     -webkit-touch-callout: none; -webkit-user-select: none;
     -khtml-user-select: none; -moz-user-select: none;
     -ms-user-select: none; user-select: none;
@@ -90,9 +93,9 @@ pre.numberSource a.sourceLine::before
   }
 pre.numberSource { margin-left: 3em; border-left: 1px solid #aaaaaa;  padding-left: 4px; }
 div.sourceCode
-  {  }
+  {   }
 @media screen {
-a.sourceLine::before { text-decoration: underline; }
+code.sourceCode > span > a:first-child::before { text-decoration: underline; }
 }
 code span.al { color: #ff0000; font-weight: bold; } /* Alert */
 code span.an { color: #60a0b0; font-weight: bold; font-style: italic; } /* Annotation */
@@ -125,6 +128,7 @@ code span.vs { color: #4070a0; } /* VerbatimString */
 code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warning */
 </style>
 
+
 <link rel="stylesheet" href="src/style.css" type="text/css" />
 <link rel="stylesheet" href="src/environments.css" type="text/css" />
 </head>
@@ -147,9 +151,9 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <li class="chapter" data-level="1.1" data-path="associated-csu-course.html"><a href="associated-csu-course.html"><i class="fa fa-check"></i><b>1.1</b> Associated CSU Course</a></li>
 </ul></li>
 <li class="chapter" data-level="2" data-path="AccessingData.html"><a href="AccessingData.html"><i class="fa fa-check"></i><b>2</b> Accessing Data</a><ul>
-<li class="chapter" data-level="2.1" data-path="rectangular-vs-non-rectangular-data.html"><a href="rectangular-vs-non-rectangular-data.html"><i class="fa fa-check"></i><b>2.1</b> Rectangular vs. Non-rectangular Data</a><ul>
-<li class="chapter" data-level="2.1.1" data-path="rectangular-vs-non-rectangular-data.html"><a href="rectangular-vs-non-rectangular-data.html#reading-and-writing-rectangular-data"><i class="fa fa-check"></i><b>2.1.1</b> Reading and Writing Rectangular Data</a></li>
-<li class="chapter" data-level="2.1.2" data-path="rectangular-vs-non-rectangular-data.html"><a href="rectangular-vs-non-rectangular-data.html#reading-and-writing-non-rectangular-data"><i class="fa fa-check"></i><b>2.1.2</b> Reading and Writing Non-rectangular Data</a></li>
+<li class="chapter" data-level="2.1" data-path="rectangular-vs.-non-rectangular-data.html"><a href="rectangular-vs.-non-rectangular-data.html"><i class="fa fa-check"></i><b>2.1</b> Rectangular vs. Non-rectangular Data</a><ul>
+<li class="chapter" data-level="2.1.1" data-path="rectangular-vs.-non-rectangular-data.html"><a href="rectangular-vs.-non-rectangular-data.html#reading-and-writing-rectangular-data"><i class="fa fa-check"></i><b>2.1.1</b> Reading and Writing Rectangular Data</a></li>
+<li class="chapter" data-level="2.1.2" data-path="rectangular-vs.-non-rectangular-data.html"><a href="rectangular-vs.-non-rectangular-data.html#reading-and-writing-non-rectangular-data"><i class="fa fa-check"></i><b>2.1.2</b> Reading and Writing Non-rectangular Data</a></li>
 </ul></li>
 <li class="chapter" data-level="2.2" data-path="APIs.html"><a href="APIs.html"><i class="fa fa-check"></i><b>2.2</b> APIs: Clean and Curated</a></li>
 <li class="chapter" data-level="2.3" data-path="scraping-messy-and-mangled.html"><a href="scraping-messy-and-mangled.html"><i class="fa fa-check"></i><b>2.3</b> Scraping: Messy and Mangled</a><ul>
@@ -205,24 +209,24 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <h2><span class="header-section-number">3.4</span> Scratch for Iterative Processes</h2>
 <p>In this case, the <code>map</code> function is sufficient since the scraped results for the Denver Broncos does not depend on the scraped results for the Dallas Cowboys. If the results of one iteration (e.g. the scraped results for the Denver Broncos) depended on the results of prior iterations (e.g. scraped results for the Dallas Cowboys), then the algorithm to scrape team statistics is <strong>recursive</strong>. When we have a recursive algorithm, the <code>map</code> function is often insufficient or overly complex. In this case, we may reach for a for-loop using the <code>for</code> function.</p>
 <p>A for-loop allows us to repeat code multiple times making small changes with each iteration. To illustrate the concept of a for-loop, let’s consider a famous example of a recursive algorithm: the Fibonacci sequence. The Fibonacci sequence is a sequence of integers starting with 0 and 1 where each following integer is the sum of the previous two integers. Written out, the first eight values of the Fibonacci sequence are <span class="math inline">\(0, 1, 1, 2, 3, 5, 8, 13\)</span>. Let’s consider how to use a for-loop to return the first <span class="math inline">\(n\)</span> integers in the Fibonacci sequence. Let’s consider <span class="math inline">\(n=8\)</span> to start.</p>
-<div class="sourceCode" id="cb53"><pre class="sourceCode r chunk-style"><code class="sourceCode r"><a class="sourceLine" id="cb53-1" title="1">n &lt;-<span class="st"> </span><span class="dv">8</span></a>
-<a class="sourceLine" id="cb53-2" title="2">fib_seq &lt;-<span class="st"> </span><span class="kw">vector</span>(<span class="dt">mode =</span> <span class="st">&#39;integer&#39;</span>, <span class="dt">length =</span> n)</a>
-<a class="sourceLine" id="cb53-3" title="3"><span class="cf">for</span>(i <span class="cf">in</span> <span class="dv">1</span><span class="op">:</span>n){</a>
-<a class="sourceLine" id="cb53-4" title="4">  <span class="co"># if it is the first element of the Fibonacci sequence, return a 0</span></a>
-<a class="sourceLine" id="cb53-5" title="5">  <span class="cf">if</span>(i <span class="op">==</span><span class="st"> </span><span class="dv">1</span>){</a>
-<a class="sourceLine" id="cb53-6" title="6">    fib_seq[i] &lt;-<span class="st"> </span><span class="dv">0</span></a>
-<a class="sourceLine" id="cb53-7" title="7">  }</a>
-<a class="sourceLine" id="cb53-8" title="8">  <span class="co"># if it is the second element of the Fibonacci sequence, return a 1</span></a>
-<a class="sourceLine" id="cb53-9" title="9">  <span class="cf">else</span> <span class="cf">if</span>(i <span class="op">==</span><span class="st"> </span><span class="dv">2</span>){</a>
-<a class="sourceLine" id="cb53-10" title="10">    fib_seq[i] &lt;-<span class="st"> </span><span class="dv">1</span></a>
-<a class="sourceLine" id="cb53-11" title="11">  }</a>
-<a class="sourceLine" id="cb53-12" title="12">  <span class="co"># if it is any other element of the Fibonacci sequence, return the sum of the </span></a>
-<a class="sourceLine" id="cb53-13" title="13">  <span class="co"># previous two elements</span></a>
-<a class="sourceLine" id="cb53-14" title="14">  <span class="cf">else</span>{</a>
-<a class="sourceLine" id="cb53-15" title="15">    fib_seq[i] &lt;-<span class="st"> </span>fib_seq[i<span class="dv">-1</span>] <span class="op">+</span><span class="st"> </span>fib_seq[i<span class="dv">-2</span>]</a>
-<a class="sourceLine" id="cb53-16" title="16">  }</a>
-<a class="sourceLine" id="cb53-17" title="17">}</a>
-<a class="sourceLine" id="cb53-18" title="18">fib_seq</a></code></pre></div>
+<div class="sourceCode" id="cb52"><pre class="sourceCode r chunk-style"><code class="sourceCode r"><span id="cb52-1"><a href="scratch-for-iterative-processes.html#cb52-1"></a>n &lt;-<span class="st"> </span><span class="dv">8</span></span>
+<span id="cb52-2"><a href="scratch-for-iterative-processes.html#cb52-2"></a>fib_seq &lt;-<span class="st"> </span><span class="kw">vector</span>(<span class="dt">mode =</span> <span class="st">&#39;integer&#39;</span>, <span class="dt">length =</span> n)</span>
+<span id="cb52-3"><a href="scratch-for-iterative-processes.html#cb52-3"></a><span class="cf">for</span>(i <span class="cf">in</span> <span class="dv">1</span><span class="op">:</span>n){</span>
+<span id="cb52-4"><a href="scratch-for-iterative-processes.html#cb52-4"></a>  <span class="co"># if it is the first element of the Fibonacci sequence, return a 0</span></span>
+<span id="cb52-5"><a href="scratch-for-iterative-processes.html#cb52-5"></a>  <span class="cf">if</span>(i <span class="op">==</span><span class="st"> </span><span class="dv">1</span>){</span>
+<span id="cb52-6"><a href="scratch-for-iterative-processes.html#cb52-6"></a>    fib_seq[i] &lt;-<span class="st"> </span><span class="dv">0</span></span>
+<span id="cb52-7"><a href="scratch-for-iterative-processes.html#cb52-7"></a>  }</span>
+<span id="cb52-8"><a href="scratch-for-iterative-processes.html#cb52-8"></a>  <span class="co"># if it is the second element of the Fibonacci sequence, return a 1</span></span>
+<span id="cb52-9"><a href="scratch-for-iterative-processes.html#cb52-9"></a>  <span class="cf">else</span> <span class="cf">if</span>(i <span class="op">==</span><span class="st"> </span><span class="dv">2</span>){</span>
+<span id="cb52-10"><a href="scratch-for-iterative-processes.html#cb52-10"></a>    fib_seq[i] &lt;-<span class="st"> </span><span class="dv">1</span></span>
+<span id="cb52-11"><a href="scratch-for-iterative-processes.html#cb52-11"></a>  }</span>
+<span id="cb52-12"><a href="scratch-for-iterative-processes.html#cb52-12"></a>  <span class="co"># if it is any other element of the Fibonacci sequence, return the sum of the </span></span>
+<span id="cb52-13"><a href="scratch-for-iterative-processes.html#cb52-13"></a>  <span class="co"># previous two elements</span></span>
+<span id="cb52-14"><a href="scratch-for-iterative-processes.html#cb52-14"></a>  <span class="cf">else</span>{</span>
+<span id="cb52-15"><a href="scratch-for-iterative-processes.html#cb52-15"></a>    fib_seq[i] &lt;-<span class="st"> </span>fib_seq[i<span class="dv">-1</span>] <span class="op">+</span><span class="st"> </span>fib_seq[i<span class="dv">-2</span>]</span>
+<span id="cb52-16"><a href="scratch-for-iterative-processes.html#cb52-16"></a>  }</span>
+<span id="cb52-17"><a href="scratch-for-iterative-processes.html#cb52-17"></a>}</span>
+<span id="cb52-18"><a href="scratch-for-iterative-processes.html#cb52-18"></a>fib_seq</span></code></pre></div>
 <pre class="output-style"><code>[1]  0  1  1  2  3  5  8 13</code></pre>
 <p>Since each value of the Fibonacci sequence depends on the results of the prior two values of the Fibonacci sequence, a for-loop allows us to index the results of the sequence with each iteration. While intuitive, the for-loops can be very slow in <code>R</code>, especially when the recursive algorithm becomes more complex. In these situations, we need a faster alternative.</p>
 
@@ -238,7 +242,6 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
     </div>
   </div>
 <script src="libs/gitbook-2.6.7/js/app.min.js"></script>
-<script src="libs/gitbook-2.6.7/js/lunr.js"></script>
 <script src="libs/gitbook-2.6.7/js/clipboard.min.js"></script>
 <script src="libs/gitbook-2.6.7/js/plugin-search.js"></script>
 <script src="libs/gitbook-2.6.7/js/plugin-sharing.js"></script>
@@ -257,6 +260,7 @@ gitbook.start({
 "weibo": false,
 "instapaper": false,
 "vk": false,
+"whatsapp": false,
 "all": ["facebook", "twitter", "linkedin", "weibo", "instapaper"]
 },
 "fontsettings": {
@@ -277,6 +281,10 @@ gitbook.start({
 "text": null
 },
 "download": ["Module2.pdf", "Module2.epub"],
+"search": {
+"engine": "fuse",
+"options": null
+},
 "toc": {
 "collapse": "subsection"
 },
