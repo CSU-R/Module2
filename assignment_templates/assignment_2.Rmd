@@ -1,0 +1,121 @@
+---
+title: "Assignment 2"
+author: "Your Name Here"
+date: "`r format(Sys.time(), '%d %h, %Y, %I:%M %p')`"
+output:
+  html_document: default
+  pdf_document: default
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+# Instructions:
+
+1. Update your name in the header block, example: `author: "Alex Fout" `
+1. Select `File > Save as` and save the file by adding your last name at the beginning with an underscore, example: `fout_assignment_1.rmd`
+1. Follow the instructions below to fill in the assignment.
+1. Be sure to _run your code chunks when you make them_, to make sure everything works!
+1. When you've completed the assignment, __knit__ the document and make sure the resulting HTML or PDF file looks alright.
+1. Upload the PDF or HTML file to Canvas (Don't upload the Rmd document).
+
+
+# Assignment
+
+This assignment will give you some experience scraping data from the web, as well as some data cleaning with `tidyverse` functions.
+
+## Problem 1. 
+
+The website [j-archive.com] contains a near-complete compendium of jeopardy clues, responses, contestants, winners, wagers, and much more! 
+For this problem, you'll scrape some data from a few games. 
+
+For this first problem, navigate to the website and notice under the site logo are numbers for every season of the show. Pick a season and click on its number, where you'll see a list of games. Pick a game and click on the link to navigate to that game's page. 
+
+Now use `rvest` to read the html from the game you chose. Make sure you get the correct url by checking your browser's address bar, there should be a game_id referenced in the url.
+Assign this html to a variable called `site`.
+
+
+```{r}
+require(rvest)
+require(dplyr)
+# your code here
+```
+
+## Problem 2
+
+Now extract the contents of the top-left clue of the game board using the `html_node` function on the `site` variable, specifying the `css` to be "#clue_J_1_1". This will extract the correct cell of the clue table. 
+Then _pipe_ the result using `%>%` to the `html_text()` function to extract the clue text, similar to the example in the textbook.
+print the text of the clue you extracted.
+
+```{r}
+# your code here
+```
+
+## Problem 4
+
+Now use the SelectorGadget or your browser's inspect feature to identify the name of the table class for the "Jeopardy!" (the top table) and "Double Jeopardy!" (the bottom table) rounds.
+When you select the correct element of the webpage, you should see the table grid hightlighted.
+Use `rvest` to read the entire table from the `site` variable specifying the class you found as the `css` argument.
+Assign the answer to a variable called `clues`.
+
+```{r}
+# your code here
+```
+
+
+## Problem 5
+
+In this problem you'll work with a dataset scraped from Wikipedia about Academy Award Nominated/Winning films.
+The code to scrape the compile the list of films is already written for you, The result is a 3 column data frame called films
+
+```{r}
+# code to retrieve the list of oscar nominated films
+require(dplyr)
+require(tidyr)
+tables <- read_html("https://en.wikipedia.org/wiki/Academy_Award_for_Best_Picture") %>%
+  html_nodes(css=".wikitable") %>% html_table()
+tables[[length(tables)]] <- NULL
+tables <- lapply(tables, function(table){names(table) <- c("Year", "Film", "Studio/Producers"); table})
+films <- do.call(rbind, tables)
+head(films)
+```
+
+Run the code above to construct the films data frame.
+Becuase of the way the data were formatted, there are extra rows with `NA` in them.
+Use the filter function to filter out the rows where the `Film` column is `NA` (hint, use the `is.na` function) and assign the result to a variable called films2
+
+```{r}
+# your code here
+```
+
+### Problem 6
+
+The winning film is the first one listed in each year.
+Extract the winning films by grouping `films2` by the `Year` column and then using the `slice_head` function to extract the first row from each group.
+Assign the result to a variable named `winners`
+
+```{r}
+# your code here
+```
+
+
+### Problem 7
+
+Determine how many films were nominated each year by grouping by the `Year` column and using the summarize function. 
+Hint, the `n()` function counts how many rows are in each group, so you can try something like `nominated=n()` inside summarize.
+
+```{r}
+# your code here
+```
+
+Use this data frame to answer the question: What was the first year after 1950 with more than 5 nominees?
+
+Answer: 
+
+
+## End
+
+This is the end of the assignment!
+You can knit the document and upload it to Canvas
+
