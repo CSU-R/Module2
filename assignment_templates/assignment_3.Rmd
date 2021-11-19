@@ -1,0 +1,137 @@
+---
+title: "Assignment 3"
+author: "Your Name Here"
+date: "`r format(Sys.time(), '%d %h, %Y, %I:%M %p')`"
+output:
+  html_document: default
+  pdf_document: default
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+# Instructions:
+
+1. Update your name in the header block, example: `author: "Alex Fout" `
+1. Select `File > Save as` and save the file by adding your last name at the beginning with an underscore, example: `fout_assignment_3.rmd`
+1. Follow the instructions below to fill in the assignment.
+1. Be sure to _run your code chunks when you make them_, to make sure everything works!
+1. When you've completed the assignment, __knit__ the document and make sure the resulting HTML or PDF file looks alright.
+1. Upload the PDF or HTML file to Canvas (Don't upload the Rmd document).
+
+
+# Assignment
+
+This assignment will give you practice using functional programming, data cleaning, and visualization
+
+We will extract and clean max global surface temperature data from [ncei.noaa.gov].
+The website provides historical weather data for many stations worldwide, going back to the 18th century.
+We will extract and clean data from only a few stations, and focus on the years 2019 and after.
+
+## Problem 1. 
+
+The first step is to download and clean a single file.
+Below is the which creates the url pointing to a data set for one weather station
+Pay attention to how the `paste0` function is used to create the url.
+
+use the `download.file` function to download the file at the url and save it as a file called "temp.csv.gz"
+
+```{r}
+# create url for downloading station data
+url_prefix <- "https://www1.ncdc.noaa.gov/pub/data/ghcn/daily/all/"
+station <- "USC00050848"
+url <- paste0(url_prefix, station, ".dly")
+
+# your code here
+```
+
+## Problem 2.
+
+Now we will load the file into R.
+The file is a "fixed width" format, meaning it has no commas or tabs or any other delimiters. 
+Instead, each column takes up a certain number of characters.
+When loading a fixed width file in R, you need to specify the width of each column.
+We've already defined the widths vector for you below as `w`, and the column names as "cn".
+
+Use the `read.fwf` function to load the "temp.csv.gz" file, specifying the `widths argument as `w` and the `col.names` argument as `cn`.
+You should also specify `header=F` since there are no file headers.
+Assign the result to a variable called dfs (data frame for the station).
+
+
+```{r}
+w <- c(11, 4, 2, 4, rep(c(5, 1, 1, 1), 31))
+cn <- c("id", "year", "month", "element", c(outer(c("value", "mflag", "qflag", "sflag"), 1:31, paste0)))
+
+# your code here.
+```
+
+## Problem 3.
+
+Next, you need to filter and format the data, using the functions and examples from the textbook as a guide.
+Here are the steps you should apply, in order:
+1. Since we are only interested in maximum temperature, use `filter` to keep only rows where the `element` column is "TMAX"
+2. Since we are only interested in 2019 and later, use `filter` to keep only rows where the `year` column is equal or greater than 2019
+3. Each row is actually a month, and there are 31 separate columns for each day of each month. So use the `pivot_longer` function to make the "wide" data into "long" data. To help you out, we've already defined a vector of the column names which need to be pivoted.
+4. Use the `mutate` function to create a new column called "day", which uses the following code to extract the day from the `name` variable: `stringr::str_replace(name, "value", "")
+5. Use the `mutate` function to create a `ymd` column which will be parsed later to make a date column. You should paste together the `year`, `month`, and `day` columns using "-" as a separator.
+6. Use the `mutate` function to create a `date` column, with the following code: `as.Date(ymd)`.
+7. Use the `mutate` function to create a `tmax` column, which is `value/10` (the temperature is recorded as tenths of a degree).
+7. Use the `select` function to select only the following columns: `id`, `date`, and `tmax`.
+8. Finally, use the `mutate` function to replace -999.9 with `NA` in the `tmax` column. This is how missing data was coded in the original data. you might find the `ifelse` function helpful.
+
+Assign your results to a variable called `dfs2`
+
+```{r}
+require(dplyr)
+require(tidyr)
+require(stringr)
+# columns to pivot:
+pivot_cols <- paste0("value", 1:31)
+
+
+# your code here
+```
+
+## Problem 4
+
+Create a plot using the either base plot, ggplot2, or plotly, of `tmax` as a function of `date` for the `dfs2` data frame
+
+```{r}
+# your code here
+```
+
+## Problem 5
+
+Now we'll repeat the processing that you performed above, on the list of stations below.
+Write a function that takes in a station name (one element of the vector below), and returns a cleaned, processed data frame similar to dfs2 above.
+Your function will have to create the appropriate url, download the data from the url, load it into R, and process it just as you did above.
+Fill in the template below to create the function.
+Finally, run `purrr::map` on the stations list, passing the function `process_station` as the second argument, and assign the results to `result`
+
+
+```{r}
+stations <- c("USC00050848", "USC00050945", "USC00053005", "USC00053496", "USC00053500", "USC00053553", "USC00054762", "USC00055116", "USC00058839", "USC00485435", "USW00023062", "USW00024018", "USW00024022")
+
+
+# your code here
+```
+
+## Problem 6
+
+
+Use the `bind_rows` function to combine the results from each station into a single data frame called `df_all`.
+
+Then create a plot of all the data, showing `date` vs. `tmax` for each station. Make each station a different color in the plot.
+
+```{r}
+# your code here
+```
+
+
+
+## End
+
+This is the end of the assignment!
+You can knit the document and upload it to Canvas
+
