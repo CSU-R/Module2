@@ -1,0 +1,124 @@
+---
+title: "Assignment 4"
+author: "Your Name Here"
+date: "`r format(Sys.time(), '%d %h, %Y, %I:%M %p')`"
+output:
+  html_document: default
+  pdf_document: default
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+# Instructions:
+
+1. Update your name in the header block, example: `author: "Alex Fout" `
+1. Select `File > Save as` and save the file by adding your last name at the beginning with an underscore, example: `fout_assignment_4.rmd`
+1. Follow the instructions below to fill in the assignment.
+1. Be sure to _run your code chunks when you make them_, to make sure everything works!
+1. When you've completed the assignment, __knit__ the document and make sure the resulting HTML or PDF file looks alright.
+1. Upload the PDF or HTML file to Canvas (Don't upload the Rmd document).
+
+
+# Assignment
+
+This assignment will give you practice creating visualizations in R, using data on the market value of soccer players (footballers) in 2021. 
+If you have a Kaggle account, you can download the data here: [https://www.kaggle.com/sanjeetsinghnaik/most-expensive-footballers-2021/version/1], but we provide it for you at [https://github.com/CSU-R/Module2/blob/master/data_raw/players.csv] as well so you can download it without a Kaggle account.
+
+## Problem 1. 
+
+Load the players.csv dataset into a dataframe called `pl`.
+Since we will be using the fifth column (`Markey.Value.In.Millions.Â..`) quite a lot, rename it to just "Value".
+
+
+```{r}
+# your code here
+```
+
+
+## Problem 2.
+
+Using `base` `R` graphics, create a scatter plot with `Age` on the X axis and `Value` on the Y axis.
+Make the points a filled circle (search for "pch" options online) colored blue (using the `col` command).
+Give the plot a suitable title.
+What do you observe for older players?
+
+```{r}
+# your code here
+```
+
+## Problem 3
+
+Now create a boxplot in `base` `R` graphics using the `boxplot` function, showing a boxplot for player value, grouped by player position.
+(hint: try ?boxplot, and under "Arguments", look for how the formula should be formatted; Some of the examples may help as well).
+Make your boxplot horizontal by adding the "horizontal=T" argument, and rotate the y axis labels with the "las=1" argument.
+Then decrease the size of the y labels using "cex.axis=0.5".
+Give the plot a suitable title.
+The thick bar in the middle of the bar is the Median for the group. Which position appears to have the lowest median value?
+
+```{r}
+# your code here
+```
+
+## Problem 4
+
+Make one more plot in `base` `R`, showing the Value vs. Matches. Then set the color based on whether a player's value is greater than 80, by setting the color command equal to `value>80`. You may have to convert it to a factor as well.
+
+```{r}
+# your code here
+```
+
+## Problem 5
+
+Now you'll create some graphics in `ggplot2`.
+First, recreate the plot of Value vs. Age, again using blue points (hint: since the color of each point doesn't depend on the data, you won't define an aesthetic for color; instead, set the "color" argument within geom_point() to be "blue").
+Add a title by __adding__ the "labs" function with the argument "title" set to "Value vs. Age".
+Change the theme of the plot by adding the `theme_classic` theme, similar to how `theme_bw` is added in the textbook.
+
+```{r}
+# Your code here
+```
+
+## Problem 6
+
+Now create a boxplot with Position on the X axis and Value on the Y axis. 
+Instead of the `geom_point()` function, you'll be using `geom_boxplot()`.
+Set the theme to `theme_bw()`, and give the plot an appropriate title.
+Also, add the following command, which will make the group labels more readable: `theme(axis.text.x = element_text(angle=45, hjust=1))`
+
+
+```{r}
+# Your code here
+```
+
+## Problem 7
+
+Now copy and paste your code from problem 6 below, and change the `geom_boxplot()` to 
+Set the theme to `theme_bw()`, and use the `scale_color_distiller` function with the "YlGn" palette to color the points by the `Matches` variable. You will also have to add `Matches` as an aesthetic in the `ggplot` function.
+Note: `scale_color_distiller` is like `scale_color_brewer`, but the former is for coloring continuous variables, and the latter is for coloring categorical variables.
+
+```{r}
+# Your code here
+```
+
+## Problem 8
+
+Finally, you'll use `ggplotly` to make a more interactive graphic.
+Make a scatter plot with Goals on the x axis and Value on the Y axis, and color by Matches.
+Add two more labels in the aesthetics including `Name` and `Club`, so they can be included in the plotly tooltip.
+Give the plot an appropriate title.
+Use `scale_color_distiller` with the "Reds" palette, and be sure to set `direction=1`, so the color scale gets larger for more Matches.
+
+Now use the `ggplotly` function to display the plot, with the tooltip including `Name`, `Club`, `Value`, and `Matches`.
+
+
+```{r}
+# Your code here
+```
+
+## End
+
+This is the end of the assignment!
+You can knit the document and upload it to Canvas
+
